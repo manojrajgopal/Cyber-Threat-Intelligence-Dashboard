@@ -94,4 +94,4 @@ def require_permissions(required_permissions: list):
 # Predefined permission requirements
 ADMIN_ONLY = require_permissions(["admin"])
 ANALYST_OR_ADMIN = require_permissions(["analyst", "admin"])
-READ_ONLY = require_permissions(["read", "analyst", "admin"])
+READ_ONLY = require_permissions(["read"])

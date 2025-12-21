@@ -14,6 +14,7 @@ import IOCDetails from './components/iocs/IOCDetails';
 import AlertsTable from './components/alerts/AlertsTable';
 import Reports from './components/reports/Reports';
 import GeoMap from './components/maps/GeoMap';
+import Users from './components/users/Users';
 
 // Auth check
 const isAuthenticated = () => {
@@ -107,6 +108,16 @@ function App() {
               <ProtectedRoute>
                 <Layout>
                   <GeoMap />
+                </Layout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/users"
+            element={
+              <ProtectedRoute>
+                <Layout>
+                  <Users />
                 </Layout>
               </ProtectedRoute>
             }

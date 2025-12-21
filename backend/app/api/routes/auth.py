@@ -40,14 +40,35 @@ async def register(
             detail="Username or email already registered"
         )
     
-    # Get default role (assuming role with id 1 is default user)
-    default_role = db.query(Role).filter(Role.name == "user").first()
-    if not default_role:
-        # Create default role if not exists
-        default_role = Role(name="user", permissions={"permissions": ["read"]})
-        db.add(default_role)
+    # Ensure all roles exist
+    admin_role = db.query(Role).filter(Role.name == "admin").first()
+    if not admin_role:
+        admin_role = Role(name="admin", permissions={"permissions": ["admin", "analyst", "read"]})
+        db.add(admin_role)
         db.commit()
-        db.refresh(default_role)
+        db.refresh(admin_role)
+
+    analyst_role = db.query(Role).filter(Role.name == "analyst").first()
+    if not analyst_role:
+        analyst_role = Role(name="analyst", permissions={"permissions": ["analyst", "read"]})
+        db.add(analyst_role)
+        db.commit()
+        db.refresh(analyst_role)
+
+    user_role = db.query(Role).filter(Role.name == "user").first()
+    if not user_role:
+        user_role = Role(name="user", permissions={"permissions": ["read"]})
+        db.add(user_role)
+        db.commit()
+        db.refresh(user_role)
+
+    # Check if this is the first user
+    first_user = db.query(User).first() is None
+
+    if first_user:
+        default_role = admin_role
+    else:
+        default_role = user_role
     
     # Create new user
     hashed_password = get_password_hash(user_data.password)
