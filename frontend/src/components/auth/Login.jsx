@@ -96,7 +96,7 @@ const Login = ({ api }) => {
       <div className="bg-floating shape-3"></div>
       <div className="bg-floating shape-4"></div>
       
-      {/* Left Panel - Security Dashboard Preview */}
+      {/* Left Panel - Video Display */}
       <div className="login-left-panel" ref={leftPanelRef}>
         <div className="security-header">
           <div className="security-brand">
@@ -113,110 +113,36 @@ const Login = ({ api }) => {
           </div>
         </div>
 
-        <div className="dashboard-preview">
-          <div className="preview-header">
-            <h3 className="preview-title">Dashboard Access</h3>
-            <div className="preview-time">Live</div>
-          </div>
+        {/* Video Container */}
+        <div className="video-container">
+          <video
+            className="security-video"
+            autoPlay
+            loop
+            muted
+            playsInline
+          >
+            <source src="/design/login.mp4" type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
           
-          <div className="preview-grid">
-            <div className="preview-card threat-card">
-              <div className="card-icon">⚠️</div>
-              <div className="card-content">
-                <div className="card-value">42</div>
-                <div className="card-label">Active Threats</div>
-              </div>
-            </div>
-            
-            <div className="preview-card alert-card">
-              <div className="card-icon">🔔</div>
-              <div className="card-content">
-                <div className="card-value">18</div>
-                <div className="card-label">New Alerts</div>
-              </div>
-            </div>
-            
-            <div className="preview-card monitor-card">
-              <div className="card-icon">👁️</div>
-              <div className="card-content">
-                <div className="card-value">256</div>
-                <div className="card-label">Assets Monitored</div>
-              </div>
-            </div>
-            
-            <div className="preview-card response-card">
-              <div className="card-icon">⚡</div>
-              <div className="card-content">
-                <div className="card-value">12s</div>
-                <div className="card-label">Avg Response Time</div>
-              </div>
-            </div>
-          </div>
           
-          <div className="activity-feed">
-            <div className="feed-header">
-              <h4>Recent Activity</h4>
-              <div className="feed-badge">Live</div>
-            </div>
-            <div className="feed-list">
-              <div className="feed-item">
-                <div className="feed-icon threat">⚠️</div>
-                <div className="feed-content">
-                  <div className="feed-title">Malware detected</div>
-                  <div className="feed-time">2 min ago</div>
-                </div>
-              </div>
-              <div className="feed-item">
-                <div className="feed-icon secure">✅</div>
-                <div className="feed-content">
-                  <div className="feed-title">Firewall updated</div>
-                  <div className="feed-time">15 min ago</div>
-                </div>
-              </div>
-              <div className="feed-item">
-                <div className="feed-icon alert">🔔</div>
-                <div className="feed-content">
-                  <div className="feed-title">DDoS attack mitigated</div>
-                  <div className="feed-time">1 hour ago</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="security-features">
-          <div className="feature-tag">
-            <span className="tag-icon">🔐</span>
-            <span className="tag-text">Zero-Trust Architecture</span>
-          </div>
-          <div className="feature-tag">
-            <span className="tag-icon">⚡</span>
-            <span className="tag-text">AI-Powered Detection</span>
-          </div>
-          <div className="feature-tag">
-            <span className="tag-icon">🌐</span>
-            <span className="tag-text">Global Threat Intel</span>
-          </div>
+          {/* Video Overlay Gradient */}
+          <div className="video-overlay-gradient"></div>
         </div>
       </div>
       
       {/* Right Panel - Login Form */}
       <div className="login-right-panel">
         <div className="access-container">
-          <div className="access-header-glass">
+          <div className="access-header">
             <div className="access-header-content">
               <h2 className="access-title">Secure Authentication</h2>
               <p className="access-subtitle">Access threat intelligence dashboard</p>
             </div>
-            <div className="access-security">
-              <div className="security-level">
-                <div className="level-icon">🛡️</div>
-                <span className="level-text">Level 4 Security</span>
-              </div>
-            </div>
           </div>
           
-          <div className="access-glass-container" ref={formRef}>
+          <div className="access-container" ref={formRef}>
             <div className="access-notice">
               <div className="notice-icon">⚠️</div>
               <div className="notice-text">
