@@ -1,0 +1,12 @@
+uvicorn==0.38.0
+fastapi==0.126.0
+pydantic-settings==2.12.0
+sqlalchemy==2.0.45
+pymysql==1.1.2
+pydantic[email]
+python-jose[cryptography]
+passlib[argon2]==1.7.4
+python-multipart==0.0.21
+requests==2.32.5
+dotenv==0.9.9
+argon2_cffi
