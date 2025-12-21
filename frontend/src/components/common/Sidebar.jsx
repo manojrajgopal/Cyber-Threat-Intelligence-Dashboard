@@ -6,9 +6,15 @@ const Sidebar = () => {
 
   const menuItems = [
     { path: '/dashboard', label: 'Dashboard', icon: '📊' },
+    { path: '/threat-input', label: 'Threat Input', icon: '📥' },
     { path: '/iocs', label: 'IOCs', icon: '🔍' },
+    { path: '/ai-insights', label: 'AI Insights', icon: '🤖' },
+    { path: '/threat-lifecycle', label: 'Lifecycle', icon: '🔄' },
+    { path: '/account-threats', label: 'My Threats', icon: '👤' },
     { path: '/alerts', label: 'Alerts', icon: '🚨' },
     { path: '/reports', label: 'Reports', icon: '📄' },
+    { path: '/map', label: 'Map', icon: '🗺️' },
+    { path: '/users', label: 'Users', icon: '👥' },
   ];
 
   return (

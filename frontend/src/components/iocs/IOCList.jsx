@@ -117,6 +117,12 @@ const IOCList = () => {
                   >
                     View
                   </Link>
+                  <Link
+                    to={`/iocs/${ioc.id}/intelligence`}
+                    className="text-purple-600 hover:text-purple-900"
+                  >
+                    Intelligence
+                  </Link>
                   {!ioc.enriched && (
                     <button
                       onClick={() => handleEnrich(ioc.id)}

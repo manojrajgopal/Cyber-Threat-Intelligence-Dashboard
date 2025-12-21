@@ -38,6 +38,21 @@ CREATE TABLE threat_iocs (
     UNIQUE KEY unique_ioc (type, value)
 );
 
+-- Threat Inputs table
+CREATE TABLE threat_inputs (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    type ENUM('ip', 'domain', 'url', 'hash') NOT NULL,
+    value VARCHAR(500) NOT NULL,
+    user_id INT,
+    account_id INT,
+    continuous_monitoring BOOLEAN DEFAULT FALSE,
+    status ENUM('pending', 'processing', 'processed', 'failed') DEFAULT 'pending',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    FOREIGN KEY (account_id) REFERENCES accounts(id)
+);
+
 -- IOC Enrichment table
 CREATE TABLE ioc_enrichment (
     id INT AUTO_INCREMENT PRIMARY KEY,

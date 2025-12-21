@@ -145,3 +145,196 @@ class PaginatedResponse(BaseModel):
     page: int
     size: int
     pages: int
+
+# Account schemas
+class AccountBase(BaseModel):
+    name: str
+    description: Optional[str] = None
+
+class AccountCreate(AccountBase):
+    pass
+
+class Account(AccountBase):
+    id: int
+    created_at: datetime
+    updated_at: datetime
+
+    class Config:
+        from_attributes = True
+
+# Threat Input schemas
+class ThreatInputBase(BaseModel):
+    type: str  # ip, domain, url, hash
+    value: str
+    continuous_monitoring: Optional[bool] = False
+
+class ThreatInputCreate(ThreatInputBase):
+    pass
+
+class ThreatInput(ThreatInputBase):
+    id: int
+    user_id: Optional[int] = None
+    account_id: Optional[int] = None
+    status: str
+    created_at: datetime
+    updated_at: datetime
+
+    class Config:
+        from_attributes = True
+
+# Bulk Ingestion schemas
+class BulkIngestionJobBase(BaseModel):
+    file_type: str  # csv, json
+
+class BulkIngestionJobCreate(BulkIngestionJobBase):
+    pass
+
+class BulkIngestionJob(BulkIngestionJobBase):
+    id: int
+    user_id: Optional[int] = None
+    file_path: Optional[str] = None
+    status: str
+    total_items: int
+    processed_items: int
+    error_message: Optional[str] = None
+    created_at: datetime
+    updated_at: datetime
+
+    class Config:
+        from_attributes = True
+
+# AI Prediction schemas
+class AIPredictionBase(BaseModel):
+    model_name: str
+    prediction: str
+    confidence: float
+    features_used: Optional[Dict[str, Any]] = None
+    explanation: Optional[str] = None
+
+class AIPredictionCreate(AIPredictionBase):
+    threat_input_id: Optional[int] = None
+    ioc_id: Optional[int] = None
+
+class AIPrediction(AIPredictionBase):
+    id: int
+    threat_input_id: Optional[int] = None
+    ioc_id: Optional[int] = None
+    created_at: datetime
+
+    class Config:
+        from_attributes = True
+
+# Model Registry schemas
+class ModelRegistryBase(BaseModel):
+    name: str
+    source: str  # huggingface, custom
+    model_id: Optional[str] = None
+    version: Optional[str] = None
+    local_path: Optional[str] = None
+
+class ModelRegistryCreate(ModelRegistryBase):
+    pass
+
+class ModelRegistry(ModelRegistryBase):
+    id: int
+    is_active: bool
+    created_at: datetime
+    updated_at: datetime
+
+    class Config:
+        from_attributes = True
+
+# Dataset schemas
+class DatasetBase(BaseModel):
+    name: str
+    source: str  # kaggle, custom
+    path: Optional[str] = None
+    features: Optional[List[str]] = None
+    target: Optional[str] = None
+
+class DatasetCreate(DatasetBase):
+    pass
+
+class Dataset(DatasetBase):
+    id: int
+    is_trained: bool
+    created_at: datetime
+    updated_at: datetime
+
+    class Config:
+        from_attributes = True
+
+# Threat Lifecycle schemas
+class ThreatLifecycleBase(BaseModel):
+    state: str  # new, under_analysis, confirmed_malicious, false_positive, mitigated
+    notes: Optional[str] = None
+
+class ThreatLifecycleCreate(ThreatLifecycleBase):
+    threat_input_id: Optional[int] = None
+    ioc_id: Optional[int] = None
+
+class ThreatLifecycleTransition(BaseModel):
+    threat_input_id: Optional[int] = None
+    ioc_id: Optional[int] = None
+    new_state: str
+    notes: Optional[str] = None
+
+class ThreatLifecycle(ThreatLifecycleBase):
+    id: int
+    threat_input_id: Optional[int] = None
+    ioc_id: Optional[int] = None
+    user_id: Optional[int] = None
+    timestamp: datetime
+
+    class Config:
+        from_attributes = True
+
+# IOC Relationship schemas
+class IOCRelationshipBase(BaseModel):
+    ioc1_id: int
+    ioc2_id: int
+    relationship_type: str
+    confidence: Optional[float] = 0.0
+    source: Optional[str] = None
+
+class IOCRelationshipCreate(IOCRelationshipBase):
+    pass
+
+class IOCRelationship(IOCRelationshipBase):
+    id: int
+    created_at: datetime
+
+    class Config:
+        from_attributes = True
+
+# Account Threat Mapping schemas
+class AccountThreatMappingBase(BaseModel):
+    account_id: int
+
+class AccountThreatMappingCreate(AccountThreatMappingBase):
+    ioc_id: Optional[int] = None
+    threat_input_id: Optional[int] = None
+
+class AccountThreatMapping(AccountThreatMappingBase):
+    id: int
+    ioc_id: Optional[int] = None
+    threat_input_id: Optional[int] = None
+    assigned_at: datetime
+
+    class Config:
+        from_attributes = True
+
+# Ingestion schemas
+class SingleIngestionRequest(BaseModel):
+    type: str
+    value: str
+    continuous_monitoring: Optional[bool] = False
+
+class BulkIngestionRequest(BaseModel):
+    file: bytes  # For file upload
+    file_type: str
+
+class IngestionResponse(BaseModel):
+    success: bool
+    message: str
+    data: Optional[Dict[str, Any]] = None

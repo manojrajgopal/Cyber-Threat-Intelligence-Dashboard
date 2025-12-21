@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import api from '../../services/api';
 
 const IOCDetails = () => {
@@ -32,7 +32,15 @@ const IOCDetails = () => {
 
   return (
     <div className="p-6">
-      <h1 className="text-3xl font-bold mb-6">IOC Details</h1>
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-3xl font-bold">IOC Details</h1>
+        <Link
+          to={`/iocs/${id}/intelligence`}
+          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+        >
+          View AI Intelligence
+        </Link>
+      </div>
       
       <div className="bg-white rounded-lg shadow-md p-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

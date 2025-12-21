@@ -9,8 +9,13 @@ import Sidebar from './components/common/Sidebar';
 import Login from './components/auth/Login';
 import Register from './components/auth/Register';
 import Dashboard from './components/dashboard/Dashboard';
+import ThreatInputPage from './pages/ThreatInputPage';
+import AIInsightsPage from './pages/AIInsightsPage';
+import ThreatLifecyclePage from './pages/ThreatLifecyclePage';
+import AccountThreatsPage from './pages/AccountThreatsPage';
 import IOCList from './components/iocs/IOCList';
 import IOCDetails from './components/iocs/IOCDetails';
+import IOCIntelligence from './components/iocs/IOCIntelligence';
 import AlertsTable from './components/alerts/AlertsTable';
 import Reports from './components/reports/Reports';
 import GeoMap from './components/maps/GeoMap';
@@ -58,6 +63,56 @@ function App() {
               <ProtectedRoute>
                 <Layout>
                   <Dashboard />
+                </Layout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/threat-input"
+            element={
+              <ProtectedRoute>
+                <Layout>
+                  <ThreatInputPage />
+                </Layout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/ai-insights"
+            element={
+              <ProtectedRoute>
+                <Layout>
+                  <AIInsightsPage />
+                </Layout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/threat-lifecycle"
+            element={
+              <ProtectedRoute>
+                <Layout>
+                  <ThreatLifecyclePage />
+                </Layout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/account-threats"
+            element={
+              <ProtectedRoute>
+                <Layout>
+                  <AccountThreatsPage />
+                </Layout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/iocs/:id/intelligence"
+            element={
+              <ProtectedRoute>
+                <Layout>
+                  <IOCIntelligence />
                 </Layout>
               </ProtectedRoute>
             }

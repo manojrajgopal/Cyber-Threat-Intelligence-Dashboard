@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import api from '../../services/api';
 
 const AlertsTable = () => {
@@ -67,7 +68,9 @@ const AlertsTable = () => {
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div>
                     <div className="text-sm font-medium text-gray-900">
-                      {alert.ioc?.value}
+                      <Link to={`/iocs/${alert.ioc?.id}`} className="text-blue-600 hover:underline">
+                        {alert.ioc?.value}
+                      </Link>
                     </div>
                     <div className="text-sm text-gray-500">
                       {alert.ioc?.type}

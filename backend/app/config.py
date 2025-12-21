@@ -32,6 +32,18 @@ class Settings(BaseSettings):
     virustotal_api_key: Optional[str] = "your_virustotal_key"
     abuseipdb_api_key: Optional[str] = "your_abuseipdb_key"
     otx_api_key: Optional[str] = "your_alienvault_otx_key"
+
+    # AI and ML Configuration
+    default_lifecycle_state: str = "new"
+    ai_inference_mode: str = "local"
+    model_storage_path: str = "./models"
+    ai_model_auto_load: bool = True
+    huggingface_api_key: Optional[str] = None
+    database_url: Optional[str] = None
+    jwt_secret_key: str = "your_secret_key_here"
+
+    kaggle_dataset_path: Optional[str] = "./datasets"
+    dataset_base_path: Optional[str] = "./datasets"
     
     class Config:
         env_file = ".env"

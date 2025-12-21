@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Boolean, DateTime, Text, DECIMAL, Enum, JSON, ForeignKey, Index
+from sqlalchemy import Column, Integer, String, Boolean, DateTime, Text, DECIMAL, Enum, JSON, ForeignKey, Index, Float
 from sqlalchemy.orm import relationship
 from datetime import datetime
 from ..db.session import Base
@@ -122,4 +122,173 @@ class AuditLog(Base):
     __table_args__ = (
         Index('idx_audit_logs_timestamp', 'timestamp'),
         Index('idx_audit_logs_user', 'user_id'),
+    )
+
+class Account(Base):
+    __tablename__ = "accounts"
+
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String(255), unique=True, nullable=False)
+    description = Column(Text)
+    created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+    # Relationships
+    threat_mappings = relationship("AccountThreatMapping", back_populates="account")
+
+class ThreatInput(Base):
+    __tablename__ = "threat_inputs"
+
+    id = Column(Integer, primary_key=True, index=True)
+    type = Column(Enum('ip', 'domain', 'url', 'hash'), nullable=False)
+    value = Column(String(500), nullable=False)
+    user_id = Column(Integer, ForeignKey("users.id"))
+    account_id = Column(Integer, ForeignKey("accounts.id"))
+    continuous_monitoring = Column(Boolean, default=False)
+    status = Column(Enum('pending', 'processing', 'processed', 'failed'), default='pending')
+    created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+    # Relationships
+    user = relationship("User")
+    account = relationship("Account")
+    lifecycle_entries = relationship("ThreatLifecycle", back_populates="threat_input", cascade="all, delete-orphan")
+    ai_predictions = relationship("AIPrediction", back_populates="threat_input", cascade="all, delete-orphan")
+
+    __table_args__ = (
+        Index('idx_threat_inputs_type_value', 'type', 'value'),
+        Index('idx_threat_inputs_user', 'user_id'),
+        Index('idx_threat_inputs_account', 'account_id'),
+    )
+
+class BulkIngestionJob(Base):
+    __tablename__ = "bulk_ingestion_jobs"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id"))
+    file_path = Column(String(500))
+    file_type = Column(Enum('csv', 'json'), nullable=False)
+    status = Column(Enum('pending', 'processing', 'completed', 'failed'), default='pending')
+    total_items = Column(Integer, default=0)
+    processed_items = Column(Integer, default=0)
+    error_message = Column(Text)
+    created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+    # Relationships
+    user = relationship("User")
+
+    __table_args__ = (
+        Index('idx_bulk_jobs_user', 'user_id'),
+        Index('idx_bulk_jobs_status', 'status'),
+    )
+
+class AIPrediction(Base):
+    __tablename__ = "ai_predictions"
+
+    id = Column(Integer, primary_key=True, index=True)
+    threat_input_id = Column(Integer, ForeignKey("threat_inputs.id"))
+    ioc_id = Column(Integer, ForeignKey("threat_iocs.id"))
+    model_name = Column(String(255), nullable=False)
+    prediction = Column(String(100), nullable=False)  # e.g., 'malicious', 'benign'
+    confidence = Column(Float, nullable=False)
+    features_used = Column(JSON)
+    explanation = Column(Text)
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+    # Relationships
+    threat_input = relationship("ThreatInput", back_populates="ai_predictions")
+    ioc = relationship("ThreatIOC")
+
+    __table_args__ = (
+        Index('idx_ai_predictions_threat_input', 'threat_input_id'),
+        Index('idx_ai_predictions_ioc', 'ioc_id'),
+    )
+
+class ModelRegistry(Base):
+    __tablename__ = "model_registry"
+
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String(255), unique=True, nullable=False)
+    source = Column(Enum('huggingface', 'custom'), default='huggingface')
+    model_id = Column(String(500))  # Hugging Face model ID
+    version = Column(String(50))
+    local_path = Column(String(500))
+    is_active = Column(Boolean, default=True)
+    created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+class Dataset(Base):
+    __tablename__ = "datasets"
+
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String(255), unique=True, nullable=False)
+    source = Column(Enum('kaggle', 'custom'), default='kaggle')
+    path = Column(String(500))
+    features = Column(JSON)  # List of features
+    target = Column(String(100))
+    is_trained = Column(Boolean, default=False)
+    created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+class ThreatLifecycle(Base):
+    __tablename__ = "threat_lifecycle"
+
+    id = Column(Integer, primary_key=True, index=True)
+    threat_input_id = Column(Integer, ForeignKey("threat_inputs.id"))
+    ioc_id = Column(Integer, ForeignKey("threat_iocs.id"))
+    state = Column(Enum('new', 'under_analysis', 'confirmed_malicious', 'false_positive', 'mitigated'), nullable=False)
+    user_id = Column(Integer, ForeignKey("users.id"))
+    notes = Column(Text)
+    timestamp = Column(DateTime, default=datetime.utcnow)
+
+    # Relationships
+    threat_input = relationship("ThreatInput", back_populates="lifecycle_entries")
+    ioc = relationship("ThreatIOC")
+    user = relationship("User")
+
+    __table_args__ = (
+        Index('idx_lifecycle_threat_input', 'threat_input_id'),
+        Index('idx_lifecycle_ioc', 'ioc_id'),
+        Index('idx_lifecycle_state', 'state'),
+    )
+
+class IOCRelationship(Base):
+    __tablename__ = "ioc_relationships"
+
+    id = Column(Integer, primary_key=True, index=True)
+    ioc1_id = Column(Integer, ForeignKey("threat_iocs.id"), nullable=False)
+    ioc2_id = Column(Integer, ForeignKey("threat_iocs.id"), nullable=False)
+    relationship_type = Column(String(100), nullable=False)  # e.g., 'related', 'campaign'
+    confidence = Column(Float, default=0.0)
+    source = Column(String(255))
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+    # Relationships
+    ioc1 = relationship("ThreatIOC", foreign_keys=[ioc1_id])
+    ioc2 = relationship("ThreatIOC", foreign_keys=[ioc2_id])
+
+    __table_args__ = (
+        Index('idx_ioc_rel_ioc1', 'ioc1_id'),
+        Index('idx_ioc_rel_ioc2', 'ioc2_id'),
+    )
+
+class AccountThreatMapping(Base):
+    __tablename__ = "account_threat_mapping"
+
+    id = Column(Integer, primary_key=True, index=True)
+    account_id = Column(Integer, ForeignKey("accounts.id"), nullable=False)
+    ioc_id = Column(Integer, ForeignKey("threat_iocs.id"))
+    threat_input_id = Column(Integer, ForeignKey("threat_inputs.id"))
+    assigned_at = Column(DateTime, default=datetime.utcnow)
+
+    # Relationships
+    account = relationship("Account", back_populates="threat_mappings")
+    ioc = relationship("ThreatIOC")
+    threat_input = relationship("ThreatInput")
+
+    __table_args__ = (
+        Index('idx_mapping_account', 'account_id'),
+        Index('idx_mapping_ioc', 'ioc_id'),
+        Index('idx_mapping_threat_input', 'threat_input_id'),
     )
