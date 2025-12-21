@@ -5,16 +5,14 @@ from sklearn.preprocessing import StandardScaler, LabelEncoder
 from sklearn.ensemble import RandomForestClassifier
 import joblib
 import os
-import logging
-
-# Setup logging
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+import time
+from utils import setup_logging, TrainingTimer, calculate_classification_metrics, save_metrics, plot_confusion_matrix, plot_training_time, generate_report
 
 # Paths from env or defaults
-MODEL_STORAGE_PATH = os.getenv('MODEL_STORAGE_PATH', 'backend/models')
-DATASET_BASE_PATH = os.getenv('DATASET_BASE_PATH', 'backend/datasets')
+MODEL_STORAGE_PATH = os.getenv('MODEL_STORAGE_PATH', 'models')
+DATASET_BASE_PATH = os.getenv('DATASET_BASE_PATH', 'datasets')
 
-def load_datasets():
+def load_datasets(logger):
     """Load and validate datasets"""
     datasets = {}
     try:
@@ -40,10 +38,10 @@ def load_datasets():
             raise ValueError("Hash dataset missing 'is_malicious' column")
         datasets['hash'] = hash_df
 
-        logging.info("Datasets loaded successfully")
+        logger.info("Datasets loaded successfully")
         return datasets
     except Exception as e:
-        logging.error(f"Error loading datasets: {e}")
+        logger.error(f"Error loading datasets: {e}")
         raise
 
 def engineer_features(df, name):
@@ -73,26 +71,39 @@ def engineer_features(df, name):
 
 def train_random_forest():
     """Train RandomForestClassifier"""
-    logging.info("Starting RandomForest training")
+    logger = setup_logging('train_random_forest')
+    timer = TrainingTimer(logger)
 
-    datasets = load_datasets()
+    timer.start()
+    logger.info("Starting RandomForest training")
+
+    datasets = load_datasets(logger)
 
     # Process each dataset
     processed_dfs = []
     for name in ['url', 'ip', 'domain', 'hash']:
         df = engineer_features(datasets[name], name)
         processed_dfs.append(df)
+        logger.info(f"Processed {name} dataset")
 
     # Combine
     combined_df = pd.concat(processed_dfs, ignore_index=True)
+    logger.info("Datasets combined")
 
     # Prepare data
     X = combined_df.drop('is_malicious', axis=1)
     y = combined_df['is_malicious']
 
+    # Handle missing values
+    X = X.fillna(0)
+
+    # Convert column names to strings
+    X.columns = X.columns.astype(str)
+
     # Scale
     scaler = StandardScaler()
     X_scaled = scaler.fit_transform(X)
+    logger.info("Data scaled")
 
     # Split
     X_train, X_test, y_train, y_test = train_test_split(X_scaled, y, test_size=0.2, random_state=42)
@@ -100,12 +111,37 @@ def train_random_forest():
     # Train
     rf = RandomForestClassifier(random_state=42, n_estimators=100)
     rf.fit(X_train, y_train)
+    timer.log_progress("Model trained")
 
-    # Save
+    # Predict on test
+    y_pred = rf.predict(X_test)
+
+    # Metrics
+    metrics = calculate_classification_metrics(y_test, y_pred, logger)
+    metrics['training_duration'] = timer.elapsed()
+
+    # Save metrics
+    save_metrics(metrics, 'train_random_forest')
+
+    # Plots
+    plot_confusion_matrix(np.array(metrics['confusion_matrix']), 'train_random_forest')
+    plot_training_time(timer.elapsed(), 'train_random_forest')
+
+    # Save model
     os.makedirs(MODEL_STORAGE_PATH, exist_ok=True)
-    joblib.dump(rf, f'{MODEL_STORAGE_PATH}/random_forest.pkl')
+    model_path = f'{MODEL_STORAGE_PATH}/random_forest.pkl'
+    joblib.dump(rf, model_path)
 
-    logging.info("RandomForest model trained and saved successfully")
+    # Report
+    end_time = time.time()
+    start_time = timer.start_time
+    graph_paths = [
+        'training_artifacts/graphs/individual/train_random_forest_confusion_matrix.png',
+        'training_artifacts/graphs/individual/train_random_forest_training_time.png'
+    ]
+    generate_report('train_random_forest', 'RandomForestClassifier', ['url', 'ip', 'domain', 'hash'], time.ctime(start_time), time.ctime(end_time), timer.elapsed(), metrics, model_path, graph_paths)
+
+    logger.info("RandomForest model trained and saved successfully")
 
 if __name__ == "__main__":
     train_random_forest()
