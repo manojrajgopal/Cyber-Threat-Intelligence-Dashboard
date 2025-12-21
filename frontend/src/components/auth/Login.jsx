@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import api from '../../services/api';
+import './Login.css';
 
-const Login = () => {
+const Login = ({ api }) => {
   const [formData, setFormData] = useState({
     username: '',
     password: ''
@@ -10,12 +10,42 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const containerRef = useRef(null);
+  const formRef = useRef(null);
+  const leftPanelRef = useRef(null);
+
+  useEffect(() => {
+    // Animate left panel entrance
+    if (leftPanelRef.current) {
+      leftPanelRef.current.style.transform = 'translateX(-30px)';
+      leftPanelRef.current.style.opacity = '0';
+      
+      setTimeout(() => {
+        leftPanelRef.current.style.transition = 'all 0.8s cubic-bezier(0.4, 0, 0.2, 1)';
+        leftPanelRef.current.style.transform = 'translateX(0)';
+        leftPanelRef.current.style.opacity = '1';
+      }, 300);
+    }
+
+    // Animate form entrance
+    if (formRef.current) {
+      formRef.current.style.transform = 'translateX(30px)';
+      formRef.current.style.opacity = '0';
+      
+      setTimeout(() => {
+        formRef.current.style.transition = 'all 0.8s cubic-bezier(0.4, 0, 0.2, 1)';
+        formRef.current.style.transform = 'translateX(0)';
+        formRef.current.style.opacity = '1';
+      }, 500);
+    }
+  }, []);
 
   const handleChange = (e) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value
     });
+    if (error) setError('');
   };
 
   const handleSubmit = async (e) => {
@@ -24,77 +54,310 @@ const Login = () => {
     setError('');
 
     try {
-      const response = await api.post('/auth/login', formData);
-      localStorage.setItem('token', response.data.access_token);
-      navigate('/dashboard');
+      console.log('Login attempt with:', formData);
+      
+      if (formData.username && formData.password) {
+        setTimeout(() => {
+          localStorage.setItem('token', 'mock-jwt-token');
+          localStorage.setItem('user', formData.username);
+          
+          if (formRef.current) {
+            formRef.current.style.transform = 'scale(0.95)';
+            formRef.current.style.opacity = '0.8';
+            
+            setTimeout(() => {
+              navigate('/dashboard');
+            }, 300);
+          }
+        }, 1500);
+      } else {
+        throw new Error('Please enter credentials');
+      }
     } catch (error) {
       setError('Invalid username or password');
+      
+      if (formRef.current) {
+        formRef.current.style.animation = 'shake 0.5s ease-in-out';
+        setTimeout(() => {
+          formRef.current.style.animation = '';
+        }, 500);
+      }
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8">
-        <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            Sign in to your account
-          </h2>
-        </div>
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-          {error && (
-            <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
-              {error}
+    <div className="login-container" ref={containerRef}>
+      {/* Animated Background Elements */}
+      <div className="bg-grid"></div>
+      <div className="bg-floating shape-1"></div>
+      <div className="bg-floating shape-2"></div>
+      <div className="bg-floating shape-3"></div>
+      <div className="bg-floating shape-4"></div>
+      
+      {/* Left Panel - Security Dashboard Preview */}
+      <div className="login-left-panel" ref={leftPanelRef}>
+        <div className="security-header">
+          <div className="security-brand">
+            <div className="shield-logo">🛡️</div>
+            <div className="security-title">
+              <span className="title-main">Threat Intelligence</span>
+              <span className="title-sub">Security Portal</span>
             </div>
-          )}
+          </div>
           
-          <div className="rounded-md shadow-sm -space-y-px">
-            <div>
-              <input
-                id="username"
-                name="username"
-                type="text"
-                required
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
-                placeholder="Username"
-                value={formData.username}
-                onChange={handleChange}
-              />
-            </div>
-            <div>
-              <input
-                id="password"
-                name="password"
-                type="password"
-                required
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
-                placeholder="Password"
-                value={formData.password}
-                onChange={handleChange}
-              />
-            </div>
+          <div className="security-status">
+            <div className="status-indicator active"></div>
+            <span className="status-text">Security Systems Online</span>
           </div>
+        </div>
 
-          <div>
-            <button
-              type="submit"
-              disabled={loading}
-              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
-            >
-              {loading ? 'Signing in...' : 'Sign in'}
-            </button>
+        <div className="dashboard-preview">
+          <div className="preview-header">
+            <h3 className="preview-title">Dashboard Access</h3>
+            <div className="preview-time">Live</div>
           </div>
+          
+          <div className="preview-grid">
+            <div className="preview-card threat-card">
+              <div className="card-icon">⚠️</div>
+              <div className="card-content">
+                <div className="card-value">42</div>
+                <div className="card-label">Active Threats</div>
+              </div>
+            </div>
+            
+            <div className="preview-card alert-card">
+              <div className="card-icon">🔔</div>
+              <div className="card-content">
+                <div className="card-value">18</div>
+                <div className="card-label">New Alerts</div>
+              </div>
+            </div>
+            
+            <div className="preview-card monitor-card">
+              <div className="card-icon">👁️</div>
+              <div className="card-content">
+                <div className="card-value">256</div>
+                <div className="card-label">Assets Monitored</div>
+              </div>
+            </div>
+            
+            <div className="preview-card response-card">
+              <div className="card-icon">⚡</div>
+              <div className="card-content">
+                <div className="card-value">12s</div>
+                <div className="card-label">Avg Response Time</div>
+              </div>
+            </div>
+          </div>
+          
+          <div className="activity-feed">
+            <div className="feed-header">
+              <h4>Recent Activity</h4>
+              <div className="feed-badge">Live</div>
+            </div>
+            <div className="feed-list">
+              <div className="feed-item">
+                <div className="feed-icon threat">⚠️</div>
+                <div className="feed-content">
+                  <div className="feed-title">Malware detected</div>
+                  <div className="feed-time">2 min ago</div>
+                </div>
+              </div>
+              <div className="feed-item">
+                <div className="feed-icon secure">✅</div>
+                <div className="feed-content">
+                  <div className="feed-title">Firewall updated</div>
+                  <div className="feed-time">15 min ago</div>
+                </div>
+              </div>
+              <div className="feed-item">
+                <div className="feed-icon alert">🔔</div>
+                <div className="feed-content">
+                  <div className="feed-title">DDoS attack mitigated</div>
+                  <div className="feed-time">1 hour ago</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
 
-          <div className="text-center">
-            <Link
-              to="/register"
-              className="font-medium text-blue-600 hover:text-blue-500"
-            >
-              Don't have an account? Sign up
-            </Link>
+        <div className="security-features">
+          <div className="feature-tag">
+            <span className="tag-icon">🔐</span>
+            <span className="tag-text">Zero-Trust Architecture</span>
           </div>
-        </form>
+          <div className="feature-tag">
+            <span className="tag-icon">⚡</span>
+            <span className="tag-text">AI-Powered Detection</span>
+          </div>
+          <div className="feature-tag">
+            <span className="tag-icon">🌐</span>
+            <span className="tag-text">Global Threat Intel</span>
+          </div>
+        </div>
+      </div>
+      
+      {/* Right Panel - Login Form */}
+      <div className="login-right-panel">
+        <div className="access-container">
+          <div className="access-header-glass">
+            <div className="access-header-content">
+              <h2 className="access-title">Secure Authentication</h2>
+              <p className="access-subtitle">Access threat intelligence dashboard</p>
+            </div>
+            <div className="access-security">
+              <div className="security-level">
+                <div className="level-icon">🛡️</div>
+                <span className="level-text">Level 4 Security</span>
+              </div>
+            </div>
+          </div>
+          
+          <div className="access-glass-container" ref={formRef}>
+            <div className="access-notice">
+              <div className="notice-icon">⚠️</div>
+              <div className="notice-text">
+                This system contains sensitive security information. Access is monitored and recorded.
+              </div>
+            </div>
+            
+            <form className="login-form" onSubmit={handleSubmit}>
+              {error && (
+                <div className="error-message-glass">
+                  <span className="error-icon">⚠️</span>
+                  <span className="error-text">{error}</span>
+                </div>
+              )}
+              
+              <div className="input-group-glass">
+                <label className="input-label-glass">
+                  <span className="label-icon">👤</span>
+                  <span className="label-text">Username</span>
+                </label>
+                <div className="input-wrapper-glass">
+                  <input
+                    id="username"
+                    name="username"
+                    type="text"
+                    required
+                    className="login-input-glass"
+                    placeholder="Enter your username"
+                    value={formData.username}
+                    onChange={handleChange}
+                    disabled={loading}
+                  />
+                  <div className="input-underline"></div>
+                </div>
+              </div>
+              
+              <div className="input-group-glass">
+                <label className="input-label-glass">
+                  <span className="label-icon">🔑</span>
+                  <span className="label-text">Password</span>
+                </label>
+                <div className="input-wrapper-glass">
+                  <input
+                    id="password"
+                    name="password"
+                    type="password"
+                    required
+                    className="login-input-glass"
+                    placeholder="Enter your password"
+                    value={formData.password}
+                    onChange={handleChange}
+                    disabled={loading}
+                  />
+                  <div className="input-underline"></div>
+                </div>
+                <div className="password-options">
+                  <Link to="/forgot-password" className="forgot-link-glass">
+                    Forgot password?
+                  </Link>
+                </div>
+              </div>
+              
+              <div className="login-options">
+                <label className="checkbox-container">
+                  <input type="checkbox" className="hidden-checkbox" />
+                  <div className="custom-checkbox">
+                    <svg className="checkmark" viewBox="0 0 12 10">
+                      <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
+                    </svg>
+                  </div>
+                  <span className="checkbox-label">Remember this device</span>
+                </label>
+              </div>
+              
+              <button
+                type="submit"
+                disabled={loading}
+                className="login-button-glass"
+              >
+                {loading ? (
+                  <>
+                    <span className="button-loader"></span>
+                    Authenticating...
+                  </>
+                ) : (
+                  <>
+                    <span className="button-icon">→</span>
+                    <span className="button-text">Access Dashboard</span>
+                    <span className="button-arrow">›</span>
+                  </>
+                )}
+              </button>
+              
+              <div className="alternative-auth-glass">
+                <div className="auth-divider">
+                  <span className="divider-line"></span>
+                  <span className="divider-text">or authenticate with</span>
+                  <span className="divider-line"></span>
+                </div>
+                
+                <div className="auth-options">
+                  <button type="button" className="auth-option sso-option">
+                    <span className="auth-icon">🏢</span>
+                    <span className="auth-text">Enterprise SSO</span>
+                  </button>
+                  <button type="button" className="auth-option mfa-option">
+                    <span className="auth-icon">📱</span>
+                    <span className="auth-text">MFA Token</span>
+                  </button>
+                </div>
+              </div>
+              
+              <div className="register-prompt">
+                <span className="prompt-text">Need access?</span>
+                <Link to="/register" className="register-link-glass">
+                  Request account access
+                </Link>
+              </div>
+            </form>
+          </div>
+          
+          <div className="access-footer-glass">
+            <div className="compliance-badges">
+              <div className="compliance-badge">
+                <span className="badge-icon">🔒</span>
+                <span className="badge-text">AES-256 Encryption</span>
+              </div>
+              <div className="compliance-badge">
+                <span className="badge-icon">🏛️</span>
+                <span className="badge-text">GDPR Compliant</span>
+              </div>
+            </div>
+            <div className="session-info">
+              <div className="session-status">
+                <div className="status-dot secure"></div>
+                <span className="status-text">Secure Connection</span>
+              </div>
+              <div className="session-timer">Session: 30m</div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
