@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import './Sidebar.css';
 
 const Sidebar = () => {
   const location = useLocation();
@@ -18,21 +19,22 @@ const Sidebar = () => {
   ];
 
   return (
-    <aside className="bg-gray-100 w-64 min-h-screen p-4">
+    <aside className="sidebar-container">
       <nav>
-        <ul className="space-y-2">
+        <ul className="sidebar-menu">
           {menuItems.map((item) => (
-            <li key={item.path}>
+            <li key={item.path} className="sidebar-item">
               <Link
                 to={item.path}
-                className={`flex items-center space-x-3 px-4 py-2 rounded-lg transition-colors ${
-                  location.pathname === item.path
-                    ? 'bg-blue-600 text-white'
-                    : 'text-gray-700 hover:bg-gray-200'
+                className={`sidebar-link ${
+                  location.pathname === item.path ? 'sidebar-link-active' : ''
                 }`}
               >
-                <span>{item.icon}</span>
-                <span>{item.label}</span>
+                <span className="sidebar-icon">{item.icon}</span>
+                <span className="sidebar-label">{item.label}</span>
+                {location.pathname === item.path && (
+                  <span className="active-indicator" />
+                )}
               </Link>
             </li>
           ))}

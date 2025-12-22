@@ -1,0 +1,104 @@
+/* Header.css */
+.header-container {
+  background: linear-gradient(135deg, 
+    rgba(255, 250, 245, 0.98) 0%,
+    rgba(255, 245, 235, 0.98) 100%);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255, 165, 0, 0.1);
+  box-shadow: 0 2px 15px rgba(255, 165, 0, 0.08);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.header-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+}
+
+/* Logout button on left corner */
+.logout-btn-left {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.2rem;
+  background: rgba(255, 235, 215, 0.9);
+  border: 1px solid rgba(255, 165, 0, 0.2);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 3px 10px rgba(255, 165, 0, 0.1);
+}
+
+.logout-btn-left:hover {
+  background: rgba(255, 228, 200, 0.95);
+  border-color: rgba(255, 165, 0, 0.3);
+  transform: translateX(-2px);
+  box-shadow: 0 5px 15px rgba(255, 165, 0, 0.15);
+}
+
+.logout-icon-img {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+  filter: drop-shadow(0 1px 2px rgba(255, 107, 28, 0.3));
+}
+
+.logout-text {
+  color: #ff6b1c;
+  font-weight: 600;
+  font-size: 0.9rem;
+  letter-spacing: 0.5px;
+}
+
+/* Brand/Logo on left */
+.header-brand {
+  color: #ff6b1c;
+  font-size: 1.3rem;
+  font-weight: 700;
+  text-decoration: none;
+  text-shadow: 0 1px 2px rgba(255, 165, 0, 0.1);
+}
+
+.header-brand:hover {
+  color: #ff5200;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .header-content {
+    padding: 0.8rem 1rem;
+  }
+  
+  .logout-text {
+    display: none;
+  }
+  
+  .logout-btn-left {
+    padding: 0.6rem;
+  }
+  
+  .header-brand {
+    font-size: 1.1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .header-brand {
+    font-size: 1rem;
+  }
+  
+  .logout-icon-img {
+    width: 16px;
+    height: 16px;
+  }
+  
+  .logout-btn-left {
+    padding: 0.5rem;
+  }
+}
