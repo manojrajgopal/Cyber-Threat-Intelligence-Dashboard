@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import './Header.css';
 
 const Header = () => {
   const navigate = useNavigate();
@@ -10,20 +11,19 @@ const Header = () => {
   };
 
   return (
-    <header className="bg-blue-600 text-white shadow-lg">
-      <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-        <Link to="/dashboard" className="text-xl font-bold">
-          CTI Dashboard
-        </Link>
-        <nav className="space-x-4">
-          <Link to="/dashboard" className="hover:underline">Dashboard</Link>
-          <Link to="/iocs" className="hover:underline">IOCs</Link>
-          <Link to="/alerts" className="hover:underline">Alerts</Link>
-          <Link to="/reports" className="hover:underline">Reports</Link>
-          <button onClick={handleLogout} className="hover:underline">
-            Logout
-          </button>
-        </nav>
+    <header className="header-container">
+      <div className="header-content">
+        {/* Brand/Logo on left */}
+        <Link to="/" className="header-brand">Cyber Threat Intelligence Dashboard</Link>
+        {/* Logout on right */}
+        <button onClick={handleLogout} className="logout-btn-left">
+          <img 
+            src="/design/check-out.png" 
+            alt="Logout" 
+            className="logout-icon-img"
+          />
+          <span className="logout-text">Logout</span>
+        </button>
       </div>
     </header>
   );

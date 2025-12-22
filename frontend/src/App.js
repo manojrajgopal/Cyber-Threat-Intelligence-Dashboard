@@ -9,7 +9,7 @@ import api from './services/api';
 import Header from './components/common/Header';
 import Footer from './components/common/Footer';
 import Sidebar from './components/common/Sidebar';
-import Login from './components/auth/Login';
+import Login from './components/auth/Login.jsx';
 import Register from './components/auth/Register';
 import Dashboard from './components/dashboard/Dashboard';
 import ThreatInputPage from './pages/ThreatInputPage';
