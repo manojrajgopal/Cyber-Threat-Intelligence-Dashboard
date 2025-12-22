@@ -10,21 +10,29 @@ const Header = () => {
   };
 
   return (
-    <header className="bg-blue-600 text-white shadow-lg">
-      <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-        <Link to="/dashboard" className="text-xl font-bold">
-          CTI Dashboard
+    <header className="glass-nav-bar">
+      <h1 className="glass-nav-title">
+        <Link to="/dashboard">
+          Cyber Threat Intelligence Dashboard
         </Link>
-        <nav className="space-x-4">
-          <Link to="/dashboard" className="hover:underline">Dashboard</Link>
-          <Link to="/iocs" className="hover:underline">IOCs</Link>
-          <Link to="/alerts" className="hover:underline">Alerts</Link>
-          <Link to="/reports" className="hover:underline">Reports</Link>
-          <button onClick={handleLogout} className="hover:underline">
-            Logout
-          </button>
-        </nav>
-      </div>
+      </h1>
+      <nav className="glass-nav-actions">
+        <Link to="/dashboard" className="glass-button secondary">
+          Dashboard
+        </Link>
+        <Link to="/iocs" className="glass-button secondary">
+          IOCs
+        </Link>
+        <Link to="/alerts" className="glass-button secondary">
+          Alerts
+        </Link>
+        <Link to="/reports" className="glass-button secondary">
+          Reports
+        </Link>
+        <button onClick={handleLogout} className="glass-button danger">
+          Logout
+        </button>
+      </nav>
     </header>
   );
 };

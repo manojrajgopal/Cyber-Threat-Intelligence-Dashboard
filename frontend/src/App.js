@@ -37,15 +37,17 @@ const ProtectedRoute = ({ children }) => {
 // Layout component
 const Layout = ({ children }) => {
   return (
-    <div className="min-h-screen bg-gray-50">
-      <Header />
-      <div className="flex">
-        <Sidebar />
-        <main className="flex-1 ml-64">
-          {children}
-        </main>
+    <div className="glass-main-container">
+      <div className="glass-floating-panel glass-fade-in">
+        <Header />
+        <div className="glass-layout">
+          <Sidebar />
+          <main className="glass-content">
+            {children}
+          </main>
+        </div>
+        <Footer />
       </div>
-      <Footer />
     </div>
   );
 };

@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import './Login.css';
 
 const Login = ({ api }) => {
   const [formData, setFormData] = useState({
@@ -93,169 +92,80 @@ const Login = ({ api }) => {
   };
 
   return (
-    <div className="login-container" ref={containerRef}>
-      {/* Animated Background Elements */}
-      <div className="bg-grid"></div>
-      <div className="bg-floating shape-1"></div>
-      <div className="bg-floating shape-2"></div>
-      <div className="bg-floating shape-3"></div>
-      <div className="bg-floating shape-4"></div>
-      
-      {/* Left Panel - Video Display */}
-      <div className="login-left-panel" ref={leftPanelRef}>
-        <div className="security-header">
-          <div className="security-brand">
-            <div className="shield-logo">🛡️</div>
-            <div className="security-title">
-              <span className="title-main">Threat Intelligence</span>
-              <span className="title-sub">Security Portal</span>
+    <div className="glass-dashboard-bg min-h-screen flex items-center justify-center p-4">
+      <div className="glass-floating-panel max-w-4xl w-full glass-fade-in">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          {/* Left Panel - Branding */}
+          <div className="glass-card p-8 text-center">
+            <div className="mb-6">
+              <div className="text-6xl mb-4">🛡️</div>
+              <h1 className="text-2xl font-bold mb-2">Cyber Threat Intelligence</h1>
+              <p className="opacity-70">Security Dashboard</p>
+            </div>
+            <div className="glass-card p-4">
+              <p className="text-sm opacity-70">
+                Advanced threat detection and intelligence analysis platform
+              </p>
             </div>
           </div>
-          
-          <div className="security-status">
-            <div className="status-indicator active"></div>
-            <span className="status-text">Security Systems Online</span>
-          </div>
-        </div>
 
-        {/* Video Container */}
-        <div className="video-container">
-          <video
-            className="security-video"
-            autoPlay
-            loop
-            muted
-            playsInline
-          >
-            <source src="/design/login.mp4" type="video/mp4" />
-            Your browser does not support the video tag.
-          </video>
-          
-          
-          {/* Video Overlay Gradient */}
-          <div className="video-overlay-gradient"></div>
-        </div>
-      </div>
-      
-      {/* Right Panel - Login Form */}
-      <div className="login-right-panel">
-        <div className="access-container">
-          <div className="access-header">
-            <div className="access-header-content">
-              <h2 className="access-title">Secure Authentication</h2>
-              <p className="access-subtitle">Access threat intelligence dashboard</p>
+          {/* Right Panel - Login Form */}
+          <div className="glass-card p-8" ref={formRef}>
+            <div className="mb-6">
+              <h2 className="text-xl font-bold mb-2">Secure Login</h2>
+              <p className="opacity-70">Access your dashboard</p>
             </div>
-          </div>
-          
-          <div className="access-container" ref={formRef}>
-            <div className="access-notice">
-              <div className="notice-icon">⚠️</div>
-              <div className="notice-text">
-                This system contains sensitive security information. Access is monitored and recorded.
+
+            {error && (
+              <div className="glass-card p-4 mb-4 border-red-500/20 bg-red-500/10">
+                <p className="text-red-300">{error}</p>
               </div>
-            </div>
-            
-            <form className="login-form" onSubmit={handleSubmit}>
-              {error && (
-                <div className="error-message-glass">
-                  <span className="error-icon">⚠️</span>
-                  <span className="error-text">{error}</span>
-                </div>
-              )}
-              
-              <div className="input-group-glass">
-                <label className="input-label-glass">
-                  <span className="label-icon">👤</span>
-                  <span className="label-text">Username</span>
-                </label>
-                <div className="input-wrapper-glass">
-                  <input
-                    id="username"
-                    name="username"
-                    type="text"
-                    required
-                    className="login-input-glass"
-                    placeholder="Enter your username"
-                    value={formData.username}
-                    onChange={handleChange}
-                    disabled={loading}
-                  />
-                </div>
+            )}
+
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div>
+                <label className="glass-label">Username</label>
+                <input
+                  type="text"
+                  name="username"
+                  required
+                  className="glass-input"
+                  placeholder="Enter username"
+                  value={formData.username}
+                  onChange={handleChange}
+                  disabled={loading}
+                />
               </div>
-              
-              <div className="input-group-glass">
-                <label className="input-label-glass">
-                  <span className="label-icon">🔑</span>
-                  <span className="label-text">Password</span>
-                </label>
-                <div className="input-wrapper-glass">
-                  <input
-                    id="password"
-                    name="password"
-                    type="password"
-                    required
-                    className="login-input-glass"
-                    placeholder="Enter your password"
-                    value={formData.password}
-                    onChange={handleChange}
-                    disabled={loading}
-                  />
-                </div>
-                <div className="password-options">
-                  <Link to="/forgot-password" className="forgot-link-glass">
-                    Forgot password?
-                  </Link>
-                </div>
+
+              <div>
+                <label className="glass-label">Password</label>
+                <input
+                  type="password"
+                  name="password"
+                  required
+                  className="glass-input"
+                  placeholder="Enter password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  disabled={loading}
+                />
               </div>
-              
-              <div className="login-options">
-                <label className="checkbox-container">
-                  <input type="checkbox" className="hidden-checkbox" />
-                  <div className="custom-checkbox">
-                    <svg className="checkmark" viewBox="0 0 12 10">
-                      <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
-                    </svg>
-                  </div>
-                  <span className="checkbox-label">Remember this device</span>
-                </label>
-              </div>
-              
+
               <button
                 type="submit"
                 disabled={loading}
-                className="login-button-glass"
+                className="glass-button primary w-full"
               >
-                {loading ? (
-                  <>
-                    <span className="button-loader"></span>
-                    Authenticating...
-                  </>
-                ) : (
-                  <>
-                    <span className="button-icon">→</span>
-                    <span className="button-text">Access Dashboard</span>
-                    <span className="button-arrow">›</span>
-                  </>
-                )}
+                {loading ? 'Authenticating...' : 'Login'}
               </button>
-              
-              <div className="alternative-auth-glass">
-                <div className="auth-divider">
-                  <span className="divider-line"></span>
-                  <span className="divider-text">or authenticate with</span>
-                  <span className="divider-line"></span>
-                </div>
-              </div>
-              
-              <div className="register-prompt">
-                <span className="prompt-text">Need access?</span>
-                <Link to="/register" className="register-link-glass">
-                  Request account access
+
+              <div className="text-center">
+                <Link to="/register" className="opacity-70 hover:opacity-100">
+                  Need an account? Register here
                 </Link>
               </div>
             </form>
           </div>
-
         </div>
       </div>
     </div>

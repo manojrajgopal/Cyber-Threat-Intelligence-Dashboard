@@ -101,109 +101,137 @@ const Users = () => {
     setShowModal(true);
   };
 
-  if (loading) return <div className="p-6">Loading...</div>;
-  if (error) return <div className="p-6 text-red-600">{error}</div>;
+  if (loading) return (
+    <div className="glass-card">
+      <div className="glass-card-content text-center py-16">
+        Loading...
+      </div>
+    </div>
+  );
+  if (error) return (
+    <div className="glass-card">
+      <div className="glass-card-content text-center py-16 text-red-300">
+        {error}
+      </div>
+    </div>
+  );
 
   return (
-    <div className="p-6">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">User Management</h1>
-        <button
-          onClick={() => openModal()}
-          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-        >
-          Add User
-        </button>
+    <div className="glass-content">
+      <div className="glass-card glass-fade-in">
+        <div className="glass-card-header">
+          <h1 className="glass-card-title">User Management</h1>
+          <button
+            onClick={() => openModal()}
+            className="glass-button primary"
+          >
+            Add User
+          </button>
+        </div>
       </div>
 
-      <div className="bg-white rounded-lg shadow overflow-hidden">
-        <table className="min-w-full">
-          <thead className="bg-gray-50">
-            <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Username</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Role</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-            </tr>
-          </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
-            {users.map((user) => (
-              <tr key={user.id}>
-                <td className="px-6 py-4 whitespace-nowrap">{user.username}</td>
-                <td className="px-6 py-4 whitespace-nowrap">{user.email}</td>
-                <td className="px-6 py-4 whitespace-nowrap">{user.role?.name || 'No Role'}</td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${user.is_active ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
-                    {user.is_active ? 'Active' : 'Inactive'}
-                  </span>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                  <button
-                    onClick={() => openModal(user)}
-                    className="text-indigo-600 hover:text-indigo-900 mr-3"
-                  >
-                    Edit
-                  </button>
-                  <button
-                    onClick={() => handleDelete(user.id)}
-                    className="text-red-600 hover:text-red-900"
-                  >
-                    Delete
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      <div className="glass-card glass-fade-in overflow-hidden">
+        <div className="glass-card-content">
+          <div className="overflow-x-auto">
+            <table className="glass-table w-full">
+              <thead>
+                <tr>
+                  <th>Username</th>
+                  <th>Email</th>
+                  <th>Role</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {users.map((user) => (
+                  <tr key={user.id}>
+                    <td className="font-medium">{user.username}</td>
+                    <td className="opacity-70">{user.email}</td>
+                    <td>
+                      <span className="px-2 py-1 text-xs rounded-full bg-blue-500/20 text-blue-300">
+                        {user.role?.name || 'No Role'}
+                      </span>
+                    </td>
+                    <td>
+                      <span className={`px-2 py-1 text-xs rounded-full ${
+                        user.is_active ? 'bg-green-500/20 text-green-300' : 'bg-red-500/20 text-red-300'
+                      }`}>
+                        {user.is_active ? 'Active' : 'Inactive'}
+                      </span>
+                    </td>
+                    <td>
+                      <div className="flex gap-2">
+                        <button
+                          onClick={() => openModal(user)}
+                          className="glass-button secondary text-xs px-2 py-1"
+                        >
+                          Edit
+                        </button>
+                        <button
+                          onClick={() => handleDelete(user.id)}
+                          className="glass-button danger text-xs px-2 py-1"
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
 
       {showModal && (
-        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full">
-          <div className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
-            <div className="mt-3">
-              <h3 className="text-lg font-medium text-gray-900 mb-4">
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="glass-card max-w-md w-full mx-4">
+            <div className="glass-card-header">
+              <h3 className="glass-card-title">
                 {editingUser ? 'Edit User' : 'Add User'}
               </h3>
-              <form onSubmit={handleSubmit}>
-                <div className="mb-4">
-                  <label className="block text-gray-700 text-sm font-bold mb-2">Username</label>
+            </div>
+            <div className="glass-card-content">
+              <form onSubmit={handleSubmit} className="space-y-4">
+                <div>
+                  <label className="glass-label">Username</label>
                   <input
                     type="text"
                     value={formData.username}
                     onChange={(e) => setFormData({...formData, username: e.target.value})}
-                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    className="glass-input"
                     required
                   />
                 </div>
-                <div className="mb-4">
-                  <label className="block text-gray-700 text-sm font-bold mb-2">Email</label>
+                <div>
+                  <label className="glass-label">Email</label>
                   <input
                     type="email"
                     value={formData.email}
                     onChange={(e) => setFormData({...formData, email: e.target.value})}
-                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    className="glass-input"
                     required
                   />
                 </div>
                 {!editingUser && (
-                  <div className="mb-4">
-                    <label className="block text-gray-700 text-sm font-bold mb-2">Password</label>
+                  <div>
+                    <label className="glass-label">Password</label>
                     <input
                       type="password"
                       value={formData.password}
                       onChange={(e) => setFormData({...formData, password: e.target.value})}
-                      className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                      className="glass-input"
                       required
                     />
                   </div>
                 )}
-                <div className="mb-4">
-                  <label className="block text-gray-700 text-sm font-bold mb-2">Role</label>
+                <div>
+                  <label className="glass-label">Role</label>
                   <select
                     value={formData.role_id}
                     onChange={(e) => setFormData({...formData, role_id: parseInt(e.target.value)})}
-                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    className="glass-select"
                     required
                   >
                     {roles.map((role) => (
@@ -213,17 +241,17 @@ const Users = () => {
                     ))}
                   </select>
                 </div>
-                <div className="flex justify-end">
+                <div className="flex justify-end gap-2">
                   <button
                     type="button"
                     onClick={() => setShowModal(false)}
-                    className="mr-2 px-4 py-2 text-sm font-medium text-gray-700 bg-gray-200 border border-gray-300 rounded-md hover:bg-gray-300"
+                    className="glass-button secondary"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
-                    className="px-4 py-2 text-sm font-medium text-white bg-blue-500 border border-transparent rounded-md hover:bg-blue-600"
+                    className="glass-button primary"
                   >
                     {editingUser ? 'Update' : 'Create'}
                   </button>

@@ -116,293 +116,109 @@ const AlertsTable = ({ api }) => {
 
   if (loading) {
     return (
-      <div className="dashboard-container">
-        <div className="glass-card loading-container">
-          <div className="loading-animation">
-            <div className="loading-spinner"></div>
-            <p className="loading-text">Loading Threat Intelligence...</p>
-          </div>
+      <div className="glass-card">
+        <div className="glass-card-content text-center py-16">
+          Loading Threat Intelligence...
         </div>
       </div>
     );
   }
 
   return (
-    <div className="p-6">
-      <h1 className="text-3xl font-bold mb-6">Alerts</h1>
-      
-      <div className="bg-white rounded-lg shadow-md overflow-hidden">
-        <table className="w-full">
-          <thead className="bg-gray-50">
-            <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                IOC
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Severity
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Message
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Status
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Created
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Actions
-              </th>
-            </tr>
-          </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
-            {alerts.map((alert) => (
-              <tr key={alert.id}>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div>
-                    <div className="text-sm font-medium text-gray-900">
-                      <Link to={`/iocs/${alert.ioc?.id}`} className="text-blue-600 hover:underline">
-                        {alert.ioc?.value}
-                      </Link>
-                    </div>
-                    <div className="text-sm text-gray-500">
-                      {alert.ioc?.type}
-                    </div>
-                  </div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                    alert.severity === 'critical' ? 'bg-red-100 text-red-800' :
-                    alert.severity === 'high' ? 'bg-orange-100 text-orange-800' :
-                    alert.severity === 'medium' ? 'bg-yellow-100 text-yellow-800' :
-                    'bg-green-100 text-green-800'
-                  }`}>
-                    {alert.severity}
-                  </span>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                  {alert.message}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                    alert.acknowledged ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
-                  }`}>
-                    {alert.acknowledged ? 'Acknowledged' : 'Active'}
-                  </span>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  {new Date(alert.created_at).toLocaleDateString()}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                  {!alert.acknowledged ? (
-                    <button
-                      onClick={() => handleAcknowledge(alert.id, true)}
-                      className="text-blue-600 hover:text-blue-900"
-                    >
-                      Acknowledge
-                    </button>
-                  ) : (
-                    <button
-                      onClick={() => handleAcknowledge(alert.id, false)}
-                      className="text-gray-600 hover:text-gray-900"
-                    >
-                      Unacknowledge
-                    </button>
-                  )}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-      
-      {alerts.length === 0 && (
-        <div className="text-center py-8 text-gray-500">
-          No alerts found
-        </div>
-      )}
-      <div className="dashboard-container">
-        <div className="dashboard-header">
-          <div className="header-content">
-            <h1 className="dashboard-title">
-              <span className="title-word">Threat</span>
-              <span className="title-word">Intelligence</span>
-              <span className="title-word">Alerts</span>
-            </h1>
-            <p className="dashboard-subtitle">Real-time monitoring and incident response</p>
-          </div>
-          <div className="header-stats">
-            <div className="stat-badge">
-              <span className="stat-label">Active</span>
-              <span className="stat-value critical">{alerts.filter(a => !a.acknowledged).length}</span>
+    <div className="glass-content">
+      <div className="glass-card">
+        <div className="glass-card-header">
+          <h1 className="glass-card-title">Alerts</h1>
+          <div className="flex gap-4">
+            <div className="glass-card p-2">
+              <span className="text-sm opacity-70">Active: </span>
+              <span className="font-medium text-red-300">{alerts.filter(a => !a.acknowledged).length}</span>
             </div>
-            <div className="stat-badge">
-              <span className="stat-label">Total</span>
-              <span className="stat-value">{alerts.length}</span>
+            <div className="glass-card p-2">
+              <span className="text-sm opacity-70">Total: </span>
+              <span className="font-medium">{alerts.length}</span>
             </div>
           </div>
         </div>
-
-      <div className="glass-card table-container" ref={tableRef}>
-        <div className="table-header">
-          <h2 className="table-title">Security Alerts Dashboard</h2>
-          <div className="table-actions">
-            <button className="action-btn refresh-btn" onClick={fetchAlerts}>
-              <span className="btn-icon">↻</span>
-              Refresh
-            </button>
-          </div>
-        </div>
-
-        <div className="table-wrapper">
-          <table className="alerts-table">
-            <thead>
-              <tr>
-                <th className="table-head-cell">
-                  <div className="head-content">
-                    <span className="head-icon">🔍</span>
-                    Indicator of Compromise
-                  </div>
-                </th>
-                <th className="table-head-cell">
-                  <div className="head-content">
-                    <span className="head-icon">⚠️</span>
-                    Severity Level
-                  </div>
-                </th>
-                <th className="table-head-cell">
-                  <div className="head-content">
-                    <span className="head-icon">📝</span>
-                    Alert Description
-                  </div>
-                </th>
-                <th className="table-head-cell">
-                  <div className="head-content">
-                    <span className="head-icon">📊</span>
-                    Status
-                  </div>
-                </th>
-                <th className="table-head-cell">
-                  <div className="head-content">
-                    <span className="head-icon">🕒</span>
-                    Time Detected
-                  </div>
-                </th>
-                <th className="table-head-cell">
-                  <div className="head-content">
-                    <span className="head-icon">⚡</span>
-                    Actions
-                  </div>
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {alerts.map((alert, index) => (
-                <tr 
-                  key={alert.id} 
-                  className="table-row"
-                  ref={el => rowsRef.current[index] = el}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.transform = 'translateX(5px)';
-                    e.currentTarget.style.boxShadow = '0 8px 32px rgba(222, 158, 54, 0.2)';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.transform = 'translateX(0)';
-                    e.currentTarget.style.boxShadow = 'none';
-                  }}
-                >
-                  <td className="table-cell">
-                    <div className="ioc-cell">
-                      <div className="ioc-value">{alert.ioc?.value}</div>
-                      <div className="ioc-type">{alert.ioc?.type}</div>
-                    </div>
-                  </td>
-                  <td className="table-cell">
-                    <span className={`severity-badge ${alert.severity}`}>
-                      <span className="severity-dot"></span>
-                      {alert.severity}
-                    </span>
-                  </td>
-                  <td className="table-cell">
-                    <div className="message-cell">{alert.message}</div>
-                  </td>
-                  <td className="table-cell">
-                    <div className={`status-badge ${alert.acknowledged ? 'acknowledged' : 'active'}`}>
-                      <span className="status-indicator"></span>
-                      {alert.acknowledged ? 'Acknowledged' : 'Active'}
-                    </div>
-                  </td>
-                  <td className="table-cell">
-                    <div className="time-cell">
-                      <div className="time-date">
-                        {new Date(alert.created_at).toLocaleDateString()}
+        <div className="glass-card-content">
+          <div className="glass-card overflow-hidden">
+            <table className="glass-table w-full">
+              <thead>
+                <tr>
+                  <th>IOC</th>
+                  <th>Severity</th>
+                  <th>Message</th>
+                  <th>Status</th>
+                  <th>Created</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {alerts.map((alert) => (
+                  <tr key={alert.id}>
+                    <td>
+                      <div>
+                        <div className="font-medium">
+                          <Link to={`/iocs/${alert.ioc?.id}`} className="hover:opacity-80">
+                            {alert.ioc?.value}
+                          </Link>
+                        </div>
+                        <div className="text-sm opacity-70">{alert.ioc?.type}</div>
                       </div>
-                      <div className="time-hour">
-                        {new Date(alert.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                      </div>
-                    </div>
-                  </td>
-                  <td className="table-cell">
-                    <div className="action-cell">
+                    </td>
+                    <td>
+                      <span className={`px-2 py-1 text-xs rounded-full ${
+                        alert.severity === 'critical' ? 'bg-red-500/20 text-red-300' :
+                        alert.severity === 'high' ? 'bg-orange-500/20 text-orange-300' :
+                        alert.severity === 'medium' ? 'bg-yellow-500/20 text-yellow-300' :
+                        'bg-green-500/20 text-green-300'
+                      }`}>
+                        {alert.severity}
+                      </span>
+                    </td>
+                    <td className="max-w-xs truncate">{alert.message}</td>
+                    <td>
+                      <span className={`px-2 py-1 text-xs rounded-full ${
+                        alert.acknowledged ? 'bg-green-500/20 text-green-300' : 'bg-red-500/20 text-red-300'
+                      }`}>
+                        {alert.acknowledged ? 'Acknowledged' : 'Active'}
+                      </span>
+                    </td>
+                    <td className="opacity-70 text-sm">
+                      {new Date(alert.created_at).toLocaleDateString()}
+                    </td>
+                    <td>
                       {!alert.acknowledged ? (
                         <button
                           onClick={() => handleAcknowledge(alert.id, true)}
-                          className="action-button acknowledge-btn"
+                          className="glass-button primary text-xs px-2 py-1"
                         >
-                          <span className="action-icon">✓</span>
                           Acknowledge
                         </button>
                       ) : (
                         <button
                           onClick={() => handleAcknowledge(alert.id, false)}
-                          className="action-button unacknowledge-btn"
+                          className="glass-button secondary text-xs px-2 py-1"
                         >
-                          <span className="action-icon">↺</span>
-                          Re-activate
+                          Unacknowledge
                         </button>
                       )}
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
 
-        {alerts.length === 0 && (
-          <div className="empty-state">
-            <div className="empty-icon">🎯</div>
-            <h3 className="empty-title">No Active Threats Detected</h3>
-            <p className="empty-subtitle">All systems are secure. Monitor this space for real-time alerts.</p>
-          </div>
-        )}
-      </div>
-
-      <div className="dashboard-footer">
-        <div className="footer-stats">
-          <div className="footer-stat">
-            <span className="footer-stat-label">Critical Threats</span>
-            <span className="footer-stat-value accent">
-              {alerts.filter(a => a.severity === 'critical').length}
-            </span>
-          </div>
-          <div className="footer-stat">
-            <span className="footer-stat-label">Response Time</span>
-            <span className="footer-stat-value">2.4s</span>
-          </div>
-          <div className="footer-stat">
-            <span className="footer-stat-label">Last Updated</span>
-            <span className="footer-stat-value">
-              {new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-            </span>
-          </div>
+          {alerts.length === 0 && (
+            <div className="text-center py-8 opacity-70">
+              No alerts found
+            </div>
+          )}
         </div>
       </div>
     </div>
-  </div>
-
-
-);
+  );
 };
 
 export default AlertsTable;

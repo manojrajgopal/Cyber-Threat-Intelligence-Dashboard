@@ -94,76 +94,75 @@ const ThreatInputForm = () => {
   const currentType = inputTypes.find(t => t.value === formData.type);
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow-md">
-      <h3 className="text-lg font-semibold mb-4">Submit Single Threat Input</h3>
+    <div className="glass-card">
+      <div className="glass-card-header">
+        <h3 className="glass-card-title">Submit Single Threat Input</h3>
+      </div>
+      <div className="glass-card-content">
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label className="glass-label">Indicator Type</label>
+            <select
+              name="type"
+              value={formData.type}
+              onChange={handleInputChange}
+              className="glass-select"
+            >
+              {inputTypes.map(type => (
+                <option key={type.value} value={type.value}>
+                  {type.label}
+                </option>
+              ))}
+            </select>
+          </div>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            Indicator Type
-          </label>
-          <select
-            name="type"
-            value={formData.type}
-            onChange={handleInputChange}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          <div>
+            <label className="glass-label">Value</label>
+            <input
+              type="text"
+              name="value"
+              value={formData.value}
+              onChange={handleInputChange}
+              placeholder={currentType?.placeholder}
+              className="glass-input"
+              required
+            />
+          </div>
+
+          <div className="flex items-center">
+            <input
+              type="checkbox"
+              name="continuous_monitoring"
+              checked={formData.continuous_monitoring}
+              onChange={handleInputChange}
+              className="mr-2"
+            />
+            <label className="text-sm opacity-80">
+              Enable continuous monitoring
+            </label>
+          </div>
+
+          {error && (
+            <div className="glass-card p-3 border-red-500/20 bg-red-500/10">
+              <p className="text-red-300 text-sm">{error}</p>
+            </div>
+          )}
+
+          {message && (
+            <div className="glass-card p-3 border-green-500/20 bg-green-500/10">
+              <p className="text-green-300 text-sm">{message}</p>
+            </div>
+          )}
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="glass-button primary w-full"
           >
-            {inputTypes.map(type => (
-              <option key={type.value} value={type.value}>
-                {type.label}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            Value
-          </label>
-          <input
-            type="text"
-            name="value"
-            value={formData.value}
-            onChange={handleInputChange}
-            placeholder={currentType?.placeholder}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            required
-          />
-        </div>
-
-        <div className="flex items-center">
-          <input
-            type="checkbox"
-            name="continuous_monitoring"
-            checked={formData.continuous_monitoring}
-            onChange={handleInputChange}
-            className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-          />
-          <label className="ml-2 block text-sm text-gray-700">
-            Enable continuous monitoring
-          </label>
-        </div>
-
-        {error && (
-          <div className="text-red-600 text-sm bg-red-50 p-3 rounded-md">
-            {error}
-          </div>
-        )}
-
-        {message && (
-          <div className="text-green-600 text-sm bg-green-50 p-3 rounded-md">
-            {message}
-          </div>
-        )}
-
-        <button
-          type="submit"
-          disabled={loading}
-          className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
-        >
-          {loading ? 'Submitting...' : 'Submit Threat Input'}
-        </button>
-      </form>
+            {loading ? 'Submitting...' : 'Submit Threat Input'}
+          </button>
+        </form>
+      </div>
     </div>
   );
 };
