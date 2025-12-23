@@ -198,6 +198,7 @@ Glass Effect Variables:
   text-decoration: none;
   transition: var(--glass-transition);
   position: relative;
+  width: 100%;
 }
 
 .glass-nav-item:hover {
@@ -209,7 +210,7 @@ Glass Effect Variables:
 
 .glass-nav-item.active {
   background: var(--glass-bg-strong);
-  color: #000000;
+  color: #c691ff;
   box-shadow: var(--glass-shadow-light);
 }
 
