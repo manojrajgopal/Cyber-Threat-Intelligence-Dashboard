@@ -1,0 +1,158 @@
+/* ThreatInputPage Component Styles */
+
+/* Content layout */
+.glass-content {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 1.5rem;
+}
+
+/* Card styling */
+.glass-card {
+  background: rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.glass-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.glass-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2), 0 20px 40px rgba(139, 69, 19, 0.1);
+}
+
+.p-4 {
+  padding: 1rem;
+}
+
+/* Card header */
+.glass-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+.glass-card-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: rgba(8, 8, 8, 0.9);
+  margin: 0;
+}
+
+/* Card content */
+.glass-card-content {
+  position: relative;
+  z-index: 1;
+  color: rgba(8, 7, 7, 0.9);
+}
+
+/* Text utilities */
+.opacity-70 {
+  opacity: 0.7;
+}
+
+.opacity-80 {
+  opacity: 0.8;
+}
+
+.text-sm {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+.block {
+  display: block;
+}
+
+.strong {
+  font-weight: 600;
+}
+
+.mb-1 {
+  margin-bottom: 0.25rem;
+}
+
+/* Grid layout */
+.grid {
+  display: grid;
+}
+
+.grid-cols-1 {
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+}
+
+.lg\:grid-cols-2 {
+  @media (min-width: 1024px) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.grid-cols-2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.md\:grid-cols-4 {
+  @media (min-width: 768px) {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.gap-6 {
+  gap: 1.5rem;
+}
+
+.gap-4 {
+  gap: 1rem;
+}
+
+/* List styling */
+.space-y-2 > * + * {
+  margin-top: 0.5rem;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+li {
+  position: relative;
+  padding-left: 1rem;
+}
+
+/* li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.5rem;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: rgba(255, 191, 0, 0.3);
+} */
+
+/* Focus styles for accessibility */
+.glass-card:focus-within {
+  box-shadow: 0 0 0 2px #ffbf00;
+}

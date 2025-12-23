@@ -1,0 +1,259 @@
+/* Glassmorphism Sidebar Styling */
+.sidebar-container {
+  width: 280px;
+  height: 60vh;
+  padding: 24px 16px;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(15px) saturate(180%);
+  border-right: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow:
+    0 12px 40px 0 rgba(31, 38, 135, 0.1),
+    inset 1px 0 0 rgba(255, 255, 255, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    0 0 0 1px rgba(255, 255, 255, 0.1);
+  position: relative;
+  z-index: 10;
+  border-radius: 0 24px 24px 0;
+}
+
+.sidebar-container nav {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.sidebar-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.12) 0%,
+    rgba(255, 241, 235, 0.08) 70%,
+    rgba(255, 248, 245, 0.02) 100%
+  );
+  border-radius: 0 24px 24px 0;
+  z-index: -1;
+}
+
+.sidebar-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 20px;
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.sidebar-item {
+  list-style: none;
+  position: relative;
+}
+
+.sidebar-item:first-child {
+  position: sticky;
+  top: 0;
+  z-index: 11;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(25px) saturate(190%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 0 24px 0 0;
+}
+
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 16px;
+  border-radius: 14px;
+  text-decoration: none;
+  color: rgba(60, 60, 67, 0.85);
+  font-weight: 500;
+  font-size: 14px;
+  letter-spacing: 0.2px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.4);
+  border: 1px solid transparent;
+}
+
+.sidebar-link:hover {
+  background: rgba(255, 255, 255, 0.65);
+  border-color: rgba(255, 159, 28, 0.25);
+  transform: translateX(4px);
+  box-shadow: 
+    0 4px 20px rgba(255, 159, 28, 0.15),
+    0 0 0 1px rgba(255, 159, 28, 0.1);
+}
+
+.sidebar-link-active {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 179, 71, 0.25) 0%,
+    rgba(255, 159, 28, 0.15) 100%
+  ) !important;
+  border: 1px solid rgba(255, 159, 28, 0.3) !important;
+  color: rgba(76, 51, 0, 0.95) !important;
+  font-weight: 600;
+  box-shadow: 
+    0 6px 24px rgba(255, 159, 28, 0.2),
+    inset 0 1px 1px rgba(255, 255, 255, 0.4),
+    inset 0 -1px 1px rgba(255, 159, 28, 0.1) !important;
+}
+
+.sidebar-link-active:hover {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 179, 71, 0.35) 0%,
+    rgba(255, 159, 28, 0.25) 100%
+  ) !important;
+  transform: translateX(4px) scale(1.02);
+}
+
+.sidebar-icon {
+  font-size: 18px;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 8px;
+  padding: 3px;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.sidebar-link-active .sidebar-icon {
+  background: rgba(255, 255, 255, 0.9);
+  border-color: rgba(255, 159, 28, 0.4);
+  box-shadow: 
+    0 3px 12px rgba(255, 159, 28, 0.25),
+    inset 0 1px 2px rgba(255, 255, 255, 0.8);
+}
+
+.sidebar-label {
+  flex: 1;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  letter-spacing: 0.3px;
+}
+
+.active-indicator {
+  position: absolute;
+  right: 16px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #FF9F1C 0%, #FFB347 100%);
+  box-shadow: 0 0 12px rgba(255, 159, 28, 0.6);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.2);
+    box-shadow: 0 0 16px rgba(255, 159, 28, 0.8);
+  }
+}
+
+/* Glassmorphism enhancement layers */
+.sidebar-link::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.3) 0%,
+    rgba(255, 255, 255, 0.1) 50%,
+    transparent 100%
+  );
+  border-radius: 14px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.sidebar-link:hover::before {
+  opacity: 1;
+}
+
+/* Subtle glow effect for the entire sidebar */
+.sidebar-container::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    rgba(255, 159, 28, 0.15),
+    transparent
+  );
+  border-radius: 0 4px 4px 0;
+  pointer-events: none;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .sidebar-container {
+    width: 240px;
+    padding: 20px 12px;
+  }
+
+  .sidebar-link {
+    padding: 10px 12px;
+    font-size: 13px;
+  }
+}
+
+/* Smooth entrance animation */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.sidebar-item {
+  animation: slideIn 0.4s ease-out forwards;
+  opacity: 0;
+}
+
+.sidebar-item:nth-child(1) { animation-delay: 0.1s; }
+.sidebar-item:nth-child(2) { animation-delay: 0.15s; }
+.sidebar-item:nth-child(3) { animation-delay: 0.2s; }
+.sidebar-item:nth-child(4) { animation-delay: 0.25s; }
+.sidebar-item:nth-child(5) { animation-delay: 0.3s; }
+.sidebar-item:nth-child(6) { animation-delay: 0.35s; }
+.sidebar-item:nth-child(7) { animation-delay: 0.4s; }
+.sidebar-item:nth-child(8) { animation-delay: 0.45s; }
+.sidebar-item:nth-child(9) { animation-delay: 0.5s; }
+.sidebar-item:nth-child(10) { animation-delay: 0.55s; }
+
+/* Style for icon images to match emoji size */
+.glass-nav-icon img {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+}

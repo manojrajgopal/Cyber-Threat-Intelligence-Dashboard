@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../../services/api';
+import './Dashboard.css';
 
 const Dashboard = () => {
   const [metrics, setMetrics] = useState(null);
@@ -22,61 +23,75 @@ const Dashboard = () => {
   };
 
   if (loading) {
-    return <div className="flex justify-center items-center h-64">Loading...</div>;
+    return (
+      <div className="glass-card">
+        <div className="glass-card-content text-center py-16">
+          Loading...
+        </div>
+      </div>
+    );
   }
 
   return (
-    <div className="p-6">
-      <h1 className="text-3xl font-bold mb-6">Dashboard</h1>
-      
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        <Link to="/iocs" className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow cursor-pointer">
-          <h3 className="text-lg font-semibold text-gray-700">Total IOCs</h3>
-          <p className="text-3xl font-bold text-blue-600">{metrics?.total_iocs || 0}</p>
-        </Link>
-
-        <Link to="/iocs" className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow cursor-pointer">
-          <h3 className="text-lg font-semibold text-gray-700">High Risk IOCs</h3>
-          <p className="text-3xl font-bold text-red-600">{metrics?.high_risk_iocs || 0}</p>
-        </Link>
-
-        <Link to="/alerts" className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow cursor-pointer">
-          <h3 className="text-lg font-semibold text-gray-700">Active Alerts</h3>
-          <p className="text-3xl font-bold text-orange-600">{metrics?.active_alerts || 0}</p>
-        </Link>
-
-        <Link to="/alerts" className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow cursor-pointer">
-          <h3 className="text-lg font-semibold text-gray-700">Acknowledged Alerts</h3>
-          <p className="text-3xl font-bold text-green-600">{metrics?.acknowledged_alerts || 0}</p>
-        </Link>
-      </div>
-      
-      <div className="bg-white p-6 rounded-lg shadow-md">
-        <h2 className="text-xl font-semibold mb-4">Recent Alerts</h2>
-        {metrics?.recent_alerts?.length > 0 ? (
-          <div className="space-y-2">
-            {metrics.recent_alerts.map((alert) => (
-              <div key={alert.id} className="flex justify-between items-center p-3 bg-gray-50 rounded">
-                <div>
-                  <p className="font-medium">{alert.message}</p>
-                  <p className="text-sm text-gray-600">
-                    IOC: <Link to={`/iocs/${alert.ioc?.id}`} className="text-blue-600 hover:underline">{alert.ioc?.value}</Link> | Severity: {alert.severity}
-                  </p>
-                </div>
-                <span className={`px-2 py-1 rounded text-xs ${
-                  alert.severity === 'critical' ? 'bg-red-100 text-red-800' :
-                  alert.severity === 'high' ? 'bg-orange-100 text-orange-800' :
-                  alert.severity === 'medium' ? 'bg-yellow-100 text-yellow-800' :
-                  'bg-green-100 text-green-800'
-                }`}>
-                  {alert.severity}
-                </span>
-              </div>
-            ))}
+    <div className="glass-content">
+      <div className="glass-card">
+        <div className="glass-card-header">
+          <h1 className="glass-card-title">Dashboard Overview</h1>
+        </div>
+        <div className="glass-card-content">
+          <div className="glass-metric-grid">
+            <Link to="/iocs" className="glass-metric-item">
+              <div className="glass-metric-value">{metrics?.total_iocs || 0}</div>
+              <div className="glass-metric-label">Total IOCs</div>
+            </Link>
+            <Link to="/iocs" className="glass-metric-item">
+              <div className="glass-metric-value">{metrics?.high_risk_iocs || 0}</div>
+              <div className="glass-metric-label">High Risk IOCs</div>
+            </Link>
+            <Link to="/alerts" className="glass-metric-item">
+              <div className="glass-metric-value">{metrics?.active_alerts || 0}</div>
+              <div className="glass-metric-label">Active Alerts</div>
+            </Link>
+            <Link to="/alerts" className="glass-metric-item">
+              <div className="glass-metric-value">{metrics?.acknowledged_alerts || 0}</div>
+              <div className="glass-metric-label">Acknowledged Alerts</div>
+            </Link>
           </div>
-        ) : (
-          <p className="text-gray-500">No recent alerts</p>
-        )}
+        </div>
+      </div>
+
+      <div className="glass-card">
+        <div className="glass-card-header">
+          <h2 className="glass-card-title">Recent Alerts</h2>
+        </div>
+        <div className="glass-card-content">
+          {metrics?.recent_alerts?.length > 0 ? (
+            <div className="space-y-2">
+              {metrics.recent_alerts.map((alert) => (
+                <div key={alert.id} className="glass-card p-4">
+                  <div className="flex justify-between items-center">
+                    <div>
+                      <p className="font-medium">{alert.message}</p>
+                      <p className="text-sm opacity-70">
+                        IOC: <Link to={`/iocs/${alert.ioc?.id}`} className="hover:opacity-100 transition-opacity">{alert.ioc?.value}</Link> | Severity: {alert.severity}
+                      </p>
+                    </div>
+                    <span className={`px-2 py-1 rounded text-xs ${
+                      alert.severity === 'critical' ? 'bg-red-500/20 text-red-300' :
+                      alert.severity === 'high' ? 'bg-orange-500/20 text-orange-300' :
+                      alert.severity === 'medium' ? 'bg-yellow-500/20 text-yellow-300' :
+                      'bg-green-500/20 text-green-300'
+                    }`}>
+                      {alert.severity}
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="opacity-70">No recent alerts</p>
+          )}
+        </div>
       </div>
     </div>
   );
