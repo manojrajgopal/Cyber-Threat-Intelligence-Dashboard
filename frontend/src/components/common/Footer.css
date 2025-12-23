@@ -1,0 +1,19 @@
+/* Footer Component Styles */
+
+/* Footer card styling */
+.glass-card.mt-8 {
+  margin-top: 2rem;
+}
+
+/* Footer content styling */
+.glass-card-content {
+  position: relative;
+  z-index: 1;
+  color: #000000;
+  font-size: 0.875rem;
+  margin: 0;
+}
+
+.text-center {
+  text-align: center;
+}

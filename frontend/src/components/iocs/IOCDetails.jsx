@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import api from '../../services/api';
+import './IOCDetails.css';
 
 const IOCDetails = () => {
   const { id } = useParams();

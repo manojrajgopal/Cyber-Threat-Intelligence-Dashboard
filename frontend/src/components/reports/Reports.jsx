@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import api from '../../services/api';
+import './Reports.css';
 
 const Reports = () => {
   const [reportConfig, setReportConfig] = useState({
@@ -42,77 +43,76 @@ const Reports = () => {
   };
 
   return (
-    <div className="p-6">
-      <h1 className="text-3xl font-bold mb-6">Reports</h1>
-      
-      <div className="bg-white rounded-lg shadow-md p-6 max-w-md">
-        <h2 className="text-xl font-semibold mb-4">Export Report</h2>
-        
-        <div className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Report Type
-            </label>
-            <select
-              name="report_type"
-              value={reportConfig.report_type}
-              onChange={handleChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+    <div className="glass-content">
+      <div className="glass-card glass-fade-in">
+        <div className="glass-card-header">
+          <h1 className="glass-card-title">Reports</h1>
+        </div>
+      </div>
+
+      <div className="glass-card glass-fade-in max-w-md">
+        <div className="glass-card-header">
+          <h2 className="glass-card-title">Export Report</h2>
+        </div>
+        <div className="glass-card-content">
+          <div className="space-y-4">
+            <div>
+              <label className="glass-label">Report Type</label>
+              <select
+                name="report_type"
+                value={reportConfig.report_type}
+                onChange={handleChange}
+                className="glass-select"
+              >
+                <option value="iocs">IOCs</option>
+                <option value="alerts">Alerts</option>
+                <option value="audit">Audit Logs</option>
+              </select>
+            </div>
+
+            <div>
+              <label className="glass-label">Format</label>
+              <select
+                name="format"
+                value={reportConfig.format}
+                onChange={handleChange}
+                className="glass-select"
+              >
+                <option value="json">JSON</option>
+                <option value="csv">CSV</option>
+              </select>
+            </div>
+
+            <div>
+              <label className="glass-label">Date From (optional)</label>
+              <input
+                type="date"
+                name="date_from"
+                value={reportConfig.date_from}
+                onChange={handleChange}
+                className="glass-input"
+              />
+            </div>
+
+            <div>
+              <label className="glass-label">Date To (optional)</label>
+              <input
+                type="date"
+                name="date_to"
+                value={reportConfig.date_to}
+                onChange={handleChange}
+                className="glass-input"
+              />
+            </div>
+
+            <button
+              onClick={handleExport}
+              disabled={loading}
+              className="glass-button primary w-full"
             >
-              <option value="iocs">IOCs</option>
-              <option value="alerts">Alerts</option>
-              <option value="audit">Audit Logs</option>
-            </select>
+              {loading ? 'Exporting...' : 'Export Report'}
+            </button>
           </div>
-          
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Format
-            </label>
-            <select
-              name="format"
-              value={reportConfig.format}
-              onChange={handleChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-            >
-              <option value="json">JSON</option>
-              <option value="csv">CSV</option>
-            </select>
-          </div>
-          
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Date From (optional)
-            </label>
-            <input
-              type="date"
-              name="date_from"
-              value={reportConfig.date_from}
-              onChange={handleChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-            />
-          </div>
-          
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Date To (optional)
-            </label>
-            <input
-              type="date"
-              name="date_to"
-              value={reportConfig.date_to}
-              onChange={handleChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-            />
-          </div>
-          
-          <button
-            onClick={handleExport}
-            disabled={loading}
-            className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50"
-          >
-            {loading ? 'Exporting...' : 'Export Report'}
-          </button>
         </div>
       </div>
     </div>

@@ -1,0 +1,93 @@
+/* Header Component Styles */
+
+/* Navigation bar styling */
+.glass-nav-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+/* Navigation title styling */
+.glass-nav-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0;
+}
+
+.glass-nav-title a {
+  color: #000000;
+  text-decoration: none;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass-nav-title a:hover {
+  color: var(--glass-color-amber);
+}
+
+/* Navigation actions container */
+.glass-nav-actions {
+  display: flex;
+  gap: 1rem;
+}
+
+/* Navigation button styling */
+.glass-button.secondary {
+  border-color: rgba(255, 255, 255, 0.15);
+  color: black;
+  background: rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 12px;
+  padding: 0.75rem 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  position: relative;
+  overflow: hidden;
+  text-decoration: none;
+}
+
+.glass-button.secondary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.glass-button.secondary:active {
+  transform: translateY(0);
+}
+
+/* Danger button styling */
+.glass-button.danger {
+  border-color: rgba(239, 68, 68, 0.3);
+  color: #FF0000;
+  background: rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 12px;
+  padding: 0.75rem 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.glass-button.danger:hover {
+  background: rgba(239, 68, 68, 0.1);
+  box-shadow: 0 10px 25px rgba(239, 68, 68, 0.2);
+}
+
+/* Focus styles for accessibility */
+.glass-button:focus {
+  outline: 2px solid #ffbf00;
+  outline-offset: 2px;
+}

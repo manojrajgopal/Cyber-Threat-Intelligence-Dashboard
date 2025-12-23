@@ -1,0 +1,261 @@
+/* BulkUpload Component Styles */
+
+/* Card styling */
+.glass-card {
+  background: rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.glass-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.glass-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2), 0 20px 40px rgba(139, 69, 19, 0.1);
+}
+
+/* Card header */
+.glass-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+.glass-card-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: rgba(0, 0, 0, 0.9);
+  margin: 0;
+}
+
+/* Card content */
+.glass-card-content {
+  position: relative;
+  z-index: 1;
+  color: rgba(0, 0, 0, 0.9);
+}
+
+/* Text utilities */
+.text-sm {
+  font-size: 0.875rem;
+}
+
+.text-xs {
+  font-size: 0.75rem;
+}
+
+.opacity-70 {
+  opacity: 0.7;
+}
+
+.opacity-80 {
+  opacity: 0.8;
+}
+
+.mb-4 {
+  margin-bottom: 1rem;
+}
+
+.mb-2 {
+  margin-bottom: 0.5rem;
+}
+
+.mt-1 {
+  margin-top: 0.25rem;
+}
+
+.mt-2 {
+  margin-top: 0.5rem;
+}
+
+.mt-6 {
+  margin-top: 1.5rem;
+}
+
+/* Form styling */
+.space-y-4 > * + * {
+  margin-top: 1rem;
+}
+
+.space-y-2 > * + * {
+  margin-top: 0.5rem;
+}
+
+/* Labels */
+.glass-label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: rgba(32, 1, 1, 0.7);
+  margin-bottom: 0.5rem;
+}
+
+/* Input fields */
+.glass-input {
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 12px;
+  padding: 0.75rem 1rem;
+  color: rgba(10, 0, 0, 0.9);
+  font-size: 0.875rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  width: 92%;
+}
+
+.glass-input:focus {
+  outline: none;
+  border-color: #ffbf00;
+  box-shadow: 0 0 0 3px rgba(255, 191, 0, 0.1);
+}
+
+.glass-input::placeholder {
+  color: #000000;
+}
+
+/* Message cards */
+.glass-card.p-3 {
+  padding: 0.75rem;
+}
+
+.border-red-500\/20 {
+  border-color: rgba(239, 68, 68, 0.2);
+}
+
+.border-green-500\/20 {
+  border-color: rgba(34, 197, 94, 0.2);
+}
+
+.bg-red-500\/10 {
+  background-color: rgba(239, 68, 68, 0.1);
+}
+
+.bg-green-500\/10 {
+  background-color: rgba(34, 197, 94, 0.1);
+}
+
+.text-red-300 {
+  color: black;
+}
+
+.text-green-300 {
+  color: #00008b;
+}
+
+/* Buttons */
+.glass-button {
+  background: rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 12px;
+  padding: 0.75rem 1rem;
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.glass-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.glass-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+.glass-button:hover::before {
+  opacity: 1;
+}
+
+.glass-button:active {
+  transform: translateY(0);
+}
+
+.glass-button.primary {
+  border-color: rgba(59, 130, 246, 0.3);
+  color: black;
+}
+
+.glass-button.primary:hover {
+  background: rgba(59, 130, 246, 0.1);
+  box-shadow: 0 10px 25px rgba(59, 130, 246, 0.2);
+}
+
+.glass-button.w-full {
+  width: 100%;
+}
+
+.glass-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Text formatting */
+.font-medium {
+  font-weight: 500;
+}
+
+.text-md {
+  font-size: 1rem;
+}
+
+.strong {
+  font-weight: 600;
+}
+
+/* Pre/code formatting */
+pre {
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  margin: 0;
+  color: black;
+}
+
+.overflow-x-auto {
+  overflow-x: auto;
+}
+
+/* Focus styles for accessibility */
+.glass-button:focus,
+.glass-input:focus {
+  outline: 2px solid #ffbf00;
+  outline-offset: 2px;
+}
+
+.glass-card:focus-within {
+  box-shadow: 0 0 0 2px #ffbf00;
+}

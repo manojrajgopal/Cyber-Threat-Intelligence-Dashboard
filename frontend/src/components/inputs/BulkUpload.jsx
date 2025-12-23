@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { ingestionApi } from '../../api/ingestionApi';
+import './BulkUpload.css';
 
 const BulkUpload = () => {
   const [file, setFile] = useState(null);
@@ -71,80 +72,84 @@ const BulkUpload = () => {
   };
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow-md">
-      <h3 className="text-lg font-semibold mb-4">Bulk Upload Threat Indicators</h3>
-      <p className="text-sm text-gray-600 mb-4">
-        Upload a CSV or JSON file containing multiple threat indicators.
-        CSV should have columns: type, value. JSON should be an array of objects with type and value fields.
-      </p>
+    <div className="glass-card">
+      <div className="glass-card-header">
+        <h3 className="glass-card-title">Bulk Upload Threat Indicators</h3>
+      </div>
+      <div className="glass-card-content">
+        <p className="text-sm opacity-70 mb-4">
+          Upload a CSV or JSON file containing multiple threat indicators.
+          CSV should have columns: type, value. JSON should be an array of objects with type and value fields.
+        </p>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            Select File
-          </label>
-          <input
-            id="file-input"
-            type="file"
-            accept=".csv,.json"
-            onChange={handleFileChange}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            required
-          />
-          {file && (
-            <div className="mt-2 text-sm text-gray-600">
-              <strong>Selected:</strong> {file.name} ({formatFileSize(file.size)})
-            </div>
-          )}
-        </div>
-
-        {error && (
-          <div className="text-red-600 text-sm bg-red-50 p-3 rounded-md">
-            {error}
-          </div>
-        )}
-
-        {message && (
-          <div className="text-green-600 text-sm bg-green-50 p-3 rounded-md">
-            {message}
-            {jobId && (
-              <div className="mt-2">
-                <strong>Job ID:</strong> {jobId}
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label className="glass-label">Select File</label>
+            <input
+              id="file-input"
+              type="file"
+              accept=".csv,.json"
+              onChange={handleFileChange}
+              className="glass-input"
+              required
+            />
+            {file && (
+              <div className="mt-2 text-sm opacity-70">
+                <strong>Selected:</strong> {file.name} ({formatFileSize(file.size)})
               </div>
             )}
           </div>
-        )}
 
-        <button
-          type="submit"
-          disabled={loading || !file}
-          className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
-        >
-          {loading ? 'Uploading...' : 'Upload and Process'}
-        </button>
-      </form>
+          {error && (
+            <div className="glass-card p-3 border-red-500/20 bg-red-500/10">
+              <p className="text-red-300 text-sm">{error}</p>
+            </div>
+          )}
 
-      <div className="mt-6">
-        <h4 className="text-md font-medium mb-2">File Format Examples</h4>
-        <div className="space-y-2 text-sm text-gray-600">
-          <div>
-            <strong>CSV Format:</strong>
-            <pre className="bg-gray-100 p-2 rounded mt-1 text-xs">
-              type,value
-              ip,192.168.1.1
-              domain,malicious.com
-              url,https://bad.example.com
-            </pre>
-          </div>
-          <div>
-            <strong>JSON Format:</strong>
-            <pre className="bg-gray-100 p-2 rounded mt-1 text-xs">
+          {message && (
+            <div className="glass-card p-3 border-green-500/20 bg-green-500/10">
+              <p className="text-green-300 text-sm">
+                {message}
+                {jobId && (
+                  <div className="mt-2">
+                    <strong>Job ID:</strong> {jobId}
+                  </div>
+                )}
+              </p>
+            </div>
+          )}
+
+          <button
+            type="submit"
+            disabled={loading || !file}
+            className="glass-button primary w-full"
+          >
+            {loading ? 'Uploading...' : 'Upload and Process'}
+          </button>
+        </form>
+
+        <div className="mt-6">
+          <h4 className="text-md font-medium mb-2 opacity-80">File Format Examples</h4>
+          <div className="space-y-2 text-sm opacity-70">
+            <div>
+              <strong>CSV Format:</strong>
+              <pre className="glass-card p-2 mt-1 text-xs">
+{`type,value
+ip,192.168.1.1
+domain,malicious.com
+url,https://bad.example.com`}
+              </pre>
+            </div>
+            <div>
+              <strong>JSON Format:</strong>
+              <pre className="glass-card p-2 mt-1 text-xs">
 {`[
   {"type": "ip", "value": "192.168.1.1"},
   {"type": "domain", "value": "malicious.com"},
   {"type": "url", "value": "https://bad.example.com"}
 ]`}
-            </pre>
+              </pre>
+            </div>
           </div>
         </div>
       </div>
