@@ -363,8 +363,12 @@ Glass Effect Variables:
   outline-offset: 2px;
 }
 
+.glass-button:focus {
+  outline: none;
+}
+
 .glass-card:focus-within {
-  box-shadow: 0 0 0 2px var(--glass-color-amber);
+  box-shadow: none;
 }
 
 /* Forms */
