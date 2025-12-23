@@ -250,3 +250,10 @@
 .sidebar-item:nth-child(8) { animation-delay: 0.45s; }
 .sidebar-item:nth-child(9) { animation-delay: 0.5s; }
 .sidebar-item:nth-child(10) { animation-delay: 0.55s; }
+
+/* Style for icon images to match emoji size */
+.glass-nav-icon img {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+}
