@@ -1,0 +1,191 @@
+2025-12-24 00:06:11,145 - train_ip - INFO - Training started
+2025-12-24 00:06:11,145 - train_ip - INFO - ============================================================
+2025-12-24 00:06:11,145 - train_ip - INFO - STARTING IP MODEL TRAINING WITH ROBUST VALIDATION
+2025-12-24 00:06:11,146 - train_ip - INFO - ============================================================
+2025-12-24 00:06:11,150 - train_ip - INFO - Removed 0 duplicate IPs.
+2025-12-24 00:06:11,150 - train_ip - INFO - IP dataset loaded successfully. Shape: (396, 4)
+2025-12-24 00:06:11,150 - train_ip - INFO - Class distribution:
+1    203
+0    193
+Name: is_malicious, dtype: int64
+2025-12-24 00:06:11,150 - train_ip - INFO - Benign IPs: 193 (48.7%)
+2025-12-24 00:06:11,152 - train_ip - INFO - Malicious IPs: 203 (51.3%)
+2025-12-24 00:06:11,152 - train_ip - INFO - Dataset is small. Extending with synthetic data...
+2025-12-24 00:06:11,153 - train_ip - INFO - Generating synthetic IP data for better model generalization...
+2025-12-24 00:06:11,180 - train_ip - ERROR - Error loading IP dataset: high is out of bounds for int32
+2025-12-24 00:07:32,045 - train_ip - INFO - Training started
+2025-12-24 00:07:32,045 - train_ip - INFO - ============================================================
+2025-12-24 00:07:32,045 - train_ip - INFO - STARTING IP MODEL TRAINING WITH ROBUST VALIDATION
+2025-12-24 00:07:32,046 - train_ip - INFO - ============================================================
+2025-12-24 00:07:32,050 - train_ip - INFO - Removed 0 duplicate IPs.
+2025-12-24 00:07:32,050 - train_ip - INFO - IP dataset loaded successfully. Shape: (396, 4)
+2025-12-24 00:07:32,050 - train_ip - INFO - Class distribution:
+1    203
+0    193
+Name: is_malicious, dtype: int64
+2025-12-24 00:07:32,052 - train_ip - INFO - Benign IPs: 193 (48.7%)
+2025-12-24 00:07:32,052 - train_ip - INFO - Malicious IPs: 203 (51.3%)
+2025-12-24 00:07:32,052 - train_ip - INFO - Dataset is small. Extending with synthetic data...
+2025-12-24 00:07:32,052 - train_ip - INFO - Generating synthetic IP data for better model generalization...
+2025-12-24 00:07:32,068 - train_ip - ERROR - Error loading IP dataset: Expected 4 octets in '96228877'
+2025-12-24 00:08:24,334 - train_ip - INFO - Training started
+2025-12-24 00:08:24,334 - train_ip - INFO - ============================================================
+2025-12-24 00:08:24,335 - train_ip - INFO - STARTING IP MODEL TRAINING WITH ROBUST VALIDATION
+2025-12-24 00:08:24,335 - train_ip - INFO - ============================================================
+2025-12-24 00:08:24,339 - train_ip - INFO - Removed 0 duplicate IPs.
+2025-12-24 00:08:24,339 - train_ip - INFO - IP dataset loaded successfully. Shape: (396, 4)
+2025-12-24 00:08:24,340 - train_ip - INFO - Class distribution:
+1    203
+0    193
+Name: is_malicious, dtype: int64
+2025-12-24 00:08:24,340 - train_ip - INFO - Benign IPs: 193 (48.7%)
+2025-12-24 00:08:24,340 - train_ip - INFO - Malicious IPs: 203 (51.3%)
+2025-12-24 00:08:24,340 - train_ip - INFO - Dataset is small. Extending with synthetic data...
+2025-12-24 00:08:24,341 - train_ip - INFO - Generating synthetic IP data for better model generalization...
+2025-12-24 00:08:24,360 - train_ip - INFO - Extended dataset from 396 to 1179 rows
+2025-12-24 00:08:24,360 - train_ip - INFO - Final class distribution: {0: 625, 1: 554}
+2025-12-24 00:08:24,360 - train_ip - INFO - Starting IP feature engineering...
+2025-12-24 00:08:24,365 - train_ip - INFO - Removed 59 invalid IPs
+2025-12-24 00:08:24,365 - train_ip - INFO - Removed 'risk_score' column to prevent data leakage
+2025-12-24 00:08:24,366 - train_ip - INFO - Removed 'source' column to prevent data leakage
+2025-12-24 00:08:24,478 - train_ip - INFO - Feature engineering completed. Total features: 36
+2025-12-24 00:08:24,478 - train_ip - INFO - Feature columns: ['is_malicious', 'octet1', 'octet2', 'octet3', 'octet4', 'ip_int', 'is_class_a', 'is_class_b', 'is_class_c', 'is_private', 'is_loopback', 'is_link_local', 'is_multicast', 'is_reserved', 'is_test_net', 'octet_sum', 'octet_mean', 'octet_std', 'octet1_high_bit', 'octet4_low_bit', 'octets_equal', 'has_consecutive_octets', 'has_zero_octet', 'has_255_octet', 'has_suspicious_end', 'octet_entropy', 'is_european_range', 'is_asian_range', 'is_american_range', 'octet1_binary_ones', 'octet4_binary_ones', 'octet_ratio_1_4', 'octet_diff_1_4', 'is_sequential_up', 'is_sequential_down', 'is_network_boundary']
+2025-12-24 00:08:24,481 - train_ip - INFO - Final dataset shape - X: (1120, 35), y: (1120,)
+2025-12-24 00:08:24,482 - train_ip - INFO - Class distribution: {0: 566, 1: 554}
+2025-12-24 00:08:24,482 - train_ip - INFO - Total features: 35
+2025-12-24 00:08:24,482 - train_ip - INFO - Performing feature selection...
+2025-12-24 00:08:24,520 - train_ip - INFO - Selected 20 features: ['octet1', 'octet2', 'octet3', 'ip_int', 'is_class_a', 'is_class_b', 'is_class_c', 'is_private', 'is_multicast', 'octet_sum', 'octet_mean', 'octet_std', 'octet1_high_bit', 'octet4_low_bit', 'octets_equal', 'has_consecutive_octets', 'octet_entropy', 'is_european_range', 'octet1_binary_ones', 'is_sequential_up']
+2025-12-24 00:08:24,520 - train_ip - INFO - Scaling features...
+2025-12-24 00:08:24,552 - train_ip - INFO - 
+Data Split Summary:
+2025-12-24 00:08:24,552 - train_ip - INFO - Train set (final): 716 samples
+2025-12-24 00:08:24,552 - train_ip - INFO - Validation set: 180 samples
+2025-12-24 00:08:24,553 - train_ip - INFO - Test set: 224 samples
+2025-12-24 00:08:24,553 - train_ip - INFO - Total samples: 1120
+2025-12-24 00:08:24,553 - train_ip - INFO - Class weights: {0: 0.988950276243094, 1: 1.0112994350282485}
+2025-12-24 00:08:24,554 - train_ip - INFO - 
+============================================================
+2025-12-24 00:08:24,554 - train_ip - INFO - STARTING MODEL TRAINING WITH 10-FOLD CROSS VALIDATION
+2025-12-24 00:08:24,554 - train_ip - INFO - ============================================================
+2025-12-24 00:08:24,554 - train_ip - INFO - 
+Training logistic_regression...
+2025-12-24 00:08:26,874 - train_ip - INFO -   Cross-validation F1 scores (10-fold): Mean=0.7359, Std=0.0657
+2025-12-24 00:08:28,440 - train_ip - INFO - logistic_regression Results:
+2025-12-24 00:08:28,441 - train_ip - INFO -   Best Parameters: {'C': 10, 'max_iter': 2000, 'penalty': 'l2', 'solver': 'saga'}
+2025-12-24 00:08:28,441 - train_ip - INFO -   Training Accuracy: 0.7467
+2025-12-24 00:08:28,441 - train_ip - INFO -   Validation Accuracy: 0.6778 (F1: 0.6915)
+2025-12-24 00:08:28,441 - train_ip - INFO -   Testing Accuracy: 0.7455
+2025-12-24 00:08:28,442 - train_ip - INFO -   Precision: 0.7755
+2025-12-24 00:08:28,442 - train_ip - INFO -   Recall: 0.6847
+2025-12-24 00:08:28,442 - train_ip - INFO -   F1-Score: 0.7273
+2025-12-24 00:08:28,442 - train_ip - INFO -   *** New Best Model! (Validation F1: 0.6915) ***
+2025-12-24 00:08:28,442 - train_ip - INFO - 
+Training random_forest...
+2025-12-24 00:08:29,039 - train_ip - INFO -   Cross-validation F1 scores (10-fold): Mean=0.7047, Std=0.0556
+2025-12-24 00:11:55,457 - train_ip - INFO - random_forest Results:
+2025-12-24 00:11:55,458 - train_ip - INFO -   Best Parameters: {'bootstrap': False, 'max_depth': 5, 'max_features': 0.5, 'min_samples_leaf': 4, 'min_samples_split': 10, 'n_estimators': 150}
+2025-12-24 00:11:55,458 - train_ip - INFO -   Training Accuracy: 0.8143
+2025-12-24 00:11:55,458 - train_ip - INFO -   Validation Accuracy: 0.7889 (F1: 0.7765)
+2025-12-24 00:11:55,459 - train_ip - INFO -   Testing Accuracy: 0.7411
+2025-12-24 00:11:55,459 - train_ip - INFO -   Precision: 0.7849
+2025-12-24 00:11:55,459 - train_ip - INFO -   Recall: 0.6577
+2025-12-24 00:11:55,459 - train_ip - INFO -   F1-Score: 0.7157
+2025-12-24 00:11:55,460 - train_ip - INFO -   *** New Best Model! (Validation F1: 0.7765) ***
+2025-12-24 00:11:55,460 - train_ip - INFO - 
+Training gradient_boosting...
+2025-12-24 00:11:56,450 - train_ip - INFO -   Cross-validation F1 scores (10-fold): Mean=0.7412, Std=0.0479
+2025-12-24 00:22:21,922 - train_ip - INFO - gradient_boosting Results:
+2025-12-24 00:22:21,922 - train_ip - INFO -   Best Parameters: {'learning_rate': 0.05, 'max_depth': 3, 'max_features': 'sqrt', 'min_samples_leaf': 4, 'min_samples_split': 2, 'n_estimators': 150, 'subsample': 0.8}
+2025-12-24 00:22:21,922 - train_ip - INFO -   Training Accuracy: 0.8401
+2025-12-24 00:22:21,923 - train_ip - INFO -   Validation Accuracy: 0.7722 (F1: 0.7709)
+2025-12-24 00:22:21,923 - train_ip - INFO -   Testing Accuracy: 0.7589
+2025-12-24 00:22:21,923 - train_ip - INFO -   Precision: 0.7664
+2025-12-24 00:22:21,923 - train_ip - INFO -   Recall: 0.7387
+2025-12-24 00:22:21,923 - train_ip - INFO -   F1-Score: 0.7523
+2025-12-24 00:22:21,924 - train_ip - INFO - 
+Training svc...
+2025-12-24 00:22:22,157 - train_ip - INFO -   Cross-validation F1 scores (10-fold): Mean=0.7476, Std=0.0523
+2025-12-24 00:22:37,957 - train_ip - INFO - svc Results:
+2025-12-24 00:22:37,958 - train_ip - INFO -   Best Parameters: {'C': 100, 'gamma': 0.01, 'kernel': 'rbf', 'max_iter': 100000, 'tol': 0.001}
+2025-12-24 00:22:37,958 - train_ip - INFO -   Training Accuracy: 0.7847
+2025-12-24 00:22:37,958 - train_ip - INFO -   Validation Accuracy: 0.7722 (F1: 0.7574)
+2025-12-24 00:22:37,959 - train_ip - INFO -   Testing Accuracy: 0.7589
+2025-12-24 00:22:37,959 - train_ip - INFO -   Precision: 0.8065
+2025-12-24 00:22:37,959 - train_ip - INFO -   Recall: 0.6757
+2025-12-24 00:22:37,959 - train_ip - INFO -   F1-Score: 0.7353
+2025-12-24 00:22:37,960 - train_ip - INFO - 
+============================================================
+2025-12-24 00:22:37,960 - train_ip - INFO - MODEL PERFORMANCE SUMMARY
+2025-12-24 00:22:37,960 - train_ip - INFO - ============================================================
+2025-12-24 00:22:37,960 - train_ip - INFO - LOGISTIC_REGRESSION       Val F1: 0.6915 | Test Acc: 0.7455 | Precision: 0.7755 | Recall: 0.6847 | F1: 0.7273
+2025-12-24 00:22:37,960 - train_ip - INFO - RANDOM_FOREST             Val F1: 0.7765 | Test Acc: 0.7411 | Precision: 0.7849 | Recall: 0.6577 | F1: 0.7157
+2025-12-24 00:22:37,961 - train_ip - INFO - GRADIENT_BOOSTING         Val F1: 0.7709 | Test Acc: 0.7589 | Precision: 0.7664 | Recall: 0.7387 | F1: 0.7523
+2025-12-24 00:22:37,961 - train_ip - INFO - SVC                       Val F1: 0.7574 | Test Acc: 0.7589 | Precision: 0.8065 | Recall: 0.6757 | F1: 0.7353
+2025-12-24 00:22:37,961 - train_ip - INFO - 
+Best model: random_forest
+2025-12-24 00:22:37,961 - train_ip - INFO - Best validation F1: 0.7765
+2025-12-24 00:22:37,962 - train_ip - INFO - Best parameters: {'bootstrap': False, 'max_depth': 5, 'max_features': 0.5, 'min_samples_leaf': 4, 'min_samples_split': 10, 'n_estimators': 150}
+2025-12-24 00:22:37,962 - train_ip - INFO - 
+============================================================
+2025-12-24 00:22:37,963 - train_ip - INFO - FINAL COMPREHENSIVE EVALUATION
+2025-12-24 00:22:37,963 - train_ip - INFO - ============================================================
+2025-12-24 00:22:37,995 - train_ip - INFO - 
+Classification Report:
+              precision    recall  f1-score   support
+
+      Benign       0.71      0.82      0.76       113
+   Malicious       0.78      0.66      0.72       111
+
+    accuracy                           0.74       224
+   macro avg       0.75      0.74      0.74       224
+weighted avg       0.75      0.74      0.74       224
+
+2025-12-24 00:22:37,995 - train_ip - INFO - 
+============================================================
+2025-12-24 00:22:37,997 - train_ip - INFO - COMPREHENSIVE MODEL VALIDATION
+2025-12-24 00:22:37,997 - train_ip - INFO - ============================================================
+2025-12-24 00:22:38,002 - train_ip - INFO - Accuracy: 0.7411
+2025-12-24 00:22:38,003 - train_ip - INFO - Precision: 0.7849
+2025-12-24 00:22:38,003 - train_ip - INFO - Recall: 0.6577
+2025-12-24 00:22:38,003 - train_ip - INFO - F1-Score: 0.7157
+2025-12-24 00:22:38,073 - train_ip - INFO - ROC-AUC Score: 0.8538
+2025-12-24 00:22:38,076 - train_ip - INFO - 
+Confusion Matrix Details:
+2025-12-24 00:22:38,077 - train_ip - INFO - True Negatives:  93
+2025-12-24 00:22:38,077 - train_ip - INFO - False Positives: 20
+2025-12-24 00:22:38,077 - train_ip - INFO - False Negatives: 38
+2025-12-24 00:22:38,077 - train_ip - INFO - True Positives:  73
+2025-12-24 00:22:38,077 - train_ip - INFO - False Positive Rate: 0.1770
+2025-12-24 00:22:38,077 - train_ip - INFO - False Negative Rate: 0.3423
+2025-12-24 00:22:38,105 - train_ip - INFO - 
+Feature Importance (Top 10):
+2025-12-24 00:22:38,106 - train_ip - INFO -    1. octet2                        : 0.4120
+2025-12-24 00:22:38,106 - train_ip - INFO -    2. octet1_binary_ones            : 0.1129
+2025-12-24 00:22:38,106 - train_ip - INFO -    3. is_private                    : 0.0989
+2025-12-24 00:22:38,106 - train_ip - INFO -    4. octet3                        : 0.0822
+2025-12-24 00:22:38,106 - train_ip - INFO -    5. octet1                        : 0.0580
+2025-12-24 00:22:38,107 - train_ip - INFO -    6. ip_int                        : 0.0572
+2025-12-24 00:22:38,107 - train_ip - INFO -    7. octet_std                     : 0.0465
+2025-12-24 00:22:38,107 - train_ip - INFO -    8. octet_entropy                 : 0.0363
+2025-12-24 00:22:38,107 - train_ip - INFO -    9. is_class_c                    : 0.0228
+2025-12-24 00:22:38,108 - train_ip - INFO -   10. octet_mean                    : 0.0216
+2025-12-24 00:22:39,827 - train_ip - INFO - 
+Model saved to: models/ip_model.pkl
+2025-12-24 00:22:39,828 - train_ip - INFO - Scaler saved to: models/scaler_ip.pkl
+2025-12-24 00:22:39,828 - train_ip - INFO - Feature selector saved to: models/selector_ip.pkl
+2025-12-24 00:22:39,828 - train_ip - INFO - Selected feature names saved to: models/ip_feature_names.pkl
+2025-12-24 00:22:39,833 - train_ip - INFO - 
+============================================================
+2025-12-24 00:22:39,834 - train_ip - INFO - TRAINING COMPLETED WITH ROBUST VALIDATION
+2025-12-24 00:22:39,834 - train_ip - INFO - Total training time: 855.50 seconds
+2025-12-24 00:22:39,834 - train_ip - INFO - ============================================================
+2025-12-24 00:22:39,835 - train_ip - INFO - 
+============================================================
+2025-12-24 00:22:39,835 - train_ip - INFO - RECOMMENDATIONS FOR PRODUCTION USE
+2025-12-24 00:22:39,835 - train_ip - INFO - ============================================================
+2025-12-24 00:22:39,835 - train_ip - INFO - 1. Monitor false positive rate in production
+2025-12-24 00:22:39,835 - train_ip - INFO - 2. Regularly update training data with new threat intelligence
+2025-12-24 00:22:39,836 - train_ip - INFO - 3. Consider ensemble methods for better generalization
+2025-12-24 00:22:39,836 - train_ip - INFO - 4. Implement a confidence threshold for predictions (e.g., >0.7 for malicious)
+2025-12-24 00:22:39,836 - train_ip - INFO - 5. Track model drift over time and retrain monthly
+2025-12-24 00:22:39,836 - train_ip - INFO - 6. Combine with reputation feeds for better coverage

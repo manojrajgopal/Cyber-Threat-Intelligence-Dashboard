@@ -485,12 +485,12 @@ def train_domain_model():
             }
         },
         'svc': {
-            'model': SVC(random_state=42, probability=True, class_weight='balanced', max_iter=10000),
+            'model': SVC(random_state=42, probability=True, class_weight='balanced', max_iter=100000),
             'params': {
                 'C': [0.1, 1, 10, 100],
                 'kernel': ['linear', 'rbf'],  # Removed 'poly' to avoid convergence issues
                 'gamma': ['scale', 'auto', 0.01, 0.1],
-                'max_iter': [10000],  # Increased for convergence
+                'max_iter': [100000],  # Increased for convergence
                 'tol': [1e-4, 1e-3]
             }
         }

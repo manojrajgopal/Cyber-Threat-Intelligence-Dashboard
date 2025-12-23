@@ -18,9 +18,9 @@
         "letter_ratio",
         "unique_char_ratio"
     ],
-    "training_start_time": "Tue Dec 23 00:52:27 2025",
-    "training_end_time": "Tue Dec 23 00:57:41 2025",
-    "total_duration_seconds": 314.3681080341339,
+    "training_start_time": "Tue Dec 23 22:29:16 2025",
+    "training_end_time": "Tue Dec 23 22:33:57 2025",
+    "total_duration_seconds": 281.0134596824646,
     "metrics": {
         "accuracy": 0.9712230215827338,
         "precision": 0.9880952380952381,
@@ -40,7 +40,7 @@
         "false_positives": 1,
         "false_negatives": 3,
         "true_positives": 83,
-        "training_duration": 313.0945472717285,
+        "training_duration": 280.3285114765167,
         "best_model": "random_forest",
         "best_parameters": "{'bootstrap': True, 'max_depth': 5, 'max_features': 0.5, 'min_samples_leaf': 1, 'min_samples_split': 5, 'n_estimators': 50}",
         "selected_features": [

@@ -713,3 +713,339 @@ Model saved to: models/domain_model.pkl
 2025-12-23 00:57:41,592 - train_domain - INFO - 3. Consider ensemble methods for better generalization
 2025-12-23 00:57:41,592 - train_domain - INFO - 4. Implement a confidence threshold for predictions
 2025-12-23 00:57:41,592 - train_domain - INFO - 5. Track model drift over time
+2025-12-23 22:22:10,092 - train_domain - INFO - Training started
+2025-12-23 22:22:10,092 - train_domain - INFO - ============================================================
+2025-12-23 22:22:10,092 - train_domain - INFO - STARTING DOMAIN MODEL TRAINING WITH ROBUST VALIDATION
+2025-12-23 22:22:10,092 - train_domain - INFO - ============================================================
+2025-12-23 22:22:10,154 - train_domain - INFO - Removed 106 duplicate domains.
+2025-12-23 22:22:10,154 - train_domain - INFO - Domain dataset loaded successfully. Shape: (645, 4)
+2025-12-23 22:22:10,155 - train_domain - INFO - Class distribution:
+1    399
+0    246
+Name: is_malicious, dtype: int64
+2025-12-23 22:22:10,156 - train_domain - INFO - Benign domains: 246 (38.1%)
+2025-12-23 22:22:10,156 - train_domain - INFO - Malicious domains: 399 (61.9%)
+2025-12-23 22:22:10,156 - train_domain - INFO - Adding realistic domains to balance dataset...
+2025-12-23 22:22:10,157 - train_domain - INFO - Added 50 new domains (mix of benign and malicious)
+2025-12-23 22:22:10,157 - train_domain - INFO - New dataset shape: (695, 4)
+2025-12-23 22:22:10,158 - train_domain - INFO - Updated class distribution: Benign=266, Malicious=429
+2025-12-23 22:22:10,158 - train_domain - INFO - Starting feature engineering...
+2025-12-23 22:22:10,158 - train_domain - INFO - Removed 0 invalid/short domains
+2025-12-23 22:22:10,160 - train_domain - INFO - Removed 'risk_score' column to prevent data leakage
+2025-12-23 22:22:10,160 - train_domain - INFO - Removed 'source' column to prevent data leakage
+2025-12-23 22:22:10,232 - train_domain - INFO - Feature engineering completed. Total features: 29
+2025-12-23 22:22:10,232 - train_domain - INFO - Feature columns: ['is_malicious', 'domain_length', 'num_dots', 'num_hyphens', 'num_underscores', 'has_digits', 'digit_count', 'letter_count', 'vowel_count', 'consonant_count', 'has_common_tld', 'has_new_tld', 'tld_length', 'tld_is_numeric', 'name_length', 'starts_with_digit', 'has_4plus_consonants', 'has_suspicious_pattern', 'entropy', 'vowel_ratio', 'digit_ratio', 'letter_ratio', 'subdomain_count', 'has_subdomain', 'unique_char_ratio', 'has_repetitive_chars', 'has_mixed_case', 'has_consecutive_special', 'is_short_with_new_tld']
+2025-12-23 22:22:10,235 - train_domain - INFO - Final dataset shape - X: (695, 28), y: (695,)
+2025-12-23 22:22:10,236 - train_domain - INFO - Class distribution: {1: 429, 0: 266}
+2025-12-23 22:22:10,236 - train_domain - INFO - Features: ['domain_length', 'num_dots', 'num_hyphens', 'num_underscores', 'has_digits', 'digit_count', 'letter_count', 'vowel_count', 'consonant_count', 'has_common_tld', 'has_new_tld', 'tld_length', 'tld_is_numeric', 'name_length', 'starts_with_digit', 'has_4plus_consonants', 'has_suspicious_pattern', 'entropy', 'vowel_ratio', 'digit_ratio', 'letter_ratio', 'subdomain_count', 'has_subdomain', 'unique_char_ratio', 'has_repetitive_chars', 'has_mixed_case', 'has_consecutive_special', 'is_short_with_new_tld']
+2025-12-23 22:22:10,237 - train_domain - INFO - Performing feature selection...
+2025-12-23 22:22:10,314 - train_domain - INFO - Selected 15 features: ['domain_length', 'num_hyphens', 'has_digits', 'digit_count', 'letter_count', 'vowel_count', 'consonant_count', 'has_common_tld', 'has_new_tld', 'name_length', 'has_suspicious_pattern', 'entropy', 'vowel_ratio', 'letter_ratio', 'unique_char_ratio']
+2025-12-23 22:22:10,314 - train_domain - INFO - Scaling features...
+2025-12-23 22:22:10,383 - train_domain - INFO - 
+Data Split Summary:
+2025-12-23 22:22:10,383 - train_domain - INFO - Train set (final): 444 samples
+2025-12-23 22:22:10,383 - train_domain - INFO - Validation set: 112 samples
+2025-12-23 22:22:10,383 - train_domain - INFO - Test set: 139 samples
+2025-12-23 22:22:10,383 - train_domain - INFO - Total samples: 695
+2025-12-23 22:22:10,417 - train_domain - INFO - Class weights: {0: 1.3058823529411765, 1: 0.8102189781021898}
+2025-12-23 22:22:10,418 - train_domain - INFO - 
+============================================================
+2025-12-23 22:22:10,418 - train_domain - INFO - STARTING MODEL TRAINING WITH 10-FOLD CROSS VALIDATION
+2025-12-23 22:22:10,418 - train_domain - INFO - ============================================================
+2025-12-23 22:22:10,418 - train_domain - INFO - 
+Training logistic_regression...
+2025-12-23 22:22:13,857 - train_domain - INFO -   Cross-validation F1 scores (10-fold): [0.94545455 0.98181818 0.98181818 0.93103448 0.92857143 0.88
+ 0.96296296 0.94117647 0.94545455 0.96296296]
+2025-12-23 22:22:13,859 - train_domain - INFO -   Mean CV F1: 0.9461 (+/- 0.0567)
+2025-12-23 22:22:15,030 - train_domain - INFO - logistic_regression Results:
+2025-12-23 22:22:15,031 - train_domain - INFO -   Best Parameters: {'C': 0.1, 'max_iter': 2000, 'penalty': 'l2', 'solver': 'lbfgs'}
+2025-12-23 22:22:15,031 - train_domain - INFO -   Training Accuracy: 0.9559
+2025-12-23 22:22:15,031 - train_domain - INFO -   Validation Accuracy: 0.9732 (F1: 0.9781)
+2025-12-23 22:22:15,031 - train_domain - INFO -   Testing Accuracy: 0.9424
+2025-12-23 22:22:15,032 - train_domain - INFO -   Precision: 0.9643
+2025-12-23 22:22:15,032 - train_domain - INFO -   Recall: 0.9419
+2025-12-23 22:22:15,032 - train_domain - INFO -   F1-Score: 0.9529
+2025-12-23 22:22:15,032 - train_domain - INFO -   *** New Best Model! (Validation F1: 0.9781) ***
+2025-12-23 22:22:15,032 - train_domain - INFO - 
+Training random_forest...
+2025-12-23 22:22:15,630 - train_domain - INFO -   Cross-validation F1 scores (10-fold): [0.98181818 0.98181818 0.98181818 0.94736842 0.96296296 0.92592593
+ 0.98181818 0.98113208 0.98181818 0.98113208]
+2025-12-23 22:22:15,633 - train_domain - INFO -   Mean CV F1: 0.9708 (+/- 0.0371)
+2025-12-23 22:23:13,978 - train_domain - INFO - random_forest Results:
+2025-12-23 22:23:13,979 - train_domain - INFO -   Best Parameters: {'bootstrap': True, 'max_depth': 5, 'max_features': 0.5, 'min_samples_leaf': 1, 'min_samples_split': 5, 'n_estimators': 50}
+2025-12-23 22:23:13,979 - train_domain - INFO -   Training Accuracy: 0.9890
+2025-12-23 22:23:13,979 - train_domain - INFO -   Validation Accuracy: 1.0000 (F1: 1.0000)
+2025-12-23 22:23:13,979 - train_domain - INFO -   Testing Accuracy: 0.9712
+2025-12-23 22:23:13,979 - train_domain - INFO -   Precision: 0.9881
+2025-12-23 22:23:13,980 - train_domain - INFO -   Recall: 0.9651
+2025-12-23 22:23:13,980 - train_domain - INFO -   F1-Score: 0.9765
+2025-12-23 22:23:13,980 - train_domain - INFO -   *** New Best Model! (Validation F1: 1.0000) ***
+2025-12-23 22:23:13,980 - train_domain - INFO - 
+Training gradient_boosting...
+2025-12-23 22:23:14,262 - train_domain - INFO -   Cross-validation F1 scores (10-fold): [0.98181818 0.96428571 0.98181818 0.94736842 0.94545455 0.94339623
+ 0.98181818 0.96153846 0.98181818 0.98113208]
+2025-12-23 22:23:14,263 - train_domain - INFO -   Mean CV F1: 0.9670 (+/- 0.0318)
+2025-12-23 22:26:51,896 - train_domain - INFO - gradient_boosting Results:
+2025-12-23 22:26:51,897 - train_domain - INFO -   Best Parameters: {'learning_rate': 0.05, 'max_depth': 4, 'max_features': None, 'min_samples_leaf': 1, 'min_samples_split': 10, 'n_estimators': 50, 'subsample': 0.8}
+2025-12-23 22:26:51,897 - train_domain - INFO -   Training Accuracy: 0.9909
+2025-12-23 22:26:51,897 - train_domain - INFO -   Validation Accuracy: 0.9911 (F1: 0.9928)
+2025-12-23 22:26:51,897 - train_domain - INFO -   Testing Accuracy: 0.9640
+2025-12-23 22:26:51,897 - train_domain - INFO -   Precision: 0.9655
+2025-12-23 22:26:51,897 - train_domain - INFO -   Recall: 0.9767
+2025-12-23 22:26:51,898 - train_domain - INFO -   F1-Score: 0.9711
+2025-12-23 22:26:51,898 - train_domain - INFO - 
+Training svc...
+2025-12-23 22:26:52,269 - train_domain - INFO -   Cross-validation F1 scores (10-fold): [0.98181818 0.96428571 1.         0.98181818 0.92857143 0.94339623
+ 0.96296296 0.98113208 0.98181818 0.98113208]
+2025-12-23 22:26:52,271 - train_domain - INFO -   Mean CV F1: 0.9707 (+/- 0.0403)
+2025-12-23 22:26:53,627 - train_domain - INFO - svc Results:
+2025-12-23 22:26:53,628 - train_domain - INFO -   Best Parameters: {'C': 1, 'gamma': 'scale', 'kernel': 'rbf', 'max_iter': 10000, 'tol': 0.0001}
+2025-12-23 22:26:53,628 - train_domain - INFO -   Training Accuracy: 0.9797
+2025-12-23 22:26:53,628 - train_domain - INFO -   Validation Accuracy: 0.9911 (F1: 0.9927)
+2025-12-23 22:26:53,628 - train_domain - INFO -   Testing Accuracy: 0.9640
+2025-12-23 22:26:53,629 - train_domain - INFO -   Precision: 0.9880
+2025-12-23 22:26:53,629 - train_domain - INFO -   Recall: 0.9535
+2025-12-23 22:26:53,629 - train_domain - INFO -   F1-Score: 0.9704
+2025-12-23 22:26:53,629 - train_domain - INFO - 
+============================================================
+2025-12-23 22:26:53,629 - train_domain - INFO - MODEL PERFORMANCE SUMMARY
+2025-12-23 22:26:53,629 - train_domain - INFO - ============================================================
+2025-12-23 22:26:53,630 - train_domain - INFO - LOGISTIC_REGRESSION       Val F1: 0.9781 | Test Acc: 0.9424 | Precision: 0.9643 | Recall: 0.9419 | F1: 0.9529
+2025-12-23 22:26:53,630 - train_domain - INFO - RANDOM_FOREST             Val F1: 1.0000 | Test Acc: 0.9712 | Precision: 0.9881 | Recall: 0.9651 | F1: 0.9765
+2025-12-23 22:26:53,630 - train_domain - INFO - GRADIENT_BOOSTING         Val F1: 0.9928 | Test Acc: 0.9640 | Precision: 0.9655 | Recall: 0.9767 | F1: 0.9711
+2025-12-23 22:26:53,630 - train_domain - INFO - SVC                       Val F1: 0.9927 | Test Acc: 0.9640 | Precision: 0.9880 | Recall: 0.9535 | F1: 0.9704
+2025-12-23 22:26:53,630 - train_domain - INFO - 
+Best model: random_forest
+2025-12-23 22:26:53,630 - train_domain - INFO - Best validation F1: 1.0000
+2025-12-23 22:26:53,630 - train_domain - INFO - Best parameters: {'bootstrap': True, 'max_depth': 5, 'max_features': 0.5, 'min_samples_leaf': 1, 'min_samples_split': 5, 'n_estimators': 50}
+2025-12-23 22:26:53,631 - train_domain - INFO - 
+============================================================
+2025-12-23 22:26:53,631 - train_domain - INFO - FINAL COMPREHENSIVE EVALUATION
+2025-12-23 22:26:53,631 - train_domain - INFO - ============================================================
+2025-12-23 22:26:53,641 - train_domain - INFO - 
+Classification Report:
+              precision    recall  f1-score   support
+
+      Benign       0.95      0.98      0.96        53
+   Malicious       0.99      0.97      0.98        86
+
+    accuracy                           0.97       139
+   macro avg       0.97      0.97      0.97       139
+weighted avg       0.97      0.97      0.97       139
+
+2025-12-23 22:26:53,641 - train_domain - INFO - 
+============================================================
+2025-12-23 22:26:53,641 - train_domain - INFO - COMPREHENSIVE MODEL VALIDATION
+2025-12-23 22:26:53,641 - train_domain - INFO - ============================================================
+2025-12-23 22:26:53,647 - train_domain - INFO - Accuracy: 0.9712
+2025-12-23 22:26:53,647 - train_domain - INFO - Precision: 0.9881
+2025-12-23 22:26:53,647 - train_domain - INFO - Recall: 0.9651
+2025-12-23 22:26:53,647 - train_domain - INFO - F1-Score: 0.9765
+2025-12-23 22:26:53,696 - train_domain - INFO - ROC-AUC Score: 0.9954
+2025-12-23 22:26:53,710 - train_domain - INFO - 
+Confusion Matrix Details:
+2025-12-23 22:26:53,710 - train_domain - INFO - True Negatives:  52
+2025-12-23 22:26:53,712 - train_domain - INFO - False Positives: 1
+2025-12-23 22:26:53,712 - train_domain - INFO - False Negatives: 3
+2025-12-23 22:26:53,712 - train_domain - INFO - True Positives:  83
+2025-12-23 22:26:53,712 - train_domain - INFO - False Positive Rate: 0.0189
+2025-12-23 22:26:53,712 - train_domain - INFO - False Negative Rate: 0.0349
+2025-12-23 22:26:53,717 - train_domain - INFO - 
+Feature Importance (Top 10):
+2025-12-23 22:26:53,717 - train_domain - INFO -    1. num_hyphens                   : 0.2789
+2025-12-23 22:26:53,717 - train_domain - INFO -    2. name_length                   : 0.2378
+2025-12-23 22:26:53,718 - train_domain - INFO -    3. domain_length                 : 0.2109
+2025-12-23 22:26:53,718 - train_domain - INFO -    4. letter_count                  : 0.0820
+2025-12-23 22:26:53,718 - train_domain - INFO -    5. letter_ratio                  : 0.0670
+2025-12-23 22:26:53,718 - train_domain - INFO -    6. digit_count                   : 0.0307
+2025-12-23 22:26:53,718 - train_domain - INFO -    7. entropy                       : 0.0302
+2025-12-23 22:26:53,719 - train_domain - INFO -    8. has_digits                    : 0.0242
+2025-12-23 22:26:53,719 - train_domain - INFO -    9. consonant_count               : 0.0120
+2025-12-23 22:26:53,719 - train_domain - INFO -   10. vowel_ratio                   : 0.0082
+2025-12-23 22:26:58,954 - train_domain - INFO - 
+Model saved to: models/domain_model.pkl
+2025-12-23 22:26:58,955 - train_domain - INFO - Scaler saved to: models/scaler_domain.pkl
+2025-12-23 22:26:58,955 - train_domain - INFO - Feature selector saved to: models/selector_domain.pkl
+2025-12-23 22:26:58,955 - train_domain - INFO - Selected feature names saved to: models/domain_feature_names.pkl
+2025-12-23 22:26:58,958 - train_domain - INFO - 
+============================================================
+2025-12-23 22:26:58,958 - train_domain - INFO - TRAINING COMPLETED WITH REALISTIC VALIDATION
+2025-12-23 22:26:58,959 - train_domain - INFO - Total training time: 288.87 seconds
+2025-12-23 22:26:58,959 - train_domain - INFO - ============================================================
+2025-12-23 22:26:58,959 - train_domain - INFO - 
+============================================================
+2025-12-23 22:26:58,959 - train_domain - INFO - RECOMMENDATIONS FOR PRODUCTION USE
+2025-12-23 22:26:58,959 - train_domain - INFO - ============================================================
+2025-12-23 22:26:58,959 - train_domain - INFO - 1. Monitor false positive rate in production
+2025-12-23 22:26:58,959 - train_domain - INFO - 2. Regularly update training data with new domain patterns
+2025-12-23 22:26:58,959 - train_domain - INFO - 3. Consider ensemble methods for better generalization
+2025-12-23 22:26:58,959 - train_domain - INFO - 4. Implement a confidence threshold for predictions
+2025-12-23 22:26:58,960 - train_domain - INFO - 5. Track model drift over time
+2025-12-23 22:29:16,401 - train_domain - INFO - Training started
+2025-12-23 22:29:16,401 - train_domain - INFO - ============================================================
+2025-12-23 22:29:16,401 - train_domain - INFO - STARTING DOMAIN MODEL TRAINING WITH ROBUST VALIDATION
+2025-12-23 22:29:16,401 - train_domain - INFO - ============================================================
+2025-12-23 22:29:16,405 - train_domain - INFO - Removed 106 duplicate domains.
+2025-12-23 22:29:16,405 - train_domain - INFO - Domain dataset loaded successfully. Shape: (645, 4)
+2025-12-23 22:29:16,406 - train_domain - INFO - Class distribution:
+1    399
+0    246
+Name: is_malicious, dtype: int64
+2025-12-23 22:29:16,406 - train_domain - INFO - Benign domains: 246 (38.1%)
+2025-12-23 22:29:16,406 - train_domain - INFO - Malicious domains: 399 (61.9%)
+2025-12-23 22:29:16,406 - train_domain - INFO - Adding realistic domains to balance dataset...
+2025-12-23 22:29:16,407 - train_domain - INFO - Added 50 new domains (mix of benign and malicious)
+2025-12-23 22:29:16,407 - train_domain - INFO - New dataset shape: (695, 4)
+2025-12-23 22:29:16,408 - train_domain - INFO - Updated class distribution: Benign=266, Malicious=429
+2025-12-23 22:29:16,408 - train_domain - INFO - Starting feature engineering...
+2025-12-23 22:29:16,409 - train_domain - INFO - Removed 0 invalid/short domains
+2025-12-23 22:29:16,409 - train_domain - INFO - Removed 'risk_score' column to prevent data leakage
+2025-12-23 22:29:16,409 - train_domain - INFO - Removed 'source' column to prevent data leakage
+2025-12-23 22:29:16,457 - train_domain - INFO - Feature engineering completed. Total features: 29
+2025-12-23 22:29:16,457 - train_domain - INFO - Feature columns: ['is_malicious', 'domain_length', 'num_dots', 'num_hyphens', 'num_underscores', 'has_digits', 'digit_count', 'letter_count', 'vowel_count', 'consonant_count', 'has_common_tld', 'has_new_tld', 'tld_length', 'tld_is_numeric', 'name_length', 'starts_with_digit', 'has_4plus_consonants', 'has_suspicious_pattern', 'entropy', 'vowel_ratio', 'digit_ratio', 'letter_ratio', 'subdomain_count', 'has_subdomain', 'unique_char_ratio', 'has_repetitive_chars', 'has_mixed_case', 'has_consecutive_special', 'is_short_with_new_tld']
+2025-12-23 22:29:16,459 - train_domain - INFO - Final dataset shape - X: (695, 28), y: (695,)
+2025-12-23 22:29:16,459 - train_domain - INFO - Class distribution: {1: 429, 0: 266}
+2025-12-23 22:29:16,459 - train_domain - INFO - Features: ['domain_length', 'num_dots', 'num_hyphens', 'num_underscores', 'has_digits', 'digit_count', 'letter_count', 'vowel_count', 'consonant_count', 'has_common_tld', 'has_new_tld', 'tld_length', 'tld_is_numeric', 'name_length', 'starts_with_digit', 'has_4plus_consonants', 'has_suspicious_pattern', 'entropy', 'vowel_ratio', 'digit_ratio', 'letter_ratio', 'subdomain_count', 'has_subdomain', 'unique_char_ratio', 'has_repetitive_chars', 'has_mixed_case', 'has_consecutive_special', 'is_short_with_new_tld']
+2025-12-23 22:29:16,459 - train_domain - INFO - Performing feature selection...
+2025-12-23 22:29:16,463 - train_domain - INFO - Selected 15 features: ['domain_length', 'num_hyphens', 'has_digits', 'digit_count', 'letter_count', 'vowel_count', 'consonant_count', 'has_common_tld', 'has_new_tld', 'name_length', 'has_suspicious_pattern', 'entropy', 'vowel_ratio', 'letter_ratio', 'unique_char_ratio']
+2025-12-23 22:29:16,463 - train_domain - INFO - Scaling features...
+2025-12-23 22:29:16,465 - train_domain - INFO - 
+Data Split Summary:
+2025-12-23 22:29:16,466 - train_domain - INFO - Train set (final): 444 samples
+2025-12-23 22:29:16,466 - train_domain - INFO - Validation set: 112 samples
+2025-12-23 22:29:16,466 - train_domain - INFO - Test set: 139 samples
+2025-12-23 22:29:16,466 - train_domain - INFO - Total samples: 695
+2025-12-23 22:29:16,467 - train_domain - INFO - Class weights: {0: 1.3058823529411765, 1: 0.8102189781021898}
+2025-12-23 22:29:16,467 - train_domain - INFO - 
+============================================================
+2025-12-23 22:29:16,467 - train_domain - INFO - STARTING MODEL TRAINING WITH 10-FOLD CROSS VALIDATION
+2025-12-23 22:29:16,467 - train_domain - INFO - ============================================================
+2025-12-23 22:29:16,467 - train_domain - INFO - 
+Training logistic_regression...
+2025-12-23 22:29:18,277 - train_domain - INFO -   Cross-validation F1 scores (10-fold): [0.94545455 0.98181818 0.98181818 0.93103448 0.92857143 0.88
+ 0.96296296 0.94117647 0.94545455 0.96296296]
+2025-12-23 22:29:18,278 - train_domain - INFO -   Mean CV F1: 0.9461 (+/- 0.0567)
+2025-12-23 22:29:19,356 - train_domain - INFO - logistic_regression Results:
+2025-12-23 22:29:19,357 - train_domain - INFO -   Best Parameters: {'C': 0.1, 'max_iter': 2000, 'penalty': 'l2', 'solver': 'lbfgs'}
+2025-12-23 22:29:19,357 - train_domain - INFO -   Training Accuracy: 0.9559
+2025-12-23 22:29:19,357 - train_domain - INFO -   Validation Accuracy: 0.9732 (F1: 0.9781)
+2025-12-23 22:29:19,357 - train_domain - INFO -   Testing Accuracy: 0.9424
+2025-12-23 22:29:19,358 - train_domain - INFO -   Precision: 0.9643
+2025-12-23 22:29:19,358 - train_domain - INFO -   Recall: 0.9419
+2025-12-23 22:29:19,358 - train_domain - INFO -   F1-Score: 0.9529
+2025-12-23 22:29:19,358 - train_domain - INFO -   *** New Best Model! (Validation F1: 0.9781) ***
+2025-12-23 22:29:19,359 - train_domain - INFO - 
+Training random_forest...
+2025-12-23 22:29:19,709 - train_domain - INFO -   Cross-validation F1 scores (10-fold): [0.98181818 0.98181818 0.98181818 0.94736842 0.96296296 0.92592593
+ 0.98181818 0.98113208 0.98181818 0.98113208]
+2025-12-23 22:29:19,710 - train_domain - INFO -   Mean CV F1: 0.9708 (+/- 0.0371)
+2025-12-23 22:30:18,232 - train_domain - INFO - random_forest Results:
+2025-12-23 22:30:18,232 - train_domain - INFO -   Best Parameters: {'bootstrap': True, 'max_depth': 5, 'max_features': 0.5, 'min_samples_leaf': 1, 'min_samples_split': 5, 'n_estimators': 50}
+2025-12-23 22:30:18,232 - train_domain - INFO -   Training Accuracy: 0.9890
+2025-12-23 22:30:18,232 - train_domain - INFO -   Validation Accuracy: 1.0000 (F1: 1.0000)
+2025-12-23 22:30:18,232 - train_domain - INFO -   Testing Accuracy: 0.9712
+2025-12-23 22:30:18,232 - train_domain - INFO -   Precision: 0.9881
+2025-12-23 22:30:18,232 - train_domain - INFO -   Recall: 0.9651
+2025-12-23 22:30:18,232 - train_domain - INFO -   F1-Score: 0.9765
+2025-12-23 22:30:18,233 - train_domain - INFO -   *** New Best Model! (Validation F1: 1.0000) ***
+2025-12-23 22:30:18,233 - train_domain - INFO - 
+Training gradient_boosting...
+2025-12-23 22:30:18,516 - train_domain - INFO -   Cross-validation F1 scores (10-fold): [0.98181818 0.96428571 0.98181818 0.94736842 0.94545455 0.94339623
+ 0.98181818 0.96153846 0.98181818 0.98113208]
+2025-12-23 22:30:18,516 - train_domain - INFO -   Mean CV F1: 0.9670 (+/- 0.0318)
+2025-12-23 22:33:54,613 - train_domain - INFO - gradient_boosting Results:
+2025-12-23 22:33:54,614 - train_domain - INFO -   Best Parameters: {'learning_rate': 0.05, 'max_depth': 4, 'max_features': None, 'min_samples_leaf': 1, 'min_samples_split': 10, 'n_estimators': 50, 'subsample': 0.8}
+2025-12-23 22:33:54,614 - train_domain - INFO -   Training Accuracy: 0.9909
+2025-12-23 22:33:54,615 - train_domain - INFO -   Validation Accuracy: 0.9911 (F1: 0.9928)
+2025-12-23 22:33:54,615 - train_domain - INFO -   Testing Accuracy: 0.9640
+2025-12-23 22:33:54,615 - train_domain - INFO -   Precision: 0.9655
+2025-12-23 22:33:54,615 - train_domain - INFO -   Recall: 0.9767
+2025-12-23 22:33:54,615 - train_domain - INFO -   F1-Score: 0.9711
+2025-12-23 22:33:54,615 - train_domain - INFO - 
+Training svc...
+2025-12-23 22:33:54,646 - train_domain - INFO -   Cross-validation F1 scores (10-fold): [0.98181818 0.96428571 1.         0.98181818 0.92857143 0.94339623
+ 0.96296296 0.98113208 0.98181818 0.98113208]
+2025-12-23 22:33:54,648 - train_domain - INFO -   Mean CV F1: 0.9707 (+/- 0.0403)
+2025-12-23 22:33:56,706 - train_domain - INFO - svc Results:
+2025-12-23 22:33:56,706 - train_domain - INFO -   Best Parameters: {'C': 1, 'gamma': 'scale', 'kernel': 'rbf', 'max_iter': 100000, 'tol': 0.0001}
+2025-12-23 22:33:56,706 - train_domain - INFO -   Training Accuracy: 0.9797
+2025-12-23 22:33:56,706 - train_domain - INFO -   Validation Accuracy: 0.9911 (F1: 0.9927)
+2025-12-23 22:33:56,707 - train_domain - INFO -   Testing Accuracy: 0.9640
+2025-12-23 22:33:56,707 - train_domain - INFO -   Precision: 0.9880
+2025-12-23 22:33:56,707 - train_domain - INFO -   Recall: 0.9535
+2025-12-23 22:33:56,707 - train_domain - INFO -   F1-Score: 0.9704
+2025-12-23 22:33:56,707 - train_domain - INFO - 
+============================================================
+2025-12-23 22:33:56,707 - train_domain - INFO - MODEL PERFORMANCE SUMMARY
+2025-12-23 22:33:56,707 - train_domain - INFO - ============================================================
+2025-12-23 22:33:56,707 - train_domain - INFO - LOGISTIC_REGRESSION       Val F1: 0.9781 | Test Acc: 0.9424 | Precision: 0.9643 | Recall: 0.9419 | F1: 0.9529
+2025-12-23 22:33:56,708 - train_domain - INFO - RANDOM_FOREST             Val F1: 1.0000 | Test Acc: 0.9712 | Precision: 0.9881 | Recall: 0.9651 | F1: 0.9765
+2025-12-23 22:33:56,708 - train_domain - INFO - GRADIENT_BOOSTING         Val F1: 0.9928 | Test Acc: 0.9640 | Precision: 0.9655 | Recall: 0.9767 | F1: 0.9711
+2025-12-23 22:33:56,708 - train_domain - INFO - SVC                       Val F1: 0.9927 | Test Acc: 0.9640 | Precision: 0.9880 | Recall: 0.9535 | F1: 0.9704
+2025-12-23 22:33:56,708 - train_domain - INFO - 
+Best model: random_forest
+2025-12-23 22:33:56,708 - train_domain - INFO - Best validation F1: 1.0000
+2025-12-23 22:33:56,708 - train_domain - INFO - Best parameters: {'bootstrap': True, 'max_depth': 5, 'max_features': 0.5, 'min_samples_leaf': 1, 'min_samples_split': 5, 'n_estimators': 50}
+2025-12-23 22:33:56,708 - train_domain - INFO - 
+============================================================
+2025-12-23 22:33:56,708 - train_domain - INFO - FINAL COMPREHENSIVE EVALUATION
+2025-12-23 22:33:56,708 - train_domain - INFO - ============================================================
+2025-12-23 22:33:56,718 - train_domain - INFO - 
+Classification Report:
+              precision    recall  f1-score   support
+
+      Benign       0.95      0.98      0.96        53
+   Malicious       0.99      0.97      0.98        86
+
+    accuracy                           0.97       139
+   macro avg       0.97      0.97      0.97       139
+weighted avg       0.97      0.97      0.97       139
+
+2025-12-23 22:33:56,718 - train_domain - INFO - 
+============================================================
+2025-12-23 22:33:56,719 - train_domain - INFO - COMPREHENSIVE MODEL VALIDATION
+2025-12-23 22:33:56,719 - train_domain - INFO - ============================================================
+2025-12-23 22:33:56,724 - train_domain - INFO - Accuracy: 0.9712
+2025-12-23 22:33:56,724 - train_domain - INFO - Precision: 0.9881
+2025-12-23 22:33:56,725 - train_domain - INFO - Recall: 0.9651
+2025-12-23 22:33:56,725 - train_domain - INFO - F1-Score: 0.9765
+2025-12-23 22:33:56,727 - train_domain - INFO - ROC-AUC Score: 0.9954
+2025-12-23 22:33:56,728 - train_domain - INFO - 
+Confusion Matrix Details:
+2025-12-23 22:33:56,728 - train_domain - INFO - True Negatives:  52
+2025-12-23 22:33:56,728 - train_domain - INFO - False Positives: 1
+2025-12-23 22:33:56,729 - train_domain - INFO - False Negatives: 3
+2025-12-23 22:33:56,729 - train_domain - INFO - True Positives:  83
+2025-12-23 22:33:56,729 - train_domain - INFO - False Positive Rate: 0.0189
+2025-12-23 22:33:56,729 - train_domain - INFO - False Negative Rate: 0.0349
+2025-12-23 22:33:56,734 - train_domain - INFO - 
+Feature Importance (Top 10):
+2025-12-23 22:33:56,734 - train_domain - INFO -    1. num_hyphens                   : 0.2789
+2025-12-23 22:33:56,734 - train_domain - INFO -    2. name_length                   : 0.2378
+2025-12-23 22:33:56,734 - train_domain - INFO -    3. domain_length                 : 0.2109
+2025-12-23 22:33:56,735 - train_domain - INFO -    4. letter_count                  : 0.0820
+2025-12-23 22:33:56,735 - train_domain - INFO -    5. letter_ratio                  : 0.0670
+2025-12-23 22:33:56,735 - train_domain - INFO -    6. digit_count                   : 0.0307
+2025-12-23 22:33:56,735 - train_domain - INFO -    7. entropy                       : 0.0302
+2025-12-23 22:33:56,735 - train_domain - INFO -    8. has_digits                    : 0.0242
+2025-12-23 22:33:56,736 - train_domain - INFO -    9. consonant_count               : 0.0120
+2025-12-23 22:33:56,736 - train_domain - INFO -   10. vowel_ratio                   : 0.0082
+2025-12-23 22:33:57,413 - train_domain - INFO - 
+Model saved to: models/domain_model.pkl
+2025-12-23 22:33:57,413 - train_domain - INFO - Scaler saved to: models/scaler_domain.pkl
+2025-12-23 22:33:57,414 - train_domain - INFO - Feature selector saved to: models/selector_domain.pkl
+2025-12-23 22:33:57,414 - train_domain - INFO - Selected feature names saved to: models/domain_feature_names.pkl
+2025-12-23 22:33:57,418 - train_domain - INFO - 
+============================================================
+2025-12-23 22:33:57,418 - train_domain - INFO - TRAINING COMPLETED WITH REALISTIC VALIDATION
+2025-12-23 22:33:57,418 - train_domain - INFO - Total training time: 281.02 seconds
+2025-12-23 22:33:57,418 - train_domain - INFO - ============================================================
+2025-12-23 22:33:57,418 - train_domain - INFO - 
+============================================================
+2025-12-23 22:33:57,418 - train_domain - INFO - RECOMMENDATIONS FOR PRODUCTION USE
+2025-12-23 22:33:57,418 - train_domain - INFO - ============================================================
+2025-12-23 22:33:57,419 - train_domain - INFO - 1. Monitor false positive rate in production
+2025-12-23 22:33:57,419 - train_domain - INFO - 2. Regularly update training data with new domain patterns
+2025-12-23 22:33:57,419 - train_domain - INFO - 3. Consider ensemble methods for better generalization
+2025-12-23 22:33:57,419 - train_domain - INFO - 4. Implement a confidence threshold for predictions
+2025-12-23 22:33:57,420 - train_domain - INFO - 5. Track model drift over time

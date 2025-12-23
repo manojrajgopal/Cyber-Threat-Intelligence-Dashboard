@@ -1,0 +1,65 @@
+Training Report for train_ip
+Algorithm: random_forest
+Datasets: octet1, octet2, octet3, ip_int, is_class_a, is_class_b, is_class_c, is_private, is_multicast, octet_sum, octet_mean, octet_std, octet1_high_bit, octet4_low_bit, octets_equal, has_consecutive_octets, octet_entropy, is_european_range, octet1_binary_ones, is_sequential_up
+Start Time: Wed Dec 24 00:08:24 2025
+End Time: Wed Dec 24 00:22:39 2025
+Duration: 855.49s
+Metrics: {
+    "accuracy": 0.7410714285714286,
+    "precision": 0.7849462365591398,
+    "recall": 0.6576576576576577,
+    "f1": 0.7156862745098039,
+    "confusion_matrix": [
+        [
+            93,
+            20
+        ],
+        [
+            38,
+            73
+        ]
+    ],
+    "true_negatives": 93,
+    "false_positives": 20,
+    "false_negatives": 38,
+    "true_positives": 73,
+    "training_duration": 853.7428815364838,
+    "best_model": "random_forest",
+    "best_parameters": "{'bootstrap': False, 'max_depth': 5, 'max_features': 0.5, 'min_samples_leaf': 4, 'min_samples_split': 10, 'n_estimators': 150}",
+    "selected_features": [
+        "octet1",
+        "octet2",
+        "octet3",
+        "ip_int",
+        "is_class_a",
+        "is_class_b",
+        "is_class_c",
+        "is_private",
+        "is_multicast",
+        "octet_sum",
+        "octet_mean",
+        "octet_std",
+        "octet1_high_bit",
+        "octet4_low_bit",
+        "octets_equal",
+        "has_consecutive_octets",
+        "octet_entropy",
+        "is_european_range",
+        "octet1_binary_ones",
+        "is_sequential_up"
+    ],
+    "feature_importance": {
+        "octet2": 0.41197232740846845,
+        "octet1_binary_ones": 0.11291670781781989,
+        "is_private": 0.09887115004019219,
+        "octet3": 0.08217548146176405,
+        "octet1": 0.058008408062809685,
+        "ip_int": 0.05718643437572483,
+        "octet_std": 0.04653060483233018,
+        "octet_entropy": 0.036282867227918174,
+        "is_class_c": 0.022783809728071747,
+        "octet_mean": 0.021575192625042625
+    }
+}
+Model Path: models/ip_model.pkl
+Graphs: training_artifacts/graphs/individual/train_ip_confusion_matrix.png, training_artifacts/graphs/individual/train_ip_training_time.png
