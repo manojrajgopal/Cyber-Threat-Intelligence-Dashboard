@@ -139,6 +139,12 @@ const Login = ({ api }) => {
       
       {/* Right Panel - Login Form */}
       <div className="login-right-panel">
+        {error && (
+          <div className="error-bar-top">
+            <span className="error-bar-icon">⚠️</span>
+            <span className="error-bar-text">{error}</span>
+          </div>
+        )}
         <div className="access-container">
           <div className="access-header">
             <div className="access-header-content">
@@ -156,13 +162,6 @@ const Login = ({ api }) => {
             </div>
             
             <form className="login-form" onSubmit={handleSubmit}>
-              {error && (
-                <div className="error-message-glass">
-                  <span className="error-icon">⚠️</span>
-                  <span className="error-text">{error}</span>
-                </div>
-              )}
-              
               <div className="input-group-glass">
                 <label className="input-label-glass">
                   <span className="label-icon">👤</span>

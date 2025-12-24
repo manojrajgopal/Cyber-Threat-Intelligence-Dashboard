@@ -172,7 +172,7 @@
 
 /* Focus styles for accessibility */
 .glass-card:focus-within {
-  box-shadow: 0 0 0 2px #ffbf00;
+  box-shadow: none;
 }
 
 .glass-metric-item:focus {

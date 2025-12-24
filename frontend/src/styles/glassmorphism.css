@@ -198,6 +198,7 @@ Glass Effect Variables:
   text-decoration: none;
   transition: var(--glass-transition);
   position: relative;
+  width: 100%;
 }
 
 .glass-nav-item:hover {
@@ -209,7 +210,7 @@ Glass Effect Variables:
 
 .glass-nav-item.active {
   background: var(--glass-bg-strong);
-  color: #000000;
+  color: #c691ff;
   box-shadow: var(--glass-shadow-light);
 }
 
@@ -337,7 +338,7 @@ Glass Effect Variables:
 
 .glass-button.danger {
   border-color: rgba(239, 68, 68, 0.3);
-  color: #fca5a5;
+  color: #f70000;
 }
 
 .glass-button.danger:hover {
@@ -362,8 +363,12 @@ Glass Effect Variables:
   outline-offset: 2px;
 }
 
+.glass-button:focus {
+  outline: none;
+}
+
 .glass-card:focus-within {
-  box-shadow: 0 0 0 2px var(--glass-color-amber);
+  box-shadow: none;
 }
 
 /* Forms */

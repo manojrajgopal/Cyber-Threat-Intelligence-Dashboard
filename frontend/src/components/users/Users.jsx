@@ -8,6 +8,8 @@ const Users = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [userToDelete, setUserToDelete] = useState(null);
   const [editingUser, setEditingUser] = useState(null);
   const [formData, setFormData] = useState({
     username: '',
@@ -72,17 +74,24 @@ const Users = () => {
     }
   };
 
-  const handleDelete = async (userId) => {
-    if (window.confirm('Are you sure you want to delete this user?')) {
-      try {
-        await axios.delete(`http://localhost:8000/api/users/${userId}`, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
-        fetchUsers();
-      } catch (err) {
-        setError('Failed to delete user');
-        console.error(err);
-      }
+  const handleDelete = (userId) => {
+    setUserToDelete(userId);
+    setShowDeleteModal(true);
+  };
+
+  const confirmDelete = async () => {
+    try {
+      await axios.delete(`http://localhost:8000/api/users/${userToDelete}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      fetchUsers();
+      setShowDeleteModal(false);
+      setUserToDelete(null);
+    } catch (err) {
+      setError('Failed to delete user');
+      console.error(err);
+      setShowDeleteModal(false);
+      setUserToDelete(null);
     }
   };
 
@@ -258,6 +267,38 @@ const Users = () => {
                   </button>
                 </div>
               </form>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showDeleteModal && (
+        <div className="fixed inset-0 modal-overlay flex items-center justify-center z-50">
+          <div className="glass-card max-w-md w-full mx-4">
+            <div className="glass-card-header">
+              <h3 className="glass-card-title">Confirm Delete</h3>
+            </div>
+            <div className="glass-card-content">
+              <p className="text-center py-4">Are you sure you want to delete this user?</p>
+              <div className="flex justify-end gap-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowDeleteModal(false);
+                    setUserToDelete(null);
+                  }}
+                  className="glass-button secondary"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  onClick={confirmDelete}
+                  className="glass-button danger"
+                >
+                  Delete
+                </button>
+              </div>
             </div>
           </div>
         </div>
