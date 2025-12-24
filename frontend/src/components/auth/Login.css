@@ -205,6 +205,7 @@
   align-items: center;
   justify-content: center;
   background: rgba(0, 0, 0, 0.8);
+  position: relative;
 }
 
 .access-container {
@@ -322,6 +323,32 @@
 
 .error-text {
   color: #d4af37;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.error-bar-top {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 12px 20px;
+  background: rgba(255, 0, 0, 0.1);
+  border-bottom: 1px solid rgba(255, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  backdrop-filter: blur(10px);
+  z-index: 10;
+}
+
+.error-bar-icon {
+  font-size: 18px;
+  color: #ff4444;
+}
+
+.error-bar-text {
+  color: #ff4444;
   font-weight: 500;
   font-size: 14px;
 }
