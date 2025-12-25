@@ -1,0 +1,81 @@
+Training Report for train_url
+Algorithm: random_forest
+Datasets: url_length, num_dots, num_hyphens, num_slashes, num_questionmarks, num_ampersands, num_equals, has_https, has_http, domain_length, num_params, subdomain_count, has_subdomain, letter_count, special_char_count, url_entropy, domain_entropy, suspicious_keyword_count, has_repetitive_chars, is_shortened, has_executable_extension, letter_ratio, path_to_url_ratio, domain_name_length, has_consecutive_consonants, unique_char_ratio, word_boundary_count, suspicious_combo_count, has_ssl_indicator, has_malicious_path
+Start Time: Thu Dec 25 10:31:48 2025
+End Time: Thu Dec 25 10:52:38 2025
+Duration: 1249.88s
+Metrics: {
+    "accuracy": 0.943089430894309,
+    "precision": 0.9166666666666666,
+    "recall": 0.9361702127659575,
+    "f1": 0.9263157894736843,
+    "confusion_matrix": [
+        [
+            144,
+            8
+        ],
+        [
+            6,
+            88
+        ]
+    ],
+    "true_negatives": 144,
+    "false_positives": 8,
+    "false_negatives": 6,
+    "true_positives": 88,
+    "specificity": 0.9473684210526315,
+    "training_duration": 1245.0093178749084,
+    "best_model": "random_forest",
+    "best_parameters": "{'bootstrap': False, 'max_depth': 20, 'max_features': 'sqrt', 'min_samples_leaf': 1, 'min_samples_split': 2, 'n_estimators': 100}",
+    "selected_features": [
+        "url_length",
+        "num_dots",
+        "num_hyphens",
+        "num_slashes",
+        "num_questionmarks",
+        "num_ampersands",
+        "num_equals",
+        "has_https",
+        "has_http",
+        "domain_length",
+        "num_params",
+        "subdomain_count",
+        "has_subdomain",
+        "letter_count",
+        "special_char_count",
+        "url_entropy",
+        "domain_entropy",
+        "suspicious_keyword_count",
+        "has_repetitive_chars",
+        "is_shortened",
+        "has_executable_extension",
+        "letter_ratio",
+        "path_to_url_ratio",
+        "domain_name_length",
+        "has_consecutive_consonants",
+        "unique_char_ratio",
+        "word_boundary_count",
+        "suspicious_combo_count",
+        "has_ssl_indicator",
+        "has_malicious_path"
+    ],
+    "feature_importance": {
+        "url_entropy": 0.09342154776326098,
+        "url_length": 0.06659026720488924,
+        "num_hyphens": 0.06295889384563137,
+        "domain_entropy": 0.055656865783062184,
+        "has_subdomain": 0.05310369057452155,
+        "letter_ratio": 0.05054089078773757,
+        "path_to_url_ratio": 0.04967987126576868,
+        "letter_count": 0.04943189224359499,
+        "suspicious_combo_count": 0.04927119158713991,
+        "domain_length": 0.047720191512960176,
+        "subdomain_count": 0.04686009759169257,
+        "domain_name_length": 0.04679030885662296,
+        "has_https": 0.044513459737997536,
+        "special_char_count": 0.04013741571136346,
+        "unique_char_ratio": 0.03780904650779327
+    }
+}
+Model Path: models/url_model.pkl
+Graphs: training_artifacts/graphs/individual/train_url_confusion_matrix.png, training_artifacts/graphs/individual/train_url_training_time.png

@@ -8,7 +8,7 @@ import re
 from ..config import settings
 from ..models.models import ThreatIOC, ThreatInput, BulkIngestionJob, AccountThreatMapping, ThreatLifecycle
 from ..db.session import SessionLocal
-from .ai_classification import AIClassificationService
+from .ai_classification import AIClassificationService, ai_service
 from .correlation import CorrelationService
 
 class ThreatIngestionService:
@@ -271,11 +271,13 @@ def is_valid_hash(value: str) -> bool:
     return bool(hash_pattern.match(value))
 
 def process_single_input(threat_input_id: int, db_session):
-    """Process a single threat input."""
+    """Process a single threat input and return prediction result."""
+    prediction_result = None
+
     try:
         threat_input = db_session.query(ThreatInput).filter(ThreatInput.id == threat_input_id).first()
         if not threat_input:
-            return
+            return None
 
         # Normalize
         normalized = normalize_input(threat_input.value, threat_input.type)
@@ -318,16 +320,28 @@ def process_single_input(threat_input_id: int, db_session):
         db_session.add(lifecycle)
 
         # AI Classification
-        ai_service = AIClassificationService()
         prediction = ai_service.classify_threat(ioc.id, db_session)
         if prediction:
             db_session.add(prediction)
+            db_session.flush()  # Get prediction ID
+            prediction_result = {
+                'prediction_id': prediction.id,
+                'prediction': prediction.prediction,
+                'confidence': prediction.confidence,
+                'model_name': prediction.model_name,
+                'explanation': prediction.explanation,
+                'ioc_id': ioc.id,
+                'ioc_type': ioc.type,
+                'ioc_value': ioc.value
+            }
 
         db_session.commit()
+        return prediction_result
 
     except Exception as e:
         db_session.rollback()
         print(f"Error processing single input {threat_input_id}: {e}")
+        return None
 
 def process_bulk_file(job_id: int, db_session):
     """Process bulk ingestion job."""

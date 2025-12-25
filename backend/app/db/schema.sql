@@ -72,6 +72,7 @@ CREATE TABLE alerts (
     acknowledged BOOLEAN DEFAULT FALSE,
     acknowledged_by INT,
     acknowledged_at TIMESTAMP NULL,
+    scheduled_at TIMESTAMP NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (ioc_id) REFERENCES threat_iocs(id),
     FOREIGN KEY (acknowledged_by) REFERENCES users(id)

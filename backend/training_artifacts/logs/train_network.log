@@ -1,0 +1,115 @@
+2025-12-24 19:27:45,911 - train_network - INFO - Training started
+2025-12-24 19:27:45,911 - train_network - INFO - ============================================================
+2025-12-24 19:27:45,911 - train_network - INFO - NETWORK ANOMALY DETECTION MODEL TRAINING
+2025-12-24 19:27:45,911 - train_network - INFO - ============================================================
+2025-12-24 19:27:45,917 - train_network - INFO - Network dataset loaded successfully. Shape: (265, 6)
+2025-12-24 19:27:45,917 - train_network - INFO - Class distribution:
+1    161
+0    104
+Name: is_malicious, dtype: int64
+2025-12-24 19:27:45,917 - train_network - INFO - Normal traffic: 104 (39.2%)
+2025-12-24 19:27:45,919 - train_network - INFO - Anomalous traffic: 161 (60.8%)
+2025-12-24 19:27:45,919 - train_network - INFO - Starting essential feature engineering...
+2025-12-24 19:27:45,924 - train_network - INFO - Feature engineering completed. Total features: 18
+2025-12-24 19:27:45,924 - train_network - INFO - Feature columns: ['packet_count', 'bytes_transferred', 'duration_seconds', 'connection_count', 'failed_connections', 'is_malicious', 'packets_per_second', 'bytes_per_second', 'avg_packet_size', 'connections_per_second', 'failure_rate', 'packets_per_connection', 'bytes_per_packet', 'traffic_burstiness', 'session_duration_norm', 'packet_size_variability', 'success_rate', 'traffic_intensity_score']
+2025-12-24 19:27:45,928 - train_network - INFO - 
+Dataset shape: X: (265, 17), y: (265,)
+2025-12-24 19:27:45,929 - train_network - INFO - Class distribution: Normal=104, Anomalous=161
+2025-12-24 19:27:45,929 - train_network - INFO - Features: ['packet_count', 'bytes_transferred', 'duration_seconds', 'connection_count', 'failed_connections', 'packets_per_second', 'bytes_per_second', 'avg_packet_size', 'connections_per_second', 'failure_rate', 'packets_per_connection', 'bytes_per_packet', 'traffic_burstiness', 'session_duration_norm', 'packet_size_variability', 'success_rate', 'traffic_intensity_score']
+2025-12-24 19:27:45,929 - train_network - INFO - Selecting top features...
+2025-12-24 19:27:45,934 - train_network - INFO - Selected 10 features: ['packet_count', 'bytes_transferred', 'connection_count', 'failed_connections', 'packets_per_second', 'bytes_per_second', 'failure_rate', 'packets_per_connection', 'session_duration_norm', 'success_rate']
+2025-12-24 19:27:45,934 - train_network - INFO - Scaling features...
+2025-12-24 19:27:45,937 - train_network - INFO - 
+Data Split:
+2025-12-24 19:27:45,938 - train_network - INFO - Training:   169 samples
+2025-12-24 19:27:45,938 - train_network - INFO - Validation: 43 samples
+2025-12-24 19:27:45,938 - train_network - INFO - Testing:    53 samples
+2025-12-24 19:27:45,939 - train_network - INFO - Class weights: {0: 1.2803030303030303, 1: 0.8203883495145631}
+2025-12-24 19:27:45,939 - train_network - INFO - 
+============================================================
+2025-12-24 19:27:45,939 - train_network - INFO - MODEL TRAINING
+2025-12-24 19:27:45,939 - train_network - INFO - ============================================================
+2025-12-24 19:27:45,939 - train_network - INFO - 
+Training random_forest...
+2025-12-24 19:27:48,713 - train_network - INFO -   CV F1: 0.9598 (±0.0271)
+2025-12-24 19:28:00,905 - train_network - INFO -   Validation F1: 1.0000
+2025-12-24 19:28:00,906 - train_network - INFO -   Test Accuracy: 0.9811
+2025-12-24 19:28:00,906 - train_network - INFO -   Test F1: 0.9841
+2025-12-24 19:28:00,906 - train_network - INFO -   ✓ New best model!
+2025-12-24 19:28:00,906 - train_network - INFO - 
+Training gradient_boosting...
+2025-12-24 19:28:01,457 - train_network - INFO -   CV F1: 0.9607 (±0.0209)
+2025-12-24 19:28:11,590 - train_network - INFO -   Validation F1: 1.0000
+2025-12-24 19:28:11,590 - train_network - INFO -   Test Accuracy: 0.9811
+2025-12-24 19:28:11,591 - train_network - INFO -   Test F1: 0.9841
+2025-12-24 19:28:11,591 - train_network - INFO - 
+Training logistic_regression...
+2025-12-24 19:28:11,891 - train_network - INFO -   CV F1: 0.7857 (±0.0506)
+2025-12-24 19:28:12,091 - train_network - INFO -   Validation F1: 0.7857
+2025-12-24 19:28:12,091 - train_network - INFO -   Test Accuracy: 0.6792
+2025-12-24 19:28:12,091 - train_network - INFO -   Test F1: 0.7213
+2025-12-24 19:28:12,092 - train_network - INFO - 
+============================================================
+2025-12-24 19:28:12,092 - train_network - INFO - MODEL COMPARISON
+2025-12-24 19:28:12,092 - train_network - INFO - ============================================================
+2025-12-24 19:28:12,092 - train_network - INFO - RANDOM_FOREST        | F1: 0.9841 | Acc: 0.9811 | Prec: 1.0000 | Rec: 0.9688
+2025-12-24 19:28:12,092 - train_network - INFO - GRADIENT_BOOSTING    | F1: 0.9841 | Acc: 0.9811 | Prec: 1.0000 | Rec: 0.9688
+2025-12-24 19:28:12,092 - train_network - INFO - LOGISTIC_REGRESSION  | F1: 0.7213 | Acc: 0.6792 | Prec: 0.7586 | Rec: 0.6875
+2025-12-24 19:28:12,092 - train_network - INFO - 
+Best model: random_forest
+2025-12-24 19:28:12,093 - train_network - INFO - Best F1: 1.0000
+2025-12-24 19:28:12,093 - train_network - INFO - Parameters: {'max_depth': 10, 'max_features': 'sqrt', 'min_samples_leaf': 1, 'min_samples_split': 2, 'n_estimators': 100}
+2025-12-24 19:28:12,093 - train_network - INFO - 
+============================================================
+2025-12-24 19:28:12,093 - train_network - INFO - FINAL EVALUATION
+2025-12-24 19:28:12,093 - train_network - INFO - ============================================================
+2025-12-24 19:28:12,106 - train_network - INFO - 
+Classification Report:
+              precision    recall  f1-score   support
+
+      Normal       0.95      1.00      0.98        21
+   Anomalous       1.00      0.97      0.98        32
+
+    accuracy                           0.98        53
+   macro avg       0.98      0.98      0.98        53
+weighted avg       0.98      0.98      0.98        53
+
+2025-12-24 19:28:12,106 - train_network - INFO - 
+============================================================
+2025-12-24 19:28:12,107 - train_network - INFO - MODEL PERFORMANCE VALIDATION
+2025-12-24 19:28:12,107 - train_network - INFO - ============================================================
+2025-12-24 19:28:12,114 - train_network - INFO - Accuracy:  0.9811
+2025-12-24 19:28:12,114 - train_network - INFO - Precision: 1.0000
+2025-12-24 19:28:12,114 - train_network - INFO - Recall:    0.9688
+2025-12-24 19:28:12,114 - train_network - INFO - F1-Score:  0.9841
+2025-12-24 19:28:12,148 - train_network - INFO - ROC-AUC:   0.9732
+2025-12-24 19:28:12,150 - train_network - INFO - 
+Confusion Matrix:
+2025-12-24 19:28:12,151 - train_network - INFO - True Negatives:  21
+2025-12-24 19:28:12,151 - train_network - INFO - False Positives: 0
+2025-12-24 19:28:12,151 - train_network - INFO - False Negatives: 1
+2025-12-24 19:28:12,151 - train_network - INFO - True Positives:  31
+2025-12-24 19:28:12,151 - train_network - INFO - False Positive Rate: 0.0000
+2025-12-24 19:28:12,151 - train_network - INFO - False Negative Rate: 0.0312
+2025-12-24 19:28:12,151 - train_network - WARNING - ⚠️  Very low false positives - may indicate overfitting
+2025-12-24 19:28:12,177 - train_network - INFO - 
+Top Features:
+2025-12-24 19:28:12,177 - train_network - INFO -   1. packets_per_connection: 0.2438
+2025-12-24 19:28:12,178 - train_network - INFO -   2. success_rate: 0.2297
+2025-12-24 19:28:12,178 - train_network - INFO -   3. failure_rate: 0.2026
+2025-12-24 19:28:12,178 - train_network - INFO -   4. packets_per_second: 0.0809
+2025-12-24 19:28:12,178 - train_network - INFO -   5. bytes_per_second: 0.0715
+2025-12-24 19:28:20,379 - train_network - INFO - 
+Model saved to: models/network_model.pkl
+2025-12-24 19:28:20,379 - train_network - INFO - Scaler saved to: models/scaler_network.pkl
+2025-12-24 19:28:20,382 - train_network - INFO - 
+============================================================
+2025-12-24 19:28:20,382 - train_network - INFO - TRAINING COMPLETE
+2025-12-24 19:28:20,383 - train_network - INFO - Total time: 34.47 seconds
+2025-12-24 19:28:20,383 - train_network - INFO - ============================================================
+2025-12-24 19:28:20,384 - train_network - INFO - 
+PRODUCTION RECOMMENDATIONS:
+2025-12-24 19:28:20,384 - train_network - INFO - 1. Monitor F1 score and false positive rate
+2025-12-24 19:28:20,384 - train_network - INFO - 2. Retrain weekly with new data
+2025-12-24 19:28:20,384 - train_network - INFO - 3. Set alert threshold at 0.7 confidence
+2025-12-24 19:28:20,384 - train_network - INFO - 4. Combine with rule-based detection

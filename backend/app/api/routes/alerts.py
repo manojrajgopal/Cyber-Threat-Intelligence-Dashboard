@@ -13,6 +13,9 @@ async def get_alerts(
     skip: int = 0,
     limit: int = 100,
     acknowledged: bool = None,
+    severity: str = None,
+    sort_by: str = "created_at",
+    sort_order: str = "desc",
     db: Session = Depends(get_db),
     current_user = Depends(get_current_active_user)
 ):
@@ -20,6 +23,22 @@ async def get_alerts(
     query = db.query(Alert)
     if acknowledged is not None:
         query = query.filter(Alert.acknowledged == acknowledged)
+    if severity:
+        query = query.filter(Alert.severity == severity)
+
+    # Sorting
+    if sort_by == "created_at":
+        order_col = Alert.created_at
+    elif sort_by == "severity":
+        order_col = Alert.severity
+    else:
+        order_col = Alert.created_at
+
+    if sort_order == "asc":
+        query = query.order_by(order_col.asc())
+    else:
+        query = query.order_by(order_col.desc())
+
     alerts = query.offset(skip).limit(limit).all()
     return alerts
 

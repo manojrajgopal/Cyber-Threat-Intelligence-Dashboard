@@ -69,7 +69,7 @@ class IOCEnrichment(Base):
 
 class Alert(Base):
     __tablename__ = "alerts"
-    
+
     id = Column(Integer, primary_key=True, index=True)
     ioc_id = Column(Integer, ForeignKey("threat_iocs.id"), nullable=False)
     severity = Column(Enum('low', 'medium', 'high', 'critical'), default='medium')

@@ -15,11 +15,10 @@ router = APIRouter()
 @router.post("/single", response_model=IngestionResponse)
 async def ingest_single(
     request: SingleIngestionRequest,
-    background_tasks: BackgroundTasks,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_active_user)
 ):
-    """Ingest a single threat input."""
+    """Ingest a single threat input and return AI prediction."""
     try:
         # Validate input type
         if request.type not in ['ip', 'domain', 'url', 'hash']:
@@ -52,13 +51,24 @@ async def ingest_single(
         db.commit()
         db.refresh(threat_input)
 
-        # Process in background
-        background_tasks.add_task(process_single_input, threat_input.id, db)
+        # Process synchronously and get prediction result
+        prediction_result = process_single_input(threat_input.id, db)
+
+        response_data = {
+            "threat_input_id": threat_input.id,
+            "ioc_processed": True
+        }
+
+        if prediction_result:
+            response_data["ai_prediction"] = prediction_result
+            message = f"Threat input processed successfully. AI Prediction: {prediction_result['prediction'].upper()}"
+        else:
+            message = "Threat input processed successfully, but AI prediction failed."
 
         return IngestionResponse(
             success=True,
-            message="Threat input ingested successfully",
-            data={"threat_input_id": threat_input.id}
+            message=message,
+            data=response_data
         )
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

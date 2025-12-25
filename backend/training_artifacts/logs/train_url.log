@@ -1,0 +1,366 @@
+2025-12-24 22:12:51,534 - train_url - INFO - Training started
+2025-12-24 22:12:51,535 - train_url - INFO - ============================================================
+2025-12-24 22:12:51,535 - train_url - INFO - STARTING URL MODEL TRAINING WITH ROBUST VALIDATION
+2025-12-24 22:12:51,535 - train_url - INFO - ============================================================
+2025-12-24 22:12:52,388 - train_url - INFO - Removed 15000 duplicate URLs.
+2025-12-24 22:12:52,389 - train_url - INFO - URL dataset loaded successfully. Shape: (808699, 2)
+2025-12-24 22:12:52,397 - train_url - INFO - Class distribution:
+1    427236
+0    381463
+Name: is_malicious, dtype: int64
+2025-12-24 22:12:52,397 - train_url - INFO - Benign URLs: 381463 (47.2%)
+2025-12-24 22:12:52,422 - train_url - INFO - Malicious URLs: 427236 (52.8%)
+2025-12-24 22:12:52,423 - train_url - INFO - Starting comprehensive URL feature engineering...
+2025-12-24 22:14:52,961 - train_url - INFO - Feature engineering completed. Total features: 58
+2025-12-24 22:14:52,961 - train_url - INFO - Sample features: ['is_malicious', 'url_length', 'num_dots', 'num_hyphens', 'num_underscores', 'num_slashes', 'num_questionmarks', 'num_ampersands', 'num_equals', 'num_at', 'num_percent', 'has_https', 'has_http', 'has_ftp', 'domain_length', 'path_length', 'path_depth', 'query_length', 'num_params', 'tld_length']...
+2025-12-24 22:14:54,042 - train_url - INFO - Final dataset shape - X: (808699, 57), y: (808699,)
+2025-12-24 22:14:54,093 - train_url - INFO - Class distribution: {1: 427236, 0: 381463}
+2025-12-24 22:14:54,093 - train_url - INFO - Total features generated: 57
+2025-12-24 22:14:54,113 - train_url - INFO - Performing feature selection...
+2025-12-24 22:14:55,626 - train_url - INFO - Selected 30 best features
+2025-12-24 22:14:55,627 - train_url - INFO - Scaling features...
+2025-12-24 22:14:57,063 - train_url - INFO - 
+Data Split Summary:
+2025-12-24 22:14:57,065 - train_url - INFO - Train set (final): 517567 samples
+2025-12-24 22:14:57,065 - train_url - INFO - Validation set: 129392 samples
+2025-12-24 22:14:57,065 - train_url - INFO - Test set: 161740 samples
+2025-12-24 22:14:57,066 - train_url - INFO - Total samples: 808699
+2025-12-24 22:14:57,171 - train_url - INFO - Class weights: {0: 1.0599972965887865, 1: 0.9464307265818434}
+2025-12-24 22:14:57,173 - train_url - INFO - 
+============================================================
+2025-12-24 22:14:57,173 - train_url - INFO - STARTING MODEL TRAINING WITH 10-FOLD CROSS VALIDATION
+2025-12-24 22:14:57,173 - train_url - INFO - ============================================================
+2025-12-24 22:14:57,173 - train_url - INFO - 
+Training logistic_regression...
+2025-12-24 22:15:55,773 - train_url - INFO -   Cross-validation F1 scores (10-fold): Mean=0.8636, Std=0.0010
+2025-12-24 22:21:19,966 - train_url - INFO - logistic_regression Results:
+2025-12-24 22:21:19,966 - train_url - INFO -   Best Parameters: {'C': 0.001, 'max_iter': 2000, 'penalty': 'l2', 'solver': 'saga'}
+2025-12-24 22:21:19,966 - train_url - INFO -   Training Accuracy: 0.8640
+2025-12-24 22:21:19,966 - train_url - INFO -   Validation Accuracy: 0.8558 (F1: 0.8634)
+2025-12-24 22:21:19,967 - train_url - INFO -   Testing Accuracy: 0.8555
+2025-12-24 22:21:19,967 - train_url - INFO -   Precision: 0.8640
+2025-12-24 22:21:19,967 - train_url - INFO -   Recall: 0.8621
+2025-12-24 22:21:19,968 - train_url - INFO -   F1-Score: 0.8630
+2025-12-24 22:21:19,968 - train_url - INFO -   *** New Best Model! (Validation F1: 0.8634) ***
+2025-12-24 22:21:19,969 - train_url - INFO - 
+Training random_forest...
+2025-12-24 22:26:08,278 - train_url - INFO -   Cross-validation F1 scores (10-fold): Mean=0.9517, Std=0.0008
+2025-12-25 09:36:12,819 - train_url - INFO - Training started
+2025-12-25 09:36:12,866 - train_url - INFO - ============================================================
+2025-12-25 09:36:12,866 - train_url - INFO - STARTING URL MODEL TRAINING WITH ROBUST VALIDATION
+2025-12-25 09:36:12,866 - train_url - INFO - ============================================================
+2025-12-25 09:36:12,866 - train_url - INFO - 
+============================================================
+2025-12-25 09:36:12,866 - train_url - INFO - HARDWARE DETECTION
+2025-12-25 09:36:12,866 - train_url - INFO - ============================================================
+2025-12-25 09:36:13,477 - train_url - INFO - Training Device: GPU
+2025-12-25 09:36:13,477 - train_url - INFO - Device Name: NVIDIA GeForce RTX 3050 Ti Laptop GPU
+2025-12-25 09:36:13,477 - train_url - INFO - Number of Devices: 1
+2025-12-25 09:36:13,477 - train_url - INFO - PyTorch Device: cuda:0
+2025-12-25 09:36:13,477 - train_url - INFO - Memory: 4.00 GB
+2025-12-25 09:36:13,477 - train_url - INFO - ✅ GPU detected! Training will utilize GPU acceleration where possible.
+2025-12-25 09:36:13,477 - train_url - INFO - CUDA Version: 11.8
+2025-12-25 09:36:13,477 - train_url - INFO - GPU Memory Allocated: 0.00 GB
+2025-12-25 09:36:13,477 - train_url - INFO - GPU Memory Cached: 0.00 GB
+2025-12-25 09:36:17,964 - train_url - INFO - Removed 15000 duplicate URLs.
+2025-12-25 09:36:17,964 - train_url - INFO - URL dataset loaded successfully. Shape: (808699, 2)
+2025-12-25 09:36:18,051 - train_url - INFO - Class distribution:
+is_malicious
+1    427236
+0    381463
+Name: count, dtype: int64
+2025-12-25 09:36:18,118 - train_url - INFO - Benign URLs: 381463 (47.2%)
+2025-12-25 09:36:18,118 - train_url - INFO - Malicious URLs: 427236 (52.8%)
+2025-12-25 09:36:18,118 - train_url - INFO - Starting comprehensive URL feature engineering...
+2025-12-25 09:38:02,382 - train_url - INFO - Feature engineering completed. Total features: 58
+2025-12-25 09:38:02,382 - train_url - INFO - Sample features: ['is_malicious', 'url_length', 'num_dots', 'num_hyphens', 'num_underscores', 'num_slashes', 'num_questionmarks', 'num_ampersands', 'num_equals', 'num_at', 'num_percent', 'has_https', 'has_http', 'has_ftp', 'domain_length', 'path_length', 'path_depth', 'query_length', 'num_params', 'tld_length']...
+2025-12-25 09:38:03,261 - train_url - INFO - Final dataset shape - X: (808699, 57), y: (808699,)
+2025-12-25 09:38:03,264 - train_url - INFO - Class distribution: {1: 427236, 0: 381463}
+2025-12-25 09:38:03,264 - train_url - INFO - Total features generated: 57
+2025-12-25 09:38:03,282 - train_url - INFO - Performing feature selection...
+2025-12-25 09:38:04,362 - train_url - INFO - Selected 30 best features
+2025-12-25 09:38:04,362 - train_url - INFO - Scaling features...
+2025-12-25 09:38:06,105 - train_url - INFO - 
+Data Split Summary:
+2025-12-25 09:38:06,105 - train_url - INFO - Train set (final): 517567 samples
+2025-12-25 09:38:06,105 - train_url - INFO - Validation set: 129392 samples
+2025-12-25 09:38:06,105 - train_url - INFO - Test set: 161740 samples
+2025-12-25 09:38:06,105 - train_url - INFO - Total samples: 808699
+2025-12-25 09:38:06,218 - train_url - INFO - Class weights: {0: 1.0599972965887865, 1: 0.9464307265818434}
+2025-12-25 09:38:06,256 - train_url - INFO - ✅ Added Neural Network model for GPU training
+2025-12-25 09:38:06,256 - train_url - INFO - 
+============================================================
+2025-12-25 09:38:06,256 - train_url - INFO - STARTING MODEL TRAINING WITH 10-FOLD CROSS VALIDATION
+2025-12-25 09:38:06,256 - train_url - INFO - ============================================================
+2025-12-25 09:38:06,256 - train_url - INFO - Training on: GPU
+2025-12-25 09:38:06,256 - train_url - INFO - 
+Training logistic_regression...
+2025-12-25 09:38:06,257 - train_url - INFO -   Model device: GPU
+2025-12-25 09:38:51,070 - train_url - INFO -   Cross-validation F1 scores (10-fold): Mean=0.8636, Std=0.0010
+2025-12-25 09:43:35,566 - train_url - INFO - logistic_regression Results:
+2025-12-25 09:43:35,566 - train_url - INFO -   Best Parameters: {'C': 0.001, 'max_iter': 2000, 'penalty': 'l2', 'solver': 'saga'}
+2025-12-25 09:43:35,566 - train_url - INFO -   Training Accuracy: 0.8640
+2025-12-25 09:43:35,566 - train_url - INFO -   Validation Accuracy: 0.8558 (F1: 0.8634)
+2025-12-25 09:43:35,566 - train_url - INFO -   Testing Accuracy: 0.8555
+2025-12-25 09:43:35,568 - train_url - INFO -   Precision: 0.8640
+2025-12-25 09:43:35,568 - train_url - INFO -   Recall: 0.8621
+2025-12-25 09:43:35,568 - train_url - INFO -   F1-Score: 0.8630
+2025-12-25 09:43:35,568 - train_url - INFO -   *** New Best Model! (Validation F1: 0.8634) ***
+2025-12-25 09:43:35,568 - train_url - INFO - 
+Training random_forest...
+2025-12-25 09:43:35,568 - train_url - INFO -   Model device: GPU
+2025-12-25 09:54:40,365 - train_url - INFO - Training started
+2025-12-25 09:54:40,365 - train_url - INFO - ============================================================
+2025-12-25 09:54:40,365 - train_url - INFO - STARTING URL MODEL TRAINING WITH ROBUST VALIDATION
+2025-12-25 09:54:40,365 - train_url - INFO - ============================================================
+2025-12-25 09:54:40,387 - train_url - INFO - Removed 924 duplicate URLs.
+2025-12-25 09:54:40,387 - train_url - INFO - URL dataset loaded successfully. Shape: (912, 2)
+2025-12-25 09:54:40,387 - train_url - INFO - Class distribution:
+0    594
+1    318
+Name: is_malicious, dtype: int64
+2025-12-25 09:54:40,388 - train_url - INFO - Benign URLs: 594 (65.1%)
+2025-12-25 09:54:40,388 - train_url - INFO - Malicious URLs: 318 (34.9%)
+2025-12-25 09:54:40,388 - train_url - INFO - Dataset is small. Extending with realistic URL patterns...
+2025-12-25 09:54:40,388 - train_url - INFO - Generating synthetic URL data for better model generalization...
+2025-12-25 09:54:40,441 - train_url - INFO - Extended dataset from 912 to 1226 rows
+2025-12-25 09:54:40,442 - train_url - INFO - Final class distribution: {0: 747, 1: 479}
+2025-12-25 09:54:40,443 - train_url - INFO - Benign: 747, Malicious: 479
+2025-12-25 09:54:40,443 - train_url - INFO - Starting comprehensive URL feature engineering...
+2025-12-25 09:54:40,704 - train_url - INFO - Feature engineering completed. Total features: 58
+2025-12-25 09:54:40,704 - train_url - INFO - Sample features: ['is_malicious', 'url_length', 'num_dots', 'num_hyphens', 'num_underscores', 'num_slashes', 'num_questionmarks', 'num_ampersands', 'num_equals', 'num_at', 'num_percent', 'has_https', 'has_http', 'has_ftp', 'domain_length', 'path_length', 'path_depth', 'query_length', 'num_params', 'tld_length']...
+2025-12-25 09:54:40,734 - train_url - INFO - Final dataset shape - X: (1226, 57), y: (1226,)
+2025-12-25 09:54:40,734 - train_url - INFO - Class distribution: {0: 747, 1: 479}
+2025-12-25 09:54:40,734 - train_url - INFO - Total features generated: 57
+2025-12-25 09:54:40,734 - train_url - INFO - Performing feature selection...
+2025-12-25 09:54:40,769 - train_url - INFO - Selected 30 best features
+2025-12-25 09:54:40,770 - train_url - INFO - Scaling features...
+2025-12-25 09:54:40,772 - train_url - INFO - 
+Data Split Summary:
+2025-12-25 09:54:40,772 - train_url - INFO - Train set (final): 784 samples
+2025-12-25 09:54:40,772 - train_url - INFO - Validation set: 196 samples
+2025-12-25 09:54:40,772 - train_url - INFO - Test set: 246 samples
+2025-12-25 09:54:40,772 - train_url - INFO - Total samples: 1226
+2025-12-25 09:54:40,788 - train_url - INFO - Class weights: {0: 0.8200836820083682, 1: 1.2810457516339868}
+2025-12-25 09:54:40,788 - train_url - INFO - 
+============================================================
+2025-12-25 09:54:40,788 - train_url - INFO - STARTING MODEL TRAINING WITH 10-FOLD CROSS VALIDATION
+2025-12-25 09:54:40,788 - train_url - INFO - ============================================================
+2025-12-25 09:54:40,788 - train_url - INFO - 
+Training logistic_regression...
+2025-12-25 09:54:42,582 - train_url - INFO -   Cross-validation F1 scores (10-fold): Mean=0.7618, Std=0.0747
+2025-12-25 09:54:44,138 - train_url - INFO - logistic_regression Results:
+2025-12-25 09:54:44,138 - train_url - INFO -   Best Parameters: {'C': 100, 'max_iter': 2000, 'penalty': 'l2', 'solver': 'lbfgs'}
+2025-12-25 09:54:44,138 - train_url - INFO -   Training Accuracy: 0.8122
+2025-12-25 09:54:44,138 - train_url - INFO -   Validation Accuracy: 0.8418 (F1: 0.8025)
+2025-12-25 09:54:44,138 - train_url - INFO -   Testing Accuracy: 0.8171
+2025-12-25 09:54:44,138 - train_url - INFO -   Precision: 0.7525
+2025-12-25 09:54:44,138 - train_url - INFO -   Recall: 0.7917
+2025-12-25 09:54:44,138 - train_url - INFO -   F1-Score: 0.7716
+2025-12-25 09:54:44,138 - train_url - INFO -   *** New Best Model! (Validation F1: 0.8025) ***
+2025-12-25 09:54:44,138 - train_url - INFO - 
+Training random_forest...
+2025-12-25 09:54:44,587 - train_url - INFO -   Cross-validation F1 scores (10-fold): Mean=0.8759, Std=0.0419
+2025-12-25 09:57:36,134 - train_url - INFO - random_forest Results:
+2025-12-25 09:57:36,134 - train_url - INFO -   Best Parameters: {'bootstrap': False, 'max_depth': 15, 'max_features': 'sqrt', 'min_samples_leaf': 1, 'min_samples_split': 5, 'n_estimators': 50}
+2025-12-25 09:57:36,134 - train_url - INFO -   Training Accuracy: 0.9984
+2025-12-25 09:57:36,134 - train_url - INFO -   Validation Accuracy: 0.9388 (F1: 0.9189)
+2025-12-25 09:57:36,134 - train_url - INFO -   Testing Accuracy: 0.9024
+2025-12-25 09:57:36,134 - train_url - INFO -   Precision: 0.9186
+2025-12-25 09:57:36,134 - train_url - INFO -   Recall: 0.8229
+2025-12-25 09:57:36,134 - train_url - INFO -   F1-Score: 0.8681
+2025-12-25 09:57:36,139 - train_url - INFO -   *** New Best Model! (Validation F1: 0.9189) ***
+2025-12-25 09:57:36,139 - train_url - INFO - 
+Training gradient_boosting...
+2025-12-25 09:57:37,024 - train_url - INFO -   Cross-validation F1 scores (10-fold): Mean=0.8635, Std=0.0486
+2025-12-25 10:13:52,908 - train_url - INFO - gradient_boosting Results:
+2025-12-25 10:13:52,909 - train_url - INFO -   Best Parameters: {'learning_rate': 0.2, 'max_depth': 6, 'max_features': 'sqrt', 'min_samples_leaf': 2, 'min_samples_split': 5, 'n_estimators': 50, 'subsample': 0.8}
+2025-12-25 10:13:52,909 - train_url - INFO -   Training Accuracy: 0.9984
+2025-12-25 10:13:52,909 - train_url - INFO -   Validation Accuracy: 0.9337 (F1: 0.9116)
+2025-12-25 10:13:52,910 - train_url - INFO -   Testing Accuracy: 0.8943
+2025-12-25 10:13:52,910 - train_url - INFO -   Precision: 0.8977
+2025-12-25 10:13:52,910 - train_url - INFO -   Recall: 0.8229
+2025-12-25 10:13:52,910 - train_url - INFO -   F1-Score: 0.8587
+2025-12-25 10:13:52,910 - train_url - WARNING -   ⚠️  Potential overfitting: Train-Test difference = 0.1041
+2025-12-25 10:13:52,911 - train_url - INFO - 
+Training svc...
+2025-12-25 10:14:46,557 - train_url - INFO -   Cross-validation F1 scores (10-fold): Mean=0.8419, Std=0.0399
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    2025-12-25 10:31:48,866 - train_url - INFO - Training started
+2025-12-25 10:31:48,884 - train_url - INFO - ============================================================
+2025-12-25 10:31:48,885 - train_url - INFO - STARTING URL MODEL TRAINING WITH ROBUST VALIDATION
+2025-12-25 10:31:48,885 - train_url - INFO - ============================================================
+2025-12-25 10:31:48,921 - train_url - INFO - Removed 924 duplicate URLs.
+2025-12-25 10:31:48,921 - train_url - INFO - URL dataset loaded successfully. Shape: (912, 2)
+2025-12-25 10:31:48,922 - train_url - INFO - Class distribution:
+0    594
+1    318
+Name: is_malicious, dtype: int64
+2025-12-25 10:31:48,922 - train_url - INFO - Benign URLs: 594 (65.1%)
+2025-12-25 10:31:48,922 - train_url - INFO - Malicious URLs: 318 (34.9%)
+2025-12-25 10:31:48,922 - train_url - INFO - Dataset is small. Extending with realistic URL patterns...
+2025-12-25 10:31:48,923 - train_url - INFO - Generating synthetic URL data for better model generalization...
+2025-12-25 10:31:48,929 - train_url - INFO - Extended dataset from 912 to 1226 rows
+2025-12-25 10:31:48,931 - train_url - INFO - Final class distribution: {0: 756, 1: 470}
+2025-12-25 10:31:48,931 - train_url - INFO - Benign: 756, Malicious: 470
+2025-12-25 10:31:48,931 - train_url - INFO - Starting comprehensive URL feature engineering...
+2025-12-25 10:31:49,112 - train_url - INFO - Feature engineering completed. Total features: 58
+2025-12-25 10:31:49,112 - train_url - INFO - Sample features: ['is_malicious', 'url_length', 'num_dots', 'num_hyphens', 'num_underscores', 'num_slashes', 'num_questionmarks', 'num_ampersands', 'num_equals', 'num_at', 'num_percent', 'has_https', 'has_http', 'has_ftp', 'domain_length', 'path_length', 'path_depth', 'query_length', 'num_params', 'tld_length']...
+2025-12-25 10:31:49,117 - train_url - INFO - Final dataset shape - X: (1226, 57), y: (1226,)
+2025-12-25 10:31:49,118 - train_url - INFO - Class distribution: {0: 756, 1: 470}
+2025-12-25 10:31:49,118 - train_url - INFO - Total features generated: 57
+2025-12-25 10:31:49,119 - train_url - INFO - Performing feature selection...
+2025-12-25 10:31:49,123 - train_url - INFO - Selected 30 best features
+2025-12-25 10:31:49,123 - train_url - INFO - Scaling features...
+2025-12-25 10:31:49,124 - train_url - INFO - 
+Data Split Summary:
+2025-12-25 10:31:49,126 - train_url - INFO - Train set (final): 784 samples
+2025-12-25 10:31:49,126 - train_url - INFO - Validation set: 196 samples
+2025-12-25 10:31:49,126 - train_url - INFO - Test set: 246 samples
+2025-12-25 10:31:49,126 - train_url - INFO - Total samples: 1226
+2025-12-25 10:31:49,126 - train_url - INFO - Class weights: {0: 0.8115942028985508, 1: 1.302325581395349}
+2025-12-25 10:31:49,126 - train_url - INFO - 
+============================================================
+2025-12-25 10:31:49,126 - train_url - INFO - STARTING MODEL TRAINING WITH 10-FOLD CROSS VALIDATION
+2025-12-25 10:31:49,128 - train_url - INFO - ============================================================
+2025-12-25 10:31:49,128 - train_url - INFO - 
+Training logistic_regression...
+2025-12-25 10:31:51,834 - train_url - INFO -   Cross-validation F1 scores (10-fold): Mean=0.7730, Std=0.0511
+2025-12-25 10:31:52,986 - train_url - INFO - logistic_regression Results:
+2025-12-25 10:31:52,986 - train_url - INFO -   Best Parameters: {'C': 100, 'max_iter': 2000, 'penalty': 'l2', 'solver': 'lbfgs'}
+2025-12-25 10:31:52,986 - train_url - INFO -   Training Accuracy: 0.8013
+2025-12-25 10:31:52,986 - train_url - INFO -   Validation Accuracy: 0.8010 (F1: 0.7417)
+2025-12-25 10:31:52,986 - train_url - INFO -   Testing Accuracy: 0.8496
+2025-12-25 10:31:52,986 - train_url - INFO -   Precision: 0.7879
+2025-12-25 10:31:52,988 - train_url - INFO -   Recall: 0.8298
+2025-12-25 10:31:52,988 - train_url - INFO -   F1-Score: 0.8083
+2025-12-25 10:31:52,988 - train_url - INFO -   *** New Best Model! (Validation F1: 0.7417) ***
+2025-12-25 10:31:52,988 - train_url - INFO - 
+Training random_forest...
+2025-12-25 10:31:53,524 - train_url - INFO -   Cross-validation F1 scores (10-fold): Mean=0.8750, Std=0.0300
+2025-12-25 10:34:55,310 - train_url - INFO - random_forest Results:
+2025-12-25 10:34:55,310 - train_url - INFO -   Best Parameters: {'bootstrap': False, 'max_depth': 20, 'max_features': 'sqrt', 'min_samples_leaf': 1, 'min_samples_split': 2, 'n_estimators': 100}
+2025-12-25 10:34:55,310 - train_url - INFO -   Training Accuracy: 1.0000
+2025-12-25 10:34:55,310 - train_url - INFO -   Validation Accuracy: 0.8878 (F1: 0.8533)
+2025-12-25 10:34:55,310 - train_url - INFO -   Testing Accuracy: 0.9431
+2025-12-25 10:34:55,310 - train_url - INFO -   Precision: 0.9167
+2025-12-25 10:34:55,310 - train_url - INFO -   Recall: 0.9362
+2025-12-25 10:34:55,311 - train_url - INFO -   F1-Score: 0.9263
+2025-12-25 10:34:55,311 - train_url - INFO -   *** New Best Model! (Validation F1: 0.8533) ***
+2025-12-25 10:34:55,311 - train_url - INFO - 
+Training gradient_boosting...
+2025-12-25 10:34:55,914 - train_url - INFO -   Cross-validation F1 scores (10-fold): Mean=0.8642, Std=0.0471
+2025-12-25 10:51:42,037 - train_url - INFO - gradient_boosting Results:
+2025-12-25 10:51:42,037 - train_url - INFO -   Best Parameters: {'learning_rate': 0.2, 'max_depth': 6, 'max_features': 'log2', 'min_samples_leaf': 4, 'min_samples_split': 2, 'n_estimators': 50, 'subsample': 1.0}
+2025-12-25 10:51:42,037 - train_url - INFO -   Training Accuracy: 1.0000
+2025-12-25 10:51:42,037 - train_url - INFO -   Validation Accuracy: 0.8878 (F1: 0.8514)
+2025-12-25 10:51:42,037 - train_url - INFO -   Testing Accuracy: 0.9309
+2025-12-25 10:51:42,037 - train_url - INFO -   Precision: 0.9053
+2025-12-25 10:51:42,037 - train_url - INFO -   Recall: 0.9149
+2025-12-25 10:51:42,039 - train_url - INFO -   F1-Score: 0.9101
+2025-12-25 10:51:42,039 - train_url - INFO - 
+Training svc...
+2025-12-25 10:51:42,190 - train_url - INFO -   Cross-validation F1 scores (10-fold): Mean=0.8478, Std=0.0397
+2025-12-25 10:52:33,809 - train_url - INFO - svc Results:
+2025-12-25 10:52:33,809 - train_url - INFO -   Best Parameters: {'C': 1, 'degree': 2, 'gamma': 0.1, 'kernel': 'rbf', 'max_iter': 1000000, 'tol': 0.0001}
+2025-12-25 10:52:33,811 - train_url - INFO -   Training Accuracy: 0.9302
+2025-12-25 10:52:33,811 - train_url - INFO -   Validation Accuracy: 0.8418 (F1: 0.7919)
+2025-12-25 10:52:33,811 - train_url - INFO -   Testing Accuracy: 0.8943
+2025-12-25 10:52:33,811 - train_url - INFO -   Precision: 0.8208
+2025-12-25 10:52:33,811 - train_url - INFO -   Recall: 0.9255
+2025-12-25 10:52:33,811 - train_url - INFO -   F1-Score: 0.8700
+2025-12-25 10:52:33,811 - train_url - INFO - 
+============================================================
+2025-12-25 10:52:33,813 - train_url - INFO - MODEL PERFORMANCE SUMMARY
+2025-12-25 10:52:33,813 - train_url - INFO - ============================================================
+2025-12-25 10:52:33,813 - train_url - INFO - LOGISTIC_REGRESSION       Val F1: 0.7417 | Test Acc: 0.8496 | Precision: 0.7879 | Recall: 0.8298 | F1: 0.8083
+2025-12-25 10:52:33,813 - train_url - INFO - RANDOM_FOREST             Val F1: 0.8533 | Test Acc: 0.9431 | Precision: 0.9167 | Recall: 0.9362 | F1: 0.9263
+2025-12-25 10:52:33,813 - train_url - INFO - GRADIENT_BOOSTING         Val F1: 0.8514 | Test Acc: 0.9309 | Precision: 0.9053 | Recall: 0.9149 | F1: 0.9101
+2025-12-25 10:52:33,813 - train_url - INFO - SVC                       Val F1: 0.7919 | Test Acc: 0.8943 | Precision: 0.8208 | Recall: 0.9255 | F1: 0.8700
+2025-12-25 10:52:33,813 - train_url - INFO - 
+Best model: random_forest
+2025-12-25 10:52:33,813 - train_url - INFO - Best validation F1: 0.8533
+2025-12-25 10:52:33,813 - train_url - INFO - Best parameters: {'bootstrap': False, 'max_depth': 20, 'max_features': 'sqrt', 'min_samples_leaf': 1, 'min_samples_split': 2, 'n_estimators': 100}
+2025-12-25 10:52:33,814 - train_url - INFO - 
+============================================================
+2025-12-25 10:52:33,814 - train_url - INFO - FINAL COMPREHENSIVE EVALUATION
+2025-12-25 10:52:33,814 - train_url - INFO - ============================================================
+2025-12-25 10:52:33,866 - train_url - INFO - 
+Classification Report:
+              precision    recall  f1-score   support
+
+      Benign       0.96      0.95      0.95       152
+   Malicious       0.92      0.94      0.93        94
+
+    accuracy                           0.94       246
+   macro avg       0.94      0.94      0.94       246
+weighted avg       0.94      0.94      0.94       246
+
+2025-12-25 10:52:33,867 - train_url - INFO - 
+============================================================
+2025-12-25 10:52:33,867 - train_url - INFO - COMPREHENSIVE MODEL VALIDATION
+2025-12-25 10:52:33,867 - train_url - INFO - ============================================================
+2025-12-25 10:52:33,871 - train_url - INFO - Accuracy: 0.9431
+2025-12-25 10:52:33,871 - train_url - INFO - Precision: 0.9167
+2025-12-25 10:52:33,871 - train_url - INFO - Recall: 0.9362
+2025-12-25 10:52:33,871 - train_url - INFO - F1-Score: 0.9263
+2025-12-25 10:52:33,872 - train_url - INFO - ROC-AUC Score: 0.9693
+2025-12-25 10:52:33,872 - train_url - INFO - 
+Confusion Matrix Details:
+2025-12-25 10:52:33,872 - train_url - INFO - True Negatives:  144
+2025-12-25 10:52:33,874 - train_url - INFO - False Positives: 8
+2025-12-25 10:52:33,874 - train_url - INFO - False Negatives: 6
+2025-12-25 10:52:33,874 - train_url - INFO - True Positives:  88
+2025-12-25 10:52:33,874 - train_url - INFO - False Positive Rate: 0.0526
+2025-12-25 10:52:33,874 - train_url - INFO - False Negative Rate: 0.0638
+2025-12-25 10:52:33,874 - train_url - INFO - Specificity: 0.9474
+2025-12-25 10:52:33,881 - train_url - INFO - 
+Feature Importance (Top 15):
+2025-12-25 10:52:33,881 - train_url - INFO -    1. url_entropy                   : 0.0934
+2025-12-25 10:52:33,881 - train_url - INFO -    2. url_length                    : 0.0666
+2025-12-25 10:52:33,881 - train_url - INFO -    3. num_hyphens                   : 0.0630
+2025-12-25 10:52:33,881 - train_url - INFO -    4. domain_entropy                : 0.0557
+2025-12-25 10:52:33,881 - train_url - INFO -    5. has_subdomain                 : 0.0531
+2025-12-25 10:52:33,881 - train_url - INFO -    6. letter_ratio                  : 0.0505
+2025-12-25 10:52:33,881 - train_url - INFO -    7. path_to_url_ratio             : 0.0497
+2025-12-25 10:52:33,882 - train_url - INFO -    8. letter_count                  : 0.0494
+2025-12-25 10:52:33,882 - train_url - INFO -    9. suspicious_combo_count        : 0.0493
+2025-12-25 10:52:33,882 - train_url - INFO -   10. domain_length                 : 0.0477
+2025-12-25 10:52:33,882 - train_url - INFO -   11. subdomain_count               : 0.0469
+2025-12-25 10:52:33,882 - train_url - INFO -   12. domain_name_length            : 0.0468
+2025-12-25 10:52:33,882 - train_url - INFO -   13. has_https                     : 0.0445
+2025-12-25 10:52:33,882 - train_url - INFO -   14. special_char_count            : 0.0401
+2025-12-25 10:52:33,882 - train_url - INFO -   15. unique_char_ratio             : 0.0378
+2025-12-25 10:52:38,747 - train_url - INFO - 
+Model saved to: models/url_model.pkl
+2025-12-25 10:52:38,747 - train_url - INFO - Scaler saved to: models/scaler_url.pkl
+2025-12-25 10:52:38,747 - train_url - INFO - Feature selector saved to: models/selector_url.pkl
+2025-12-25 10:52:38,747 - train_url - INFO - Selected feature names saved to: models/url_feature_names.pkl
+2025-12-25 10:52:38,779 - train_url - INFO - 
+============================================================
+2025-12-25 10:52:38,780 - train_url - INFO - TRAINING COMPLETED SUCCESSFULLY
+2025-12-25 10:52:38,780 - train_url - INFO - Total training time: 1249.91 seconds
+2025-12-25 10:52:38,780 - train_url - INFO - ============================================================
+2025-12-25 10:52:38,780 - train_url - INFO - 
+============================================================
+2025-12-25 10:52:38,780 - train_url - INFO - PRODUCTION RECOMMENDATIONS
+2025-12-25 10:52:38,780 - train_url - INFO - ============================================================
+2025-12-25 10:52:38,780 - train_url - INFO - 1. Monitor false positive rate in production (aim for < 5%)
+2025-12-25 10:52:38,780 - train_url - INFO - 2. Regularly retrain model with new phishing/malicious URL patterns
+2025-12-25 10:52:38,780 - train_url - INFO - 3. Implement confidence thresholds for predictions
+2025-12-25 10:52:38,780 - train_url - INFO - 4. Combine with real-time threat intelligence feeds
+2025-12-25 10:52:38,781 - train_url - INFO - 5. Use ensemble methods for critical decisions
+2025-12-25 10:52:38,782 - train_url - INFO - 6. Track model drift and retrain monthly
+2025-12-25 10:52:38,782 - train_url - INFO - 7. Implement rate limiting for URL checking API
+2025-12-25 10:52:38,782 - train_url - INFO - 8. Log all predictions for audit and improvement
+2025-12-25 10:52:38,782 - train_url - INFO - 9. Consider browser extension integration for real-time protection
+2025-12-25 10:52:38,782 - train_url - INFO - 10. Implement feedback loop from user reports
+2025-12-25 10:52:38,782 - train_url - INFO - 
+============================================================
+2025-12-25 10:52:38,782 - train_url - INFO - PERFORMANCE SUMMARY
+2025-12-25 10:52:38,782 - train_url - INFO - ============================================================
+2025-12-25 10:52:38,783 - train_url - INFO - Best Model: random_forest
+2025-12-25 10:52:38,783 - train_url - INFO - Test Accuracy: 0.9431
+2025-12-25 10:52:38,783 - train_url - INFO - Precision: 0.9167
+2025-12-25 10:52:38,783 - train_url - INFO - Recall: 0.9362
+2025-12-25 10:52:38,783 - train_url - INFO - F1-Score: 0.9263
+2025-12-25 10:52:38,783 - train_url - INFO - False Positive Rate: 0.0526

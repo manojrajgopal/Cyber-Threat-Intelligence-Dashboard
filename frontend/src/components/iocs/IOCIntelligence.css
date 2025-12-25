@@ -260,7 +260,7 @@
   border: 1px solid var(--glass-border);
   border-radius: 8px;
   padding: 0.75rem 1.5rem;
-  color: rgba(255, 255, 255, 0.9);
+  color: black;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -275,7 +275,7 @@
 
 .glass-button.danger {
   border-color: rgba(239, 68, 68, 0.3);
-  color: #fca5a5;
+  color: black;
 }
 
 .glass-button.danger:hover {

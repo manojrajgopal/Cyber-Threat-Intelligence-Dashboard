@@ -131,7 +131,7 @@ class ThreatLifecycleService:
         return to_state in valid_transitions.get(from_state, [])
 
     def _update_entity_state(self, threat_input_id: Optional[int],
-                           ioc_id: Optional[int], state: str):
+                            ioc_id: Optional[int], state: str):
         """Update the state of related entities."""
         db = SessionLocal()
         try:
@@ -142,7 +142,7 @@ class ThreatLifecycleService:
                     # Map lifecycle state to input status
                     status_mapping = {
                         'new': 'pending',
-                        'under_analysis': 'processing',
+                        'under_analysis': 'processed',  # Changed from 'processing' to avoid DB issues
                         'confirmed_malicious': 'processed',
                         'false_positive': 'processed',
                         'mitigated': 'processed'

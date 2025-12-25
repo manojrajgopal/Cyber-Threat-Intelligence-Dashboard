@@ -1,0 +1,59 @@
+{
+    "model_name": "train_network",
+    "algorithm": "random_forest",
+    "datasets_used": [
+        "packet_count",
+        "bytes_transferred",
+        "connection_count",
+        "failed_connections",
+        "packets_per_second",
+        "bytes_per_second",
+        "failure_rate",
+        "packets_per_connection",
+        "session_duration_norm",
+        "success_rate"
+    ],
+    "training_start_time": "Wed Dec 24 19:27:45 2025",
+    "training_end_time": "Wed Dec 24 19:28:20 2025",
+    "total_duration_seconds": 34.46798634529114,
+    "metrics": {
+        "accuracy": 0.9811320754716981,
+        "precision": 1.0,
+        "recall": 0.96875,
+        "f1": 0.9841269841269841,
+        "confusion_matrix": [
+            [
+                21,
+                0
+            ],
+            [
+                1,
+                31
+            ]
+        ],
+        "true_negatives": 21,
+        "false_positives": 0,
+        "false_negatives": 1,
+        "true_positives": 31,
+        "training_duration": 26.240161657333374,
+        "best_model": "random_forest",
+        "best_parameters": "{'max_depth': 10, 'max_features': 'sqrt', 'min_samples_leaf': 1, 'min_samples_split': 2, 'n_estimators': 100}",
+        "selected_features": [
+            "packet_count",
+            "bytes_transferred",
+            "connection_count",
+            "failed_connections",
+            "packets_per_second",
+            "bytes_per_second",
+            "failure_rate",
+            "packets_per_connection",
+            "session_duration_norm",
+            "success_rate"
+        ]
+    },
+    "model_file_path": "models/network_model.pkl",
+    "graph_file_paths": [
+        "training_artifacts/graphs/individual/train_network_confusion_matrix.png",
+        "training_artifacts/graphs/individual/train_network_training_time.png"
+    ]
+}

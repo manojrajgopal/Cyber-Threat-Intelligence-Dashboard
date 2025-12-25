@@ -10,6 +10,7 @@ const ThreatInputForm = () => {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
+  const [aiResult, setAiResult] = useState(null);
 
   const inputTypes = [
     { value: 'ip', label: 'IP Address', placeholder: 'e.g., 192.168.1.1' },
@@ -74,6 +75,7 @@ const ThreatInputForm = () => {
     e.preventDefault();
     setError('');
     setMessage('');
+    setAiResult(null);
 
     if (!validateInput()) {
       return;
@@ -82,7 +84,13 @@ const ThreatInputForm = () => {
     setLoading(true);
     try {
       const response = await ingestionApi.submitSingleInput(formData);
-      setMessage('Threat input submitted successfully!');
+      setMessage(response.message || 'Threat input submitted successfully!');
+
+      // Display AI prediction result
+      if (response.data && response.data.ai_prediction) {
+        setAiResult(response.data.ai_prediction);
+      }
+
       setFormData(prev => ({ ...prev, value: '' })); // Clear value but keep type
     } catch (err) {
       setError(err.message || 'Failed to submit threat input');
@@ -151,6 +159,57 @@ const ThreatInputForm = () => {
           {message && (
             <div className="glass-card p-3 border-green-500/20 bg-green-500/10">
               <p className="text-green-300 text-sm">{message}</p>
+            </div>
+          )}
+
+          {aiResult && (
+            <div className={`glass-card p-4 border-2 ${
+              aiResult.prediction === 'malicious'
+                ? 'border-red-500/30 bg-red-500/10'
+                : aiResult.prediction === 'benign'
+                ? 'border-green-500/30 bg-green-500/10'
+                : 'border-yellow-500/30 bg-yellow-500/10'
+            }`}>
+              <div className="flex items-center justify-between mb-3">
+                <h4 className="text-lg font-semibold">AI Analysis Result</h4>
+                <span className={`px-3 py-1 rounded-full text-sm font-medium ${
+                  aiResult.prediction === 'malicious'
+                    ? 'bg-red-500/20 text-red-300'
+                    : aiResult.prediction === 'benign'
+                    ? 'bg-green-500/20 text-green-300'
+                    : 'bg-yellow-500/20 text-yellow-300'
+                }`}>
+                  {aiResult.prediction.toUpperCase()}
+                </span>
+              </div>
+
+              <div className="space-y-2 text-sm">
+                <div className="flex justify-between">
+                  <span className="opacity-80">IOC Type:</span>
+                  <span className="font-medium">{aiResult.ioc_type.toUpperCase()}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="opacity-80">Confidence:</span>
+                  <span className="font-medium">{(aiResult.confidence * 100).toFixed(1)}%</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="opacity-80">Model:</span>
+                  <span className="font-medium">{aiResult.model_name}</span>
+                </div>
+              </div>
+
+              {aiResult.explanation && (
+                <div className="mt-4">
+                  <details className="cursor-pointer">
+                    <summary className="text-sm font-medium opacity-80 hover:opacity-100">
+                      View Detailed Analysis
+                    </summary>
+                    <div className="mt-2 p-3 bg-black/20 rounded text-xs whitespace-pre-line max-h-60 overflow-y-auto">
+                      {aiResult.explanation}
+                    </div>
+                  </details>
+                </div>
+              )}
             </div>
           )}
 
