@@ -939,7 +939,7 @@ class AIClassificationService:
             print(f"Error extracting features for {ioc_type}: {e}")
             return self._create_fallback_prediction(ioc_id, ioc)
 
-        # Select features using trained selector
+        # Select features using trained selector or feature names
         if ioc_type in self.selectors and ioc_type in self.feature_names:
             try:
                 selected_features = self.feature_names[ioc_type]
@@ -947,8 +947,16 @@ class AIClassificationService:
             except Exception as e:
                 print(f"Error selecting features for {ioc_type}: {e}")
                 return self._create_fallback_prediction(ioc_id, ioc)
+        elif ioc_type in self.feature_names:
+            # For IOC types like hash that don't use feature selection
+            try:
+                selected_features = self.feature_names[ioc_type]
+                features_selected = features_df[selected_features]
+            except Exception as e:
+                print(f"Error using feature names for {ioc_type}: {e}")
+                return self._create_fallback_prediction(ioc_id, ioc)
         else:
-            print(f"No feature selector available for {ioc_type}")
+            print(f"No feature selector or feature names available for {ioc_type}")
             return self._create_fallback_prediction(ioc_id, ioc)
 
         # Scale features
