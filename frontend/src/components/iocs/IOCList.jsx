@@ -10,6 +10,8 @@ const IOCList = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedIoc, setSelectedIoc] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [iocToDelete, setIocToDelete] = useState(null);
   const itemsPerPage = 10;
 
   useEffect(() => {
@@ -38,16 +40,23 @@ const IOCList = () => {
     }
   };
 
-  const handleDelete = async (iocId) => {
-    if (window.confirm('Are you sure you want to delete this IOC?')) {
-      try {
-        await api.delete(`/iocs/${iocId}`);
-        // Refresh the list after deletion
-        fetchIOCs();
-      } catch (error) {
-        console.error('Error deleting IOC:', error);
-        alert('Failed to delete IOC. Please try again.');
-      }
+  const handleDelete = (iocId) => {
+    setIocToDelete(iocId);
+    setShowDeleteModal(true);
+  };
+
+  const confirmDelete = async () => {
+    try {
+      await api.delete(`/iocs/${iocToDelete}`);
+      // Refresh the list after deletion
+      fetchIOCs();
+      setShowDeleteModal(false);
+      setIocToDelete(null);
+    } catch (error) {
+      console.error('Error deleting IOC:', error);
+      alert('Failed to delete IOC. Please try again.');
+      setShowDeleteModal(false);
+      setIocToDelete(null);
     }
   };
 
@@ -208,6 +217,38 @@ const IOCList = () => {
               <div className="mt-4 space-x-2">
                 <Link to={`/iocs/${selectedIoc.id}`} className="glass-button primary" onClick={closeModal}>View</Link>
                 <button onClick={closeModal} className="glass-button secondary">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showDeleteModal && (
+        <div className="fixed inset-0 modal-overlay flex items-center justify-center z-50">
+          <div className="glass-card max-w-md w-full mx-4">
+            <div className="glass-card-header">
+              <h3 className="glass-card-title">Confirm Delete</h3>
+            </div>
+            <div className="glass-card-content">
+              <p className="text-center py-4">Are you sure you want to delete this IOC?</p>
+              <div className="flex justify-end gap-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowDeleteModal(false);
+                    setIocToDelete(null);
+                  }}
+                  className="glass-button secondary"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  onClick={confirmDelete}
+                  className="glass-button danger"
+                >
+                  Delete
+                </button>
               </div>
             </div>
           </div>

@@ -315,7 +315,12 @@
   box-shadow: 0 0 0 2px #ffbf00;
 }
 
-.previous-button, 
+.previous-button,
 .next-button {
   margin-top: 20px;
+}
+
+/* Modal overlay */
+.modal-overlay {
+  background: linear-gradient(135deg, rgba(255, 165, 0, 0.3), rgba(255, 255, 255, 0.7));
 }
