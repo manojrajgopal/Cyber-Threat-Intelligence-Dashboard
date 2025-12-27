@@ -16,7 +16,7 @@ const Dashboard = () => {
       const response = await api.get('/dashboard/metrics');
       setMetrics(response.data);
     } catch (error) {
-      console.error('Error fetching metrics:', error);
+      // Error fetching metrics
     } finally {
       setLoading(false);
     }

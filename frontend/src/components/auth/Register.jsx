@@ -111,7 +111,6 @@ const Register = ({ api }) => {
     }
 
     try {
-      console.log('Registration attempt with:', formData);
 
       if (formData.username && formData.email && formData.password) {
         const response = await api.post('/auth/register', {
@@ -152,7 +151,6 @@ const Register = ({ api }) => {
         throw new Error('Please fill all fields');
       }
     } catch (error) {
-      console.error('Registration error:', error);
       setError(error.response?.data?.detail || 'Registration failed');
       
       if (formRef.current) {

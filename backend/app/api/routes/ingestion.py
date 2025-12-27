@@ -20,11 +20,13 @@ async def ingest_single(
 ):
     """Ingest a single threat input and return AI prediction."""
     try:
-        # Validate input type
-        if request.type not in ['ip', 'domain', 'url', 'hash', 'network']:
-            raise HTTPException(status_code=400, detail="Invalid input type")
-
-        # Get default account (assuming user has account, or create default)
+        # Step 1: Validate input type
+        supported_types = ['ip', 'domain', 'url', 'hash', 'network']
+        
+        if request.type not in supported_types:
+            raise HTTPException(status_code=400, detail=f"Invalid input type: {request.type}. Supported types: {supported_types}")
+        
+        # Step 2: Get account mapping
         account_id = None
         if hasattr(current_user, 'account_id') and current_user.account_id:
             account_id = current_user.account_id
@@ -38,7 +40,7 @@ async def ingest_single(
                 db.refresh(default_account)
             account_id = default_account.id
 
-        # Create threat input
+        # Step 3: Create threat input
         threat_input = ThreatInput(
             type=request.type,
             value=request.value,
@@ -51,9 +53,10 @@ async def ingest_single(
         db.commit()
         db.refresh(threat_input)
 
-        # Process synchronously and get prediction result
+        # Step 4: Process threat input
         prediction_result = process_single_input(threat_input.id, db)
 
+        # Step 5: Build response
         response_data = {
             "threat_input_id": threat_input.id,
             "ioc_processed": True
@@ -70,8 +73,12 @@ async def ingest_single(
             message=message,
             data=response_data
         )
+        
+    except HTTPException:
+        raise
+        
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
 
 @router.post("/bulk", response_model=IngestionResponse)
 async def ingest_bulk(

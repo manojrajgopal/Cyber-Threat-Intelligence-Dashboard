@@ -3,10 +3,20 @@ import api from '../services/api';
 export const ingestionApi = {
   // Submit single threat input
   submitSingleInput: async (inputData) => {
+    
     try {
       const response = await api.post('/ingestion/single', inputData);
+      
+      if (response.data.data) {
+        if (response.data.data.ai_prediction) {
+          // AI prediction available
+        }
+      }
+      
       return response.data;
+      
     } catch (error) {
+      // Throw the error response data if available, otherwise the error message
       throw error.response?.data || error.message;
     }
   },

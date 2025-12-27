@@ -16,7 +16,7 @@ const IOCDetails = () => {
       const response = await api.get(`/iocs/${id}`);
       setIoc(response.data);
     } catch (error) {
-      console.error('Error fetching IOC:', error);
+      // Error fetching IOC
     } finally {
       setLoading(false);
     }

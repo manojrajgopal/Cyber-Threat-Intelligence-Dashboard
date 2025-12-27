@@ -47,7 +47,6 @@ const AlertsTable = () => {
       const response = await api.get(`/alerts/?${params}`);
       setAlerts(response.data);
     } catch (error) {
-      console.error('Error fetching alerts:', error);
       setError('Failed to fetch alerts');
     } finally {
       setLoading(false);
@@ -63,7 +62,7 @@ const AlertsTable = () => {
       const response = await api.get('/iocs');
       setIocs(response.data);
     } catch (error) {
-      console.error('Error fetching IOCs:', error);
+      // Error fetching IOCs
     }
   };
 
@@ -103,7 +102,6 @@ const AlertsTable = () => {
         }, 300);
       }
     } catch (error) {
-      console.error('Error acknowledging alert:', error);
       setError('Failed to acknowledge alert');
     } finally {
       setActionLoading(null);
@@ -118,7 +116,6 @@ const AlertsTable = () => {
       await api.delete(`/alerts/${alertId}`);
       setAlerts(prev => prev.filter(alert => alert.id !== alertId));
     } catch (error) {
-      console.error('Error deleting alert:', error);
       setError('Failed to delete alert');
     } finally {
       setActionLoading(null);
@@ -138,7 +135,6 @@ const AlertsTable = () => {
       setCreateForm({ ioc_id: '', severity: 'medium', message: '' });
       setShowCreateForm(false);
     } catch (error) {
-      console.error('Error creating alert:', error);
       setError('Failed to create alert');
     } finally {
       setActionLoading(null);

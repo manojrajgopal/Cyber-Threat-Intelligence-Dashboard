@@ -864,13 +864,42 @@ class AIClassificationService:
 
         # For now, create dummy features based on typical network anomaly detection
         # This is a placeholder - real implementation would need actual network packet data
+        
+        
+        # Analyze the network indicator text to create more realistic dummy data
+        network_text = ioc.value.lower()
+        
+        # Base dummy values
+        base_packet_count = 100
+        base_bytes_transferred = 50000
+        base_duration_seconds = 30
+        base_connection_count = 5
+        base_failed_connections = 0
+        
+        # Adjust dummy values based on content analysis
+        if 'high' in network_text or 'large' in network_text:
+            base_packet_count = 500
+            base_bytes_transferred = 250000
+            
+        if 'failed' in network_text or 'error' in network_text or 'anomaly' in network_text:
+            base_failed_connections = 3
+            base_connection_count = 8
+            
+        if 'port' in network_text and 'scan' in network_text:
+            base_connection_count = 50
+            base_failed_connections = 45
+            base_duration_seconds = 120
+            
+        if 'tunnel' in network_text or 'exfil' in network_text:
+            base_bytes_transferred = 1000000
+            base_duration_seconds = 60
 
         df = pd.DataFrame([{
-            'packet_count': 100,  # Dummy values
-            'bytes_transferred': 50000,
-            'duration_seconds': 30,
-            'connection_count': 5,
-            'failed_connections': 0,
+            'packet_count': base_packet_count,
+            'bytes_transferred': base_bytes_transferred,
+            'duration_seconds': base_duration_seconds,
+            'connection_count': base_connection_count,
+            'failed_connections': base_failed_connections,
             'is_malicious': 0  # Dummy target
         }])
 
@@ -918,6 +947,7 @@ class AIClassificationService:
 
     def classify_threat(self, ioc_id: int, db_session) -> AIPrediction:
         """Classify a threat IOC using trained domain-specific models."""
+        
         ioc = db_session.query(ThreatIOC).filter(ThreatIOC.id == ioc_id).first()
         if not ioc:
             return None
@@ -926,17 +956,20 @@ class AIClassificationService:
 
         # Check if we have a trained model for this IOC type
         if ioc_type not in self.models:
-            print(f"No trained model available for IOC type: {ioc_type}")
             return self._create_fallback_prediction(ioc_id, ioc)
 
-        # Extract features
         try:
             features_df = self._extract_features_for_ioc_type(ioc, ioc_type)
+            
             if features_df.empty:
-                print(f"Feature extraction failed for IOC type: {ioc_type}")
                 return self._create_fallback_prediction(ioc_id, ioc)
+                
+            for col in features_df.columns[:5]:  # Show first 5 features
+                value = features_df[col].iloc[0]
+                
         except Exception as e:
-            print(f"Error extracting features for {ioc_type}: {e}")
+            import traceback
+            traceback.print_exc()
             return self._create_fallback_prediction(ioc_id, ioc)
 
         # Select features using trained selector or feature names
@@ -945,7 +978,6 @@ class AIClassificationService:
                 selected_features = self.feature_names[ioc_type]
                 features_selected = features_df[selected_features]
             except Exception as e:
-                print(f"Error selecting features for {ioc_type}: {e}")
                 return self._create_fallback_prediction(ioc_id, ioc)
         elif ioc_type in self.feature_names:
             # For IOC types like hash that don't use feature selection
@@ -953,10 +985,8 @@ class AIClassificationService:
                 selected_features = self.feature_names[ioc_type]
                 features_selected = features_df[selected_features]
             except Exception as e:
-                print(f"Error using feature names for {ioc_type}: {e}")
                 return self._create_fallback_prediction(ioc_id, ioc)
         else:
-            print(f"No feature selector or feature names available for {ioc_type}")
             return self._create_fallback_prediction(ioc_id, ioc)
 
         # Scale features
@@ -964,10 +994,8 @@ class AIClassificationService:
             try:
                 features_scaled = self.scalers[ioc_type].transform(features_selected)
             except Exception as e:
-                print(f"Error scaling features for {ioc_type}: {e}")
                 return self._create_fallback_prediction(ioc_id, ioc)
         else:
-            print(f"No scaler available for {ioc_type}")
             return self._create_fallback_prediction(ioc_id, ioc)
 
         # Make prediction
@@ -978,11 +1006,9 @@ class AIClassificationService:
             try:
                 # For RandomForestClassifier, check if it has estimators (fitted)
                 if hasattr(model, 'estimators_') and len(model.estimators_) == 0:
-                    print(f"Model {ioc_type} is not fitted yet - no estimators")
                     return self._create_fallback_prediction(ioc_id, ioc)
                 # For other models, check if they have classes_ attribute
                 elif hasattr(model, 'classes_') and len(model.classes_) == 0:
-                    print(f"Model {ioc_type} is not fitted yet - no classes")
                     return self._create_fallback_prediction(ioc_id, ioc)
                 # Additional check: try to make a dummy prediction to ensure model is ready
                 elif hasattr(model, 'predict'):
@@ -992,10 +1018,8 @@ class AIClassificationService:
                     try:
                         model.predict(dummy_features)
                     except Exception as pred_error:
-                        print(f"Model {ioc_type} prediction test failed: {pred_error}")
                         return self._create_fallback_prediction(ioc_id, ioc)
             except Exception as attr_error:
-                print(f"Model {ioc_type} is not fitted yet - attribute check failed: {attr_error}")
                 return self._create_fallback_prediction(ioc_id, ioc)
 
             if ioc_type == 'hash':
@@ -1010,7 +1034,6 @@ class AIClassificationService:
                 confidence = max(prediction_proba)
 
         except Exception as e:
-            print(f"Error making prediction for {ioc_type}: {e}")
             return self._create_fallback_prediction(ioc_id, ioc)
 
         # Create features dict for explanation
@@ -1025,6 +1048,7 @@ class AIClassificationService:
         # Generate explanation
         explanation = self._generate_detailed_explanation(ioc, prediction, confidence, features_dict, ioc_type)
 
+        # Create prediction object
         prediction_obj = AIPrediction(
             ioc_id=ioc_id,
             model_name=f'{ioc_type}_model',

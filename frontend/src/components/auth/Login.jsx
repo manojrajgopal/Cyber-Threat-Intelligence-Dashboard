@@ -77,7 +77,6 @@ const Login = ({ api }) => {
         throw new Error('Please enter credentials');
       }
     } catch (error) {
-      console.error('Login error:', error);
       setError(error.response?.data?.detail || 'Invalid username or password');
 
       if (formRef.current) {

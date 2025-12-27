@@ -26,7 +26,7 @@ CREATE TABLE users (
 -- Threat IOCs table
 CREATE TABLE threat_iocs (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    type ENUM('ip', 'domain', 'url', 'hash') NOT NULL,
+    type ENUM('ip', 'domain', 'url', 'hash', 'network') NOT NULL,
     value VARCHAR(500) NOT NULL,
     source VARCHAR(255),
     first_seen TIMESTAMP,
@@ -41,7 +41,7 @@ CREATE TABLE threat_iocs (
 -- Threat Inputs table
 CREATE TABLE threat_inputs (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    type ENUM('ip', 'domain', 'url', 'hash') NOT NULL,
+    type ENUM('ip', 'domain', 'url', 'hash', 'network') NOT NULL,
     value VARCHAR(500) NOT NULL,
     user_id INT,
     account_id INT,

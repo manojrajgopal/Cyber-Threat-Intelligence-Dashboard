@@ -16,20 +16,25 @@ const ThreatInputForm = () => {
     { value: 'ip', label: 'IP Address', placeholder: 'e.g., 192.168.1.1' },
     { value: 'domain', label: 'Domain', placeholder: 'e.g., example.com' },
     { value: 'url', label: 'URL', placeholder: 'e.g., https://example.com/malicious' },
-    { value: 'hash', label: 'Hash (MD5/SHA1/SHA256)', placeholder: 'e.g., a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3' }
+    { value: 'hash', label: 'Hash (MD5/SHA1/SHA256)', placeholder: 'e.g., a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3' },
+    { value: 'network', label: 'Network Traffic', placeholder: 'e.g., network anomaly or packet data' }
   ];
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: type === 'checkbox' ? checked : value
-    }));
+    
+    setFormData(prev => {
+      const newFormData = {
+        ...prev,
+        [name]: type === 'checkbox' ? checked : value
+      };
+      return newFormData;
+    });
   };
 
   const validateInput = () => {
     if (!formData.value.trim()) {
-      setError('Please enter a value');
+      setError('❌ Please enter a value');
       return false;
     }
 
@@ -38,14 +43,14 @@ const ThreatInputForm = () => {
       case 'ip':
         const ipRegex = /^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
         if (!ipRegex.test(formData.value)) {
-          setError('Please enter a valid IP address');
+          setError('❌ Please enter a valid IP address (e.g., 192.168.1.1)');
           return false;
         }
         break;
       case 'domain':
         const domainRegex = /^(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}$/;
         if (!domainRegex.test(formData.value)) {
-          setError('Please enter a valid domain name');
+          setError('❌ Please enter a valid domain name (e.g., example.com)');
           return false;
         }
         break;
@@ -53,19 +58,34 @@ const ThreatInputForm = () => {
         try {
           new URL(formData.value);
         } catch {
-          setError('Please enter a valid URL');
+          setError('❌ Please enter a valid URL (e.g., https://example.com)');
           return false;
         }
         break;
       case 'hash':
         const hashRegex = /^[a-f0-9]{32}$|^[a-f0-9]{40}$|^[a-f0-9]{64}$/i;
         if (!hashRegex.test(formData.value)) {
-          setError('Please enter a valid hash (MD5, SHA1, or SHA256)');
+          setError('❌ Please enter a valid hash (MD5/SHA1/SHA256)');
+          return false;
+        }
+        break;
+      case 'network':
+        const trimmedValue = formData.value.trim();
+        
+        if (trimmedValue.length < 3) {
+          setError('❌ Please enter a descriptive network indicator (at least 3 characters)');
+          return false;
+        }
+        
+        // Check for meaningful content
+        if (!/[a-zA-Z0-9]/.test(trimmedValue)) {
+          setError('❌ Network indicator must contain meaningful text or data');
           return false;
         }
         break;
       default:
-        break;
+        setError(`❌ Unsupported IOC type: ${formData.type}`);
+        return false;
     }
 
     return true;
@@ -73,27 +93,37 @@ const ThreatInputForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    // Clear previous states
     setError('');
     setMessage('');
     setAiResult(null);
 
+    // Validate input
     if (!validateInput()) {
       return;
     }
-
+    
     setLoading(true);
+
     try {
       const response = await ingestionApi.submitSingleInput(formData);
-      setMessage(response.message || 'Threat input submitted successfully!');
+      
+      const successMessage = response.message || '✅ Threat input submitted successfully!';
+      setMessage(successMessage);
 
       // Display AI prediction result
       if (response.data && response.data.ai_prediction) {
         setAiResult(response.data.ai_prediction);
       }
 
-      setFormData(prev => ({ ...prev, value: '' })); // Clear value but keep type
+      // Clear form value but keep type and monitoring setting
+      setFormData(prev => ({ ...prev, value: '' }));
+      
     } catch (err) {
-      setError(err.message || 'Failed to submit threat input');
+      const errorMessage = err.message || '❌ Failed to submit threat input';
+      setError(errorMessage);
+      
     } finally {
       setLoading(false);
     }

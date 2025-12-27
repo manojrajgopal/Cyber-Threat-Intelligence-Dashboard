@@ -35,7 +35,6 @@ const Reports = () => {
       link.remove();
       window.URL.revokeObjectURL(url);
     } catch (error) {
-      console.error('Error exporting report:', error);
       alert('Error exporting report');
     } finally {
       setLoading(false);

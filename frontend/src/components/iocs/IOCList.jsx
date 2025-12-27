@@ -24,7 +24,7 @@ const IOCList = () => {
       const response = await api.get('/iocs', { params });
       setIocs(response.data);
     } catch (error) {
-      console.error('Error fetching IOCs:', error);
+      // Error fetching IOCs
     } finally {
       setLoading(false);
     }
@@ -36,7 +36,7 @@ const IOCList = () => {
       // Refresh the list to show updated enrichment status
       fetchIOCs();
     } catch (error) {
-      console.error('Error enriching IOC:', error);
+      // Error enriching IOC
     }
   };
 
@@ -53,7 +53,6 @@ const IOCList = () => {
       setShowDeleteModal(false);
       setIocToDelete(null);
     } catch (error) {
-      console.error('Error deleting IOC:', error);
       alert('Failed to delete IOC. Please try again.');
       setShowDeleteModal(false);
       setIocToDelete(null);

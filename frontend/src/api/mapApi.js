@@ -7,7 +7,6 @@ export const getMapIOCs = async () => {
         const response = await axios.get(`${API_BASE_URL}/iocs/map`);
         return response.data;
     } catch (error) {
-        console.error('Error fetching map IOCs:', error);
         return [];
     }
 };

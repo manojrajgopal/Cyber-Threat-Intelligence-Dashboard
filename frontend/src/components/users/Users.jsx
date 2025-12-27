@@ -32,7 +32,7 @@ const Users = () => {
       });
       setRoles(response.data);
     } catch (err) {
-      console.error('Failed to fetch roles', err);
+      // Failed to fetch roles
     }
   };
 
@@ -44,7 +44,6 @@ const Users = () => {
       setUsers(response.data);
     } catch (err) {
       setError('Failed to fetch users');
-      console.error(err);
     } finally {
       setLoading(false);
     }
@@ -70,7 +69,6 @@ const Users = () => {
       fetchUsers();
     } catch (err) {
       setError('Failed to save user');
-      console.error(err);
     }
   };
 
@@ -89,7 +87,6 @@ const Users = () => {
       setUserToDelete(null);
     } catch (err) {
       setError('Failed to delete user');
-      console.error(err);
       setShowDeleteModal(false);
       setUserToDelete(null);
     }
