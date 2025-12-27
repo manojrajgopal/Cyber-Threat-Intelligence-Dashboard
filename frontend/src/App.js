@@ -23,6 +23,7 @@ import AlertsTable from './components/alerts/AlertsTable';
 import Reports from './components/reports/Reports';
 import GeoMap from './components/maps/GeoMap';
 import Users from './components/users/Users';
+import RiskManagement from './components/dashboard/RiskManagement';
 
 // Auth check
 const isAuthenticated = () => {
@@ -178,6 +179,16 @@ function App() {
               <ProtectedRoute>
                 <Layout>
                   <Users />
+                </Layout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/risk"
+            element={
+              <ProtectedRoute>
+                <Layout>
+                  <RiskManagement />
                 </Layout>
               </ProtectedRoute>
             }

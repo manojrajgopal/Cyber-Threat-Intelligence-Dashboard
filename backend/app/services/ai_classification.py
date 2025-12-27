@@ -169,7 +169,7 @@ class AIClassificationService:
         return min(score, 1.0)
 
     def _calculate_fallback_risk_score(self, ioc: ThreatIOC) -> float:
-        """Calculate risk score based on IOC value characteristics."""
+        """Calculate risk score based on IOC value characteristics."""  
         score = 0.0
         value = ioc.value.lower()
 
@@ -178,6 +178,8 @@ class AIClassificationService:
             score += 0.3  # Suspiciously long
         elif len(value) < 5:
             score += 0.1  # Very short
+        else:
+            pass
 
         # Character-based scoring
         if ioc.type == 'url':
@@ -212,7 +214,8 @@ class AIClassificationService:
             elif len(value) == 64:  # SHA256
                 score += 0.2
 
-        return min(score, 0.8)  # Cap fallback score
+        final_score = min(score, 0.8)  # Cap fallback score
+        return final_score
 
     def _extract_domain_features(self, ioc: ThreatIOC) -> pd.DataFrame:
         """Extract domain features matching train_domain.py"""
@@ -948,68 +951,130 @@ class AIClassificationService:
     def classify_threat(self, ioc_id: int, db_session) -> AIPrediction:
         """Classify a threat IOC using trained domain-specific models."""
         
+        print(f"\n=== AI CLASSIFICATION DEBUG START ===")
+        print(f"[DEBUG] Starting classification for IOC ID: {ioc_id}")
+        
         ioc = db_session.query(ThreatIOC).filter(ThreatIOC.id == ioc_id).first()
         if not ioc:
+            print(f"[DEBUG] ERROR: IOC with ID {ioc_id} not found")
             return None
 
+        print(f"[DEBUG] Found IOC: {ioc.value} (type: {ioc.type})")
+        print(f"[DEBUG] Current risk_score before AI analysis: {ioc.risk_score}")
+        
         ioc_type = ioc.type
+        print(f"[DEBUG] IOC type: {ioc_type}")
 
         # Check if we have a trained model for this IOC type
         if ioc_type not in self.models:
-            return self._create_fallback_prediction(ioc_id, ioc)
+            print(f"[DEBUG] WARNING: No trained model for {ioc_type}, using fallback")
+            prediction = self._create_fallback_prediction(ioc_id, ioc)
+            # Still calculate and store risk score for fallback
+            risk_score = self._calculate_and_store_risk_score(ioc, db_session)
+            print(f"[DEBUG] Fallback risk_score calculated and stored: {risk_score}")
+            return prediction
 
         try:
             features_df = self._extract_features_for_ioc_type(ioc, ioc_type)
+            print(f"[DEBUG] Extracted features shape: {features_df.shape if not features_df.empty else 'empty'}")
             
             if features_df.empty:
-                return self._create_fallback_prediction(ioc_id, ioc)
+                print(f"[DEBUG] WARNING: Features DataFrame is empty, using fallback")
+                prediction = self._create_fallback_prediction(ioc_id, ioc)
+                risk_score = self._calculate_and_store_risk_score(ioc, db_session)
+                print(f"[DEBUG] Fallback risk_score calculated and stored: {risk_score}")
+                return prediction
                 
             for col in features_df.columns[:5]:  # Show first 5 features
                 value = features_df[col].iloc[0]
+                print(f"[DEBUG] Feature {col}: {value}")
                 
         except Exception as e:
             import traceback
             traceback.print_exc()
-            return self._create_fallback_prediction(ioc_id, ioc)
+            print(f"[DEBUG] ERROR in feature extraction: {e}")
+            prediction = self._create_fallback_prediction(ioc_id, ioc)
+            risk_score = self._calculate_and_store_risk_score(ioc, db_session)
+            print(f"[DEBUG] Fallback risk_score calculated and stored after error: {risk_score}")
+            return prediction
 
         # Select features using trained selector or feature names
+        print(f"[DEBUG] Available selectors: {list(self.selectors.keys())}")
+        print(f"[DEBUG] Available feature_names: {list(self.feature_names.keys())}")
+        
         if ioc_type in self.selectors and ioc_type in self.feature_names:
             try:
                 selected_features = self.feature_names[ioc_type]
+                print(f"[DEBUG] Using selector, selected features count: {len(selected_features)}")
                 features_selected = features_df[selected_features]
+                print(f"[DEBUG] Selected features shape: {features_selected.shape}")
             except Exception as e:
-                return self._create_fallback_prediction(ioc_id, ioc)
+                print(f"[DEBUG] ERROR in feature selection with selector: {e}")
+                prediction = self._create_fallback_prediction(ioc_id, ioc)
+                risk_score = self._calculate_and_store_risk_score(ioc, db_session)
+                print(f"[DEBUG] Fallback risk_score calculated and stored: {risk_score}")
+                return prediction
         elif ioc_type in self.feature_names:
             # For IOC types like hash that don't use feature selection
             try:
                 selected_features = self.feature_names[ioc_type]
+                print(f"[DEBUG] Using feature names directly, selected features count: {len(selected_features)}")
                 features_selected = features_df[selected_features]
+                print(f"[DEBUG] Selected features shape: {features_selected.shape}")
             except Exception as e:
-                return self._create_fallback_prediction(ioc_id, ioc)
+                print(f"[DEBUG] ERROR in feature selection with feature names: {e}")
+                prediction = self._create_fallback_prediction(ioc_id, ioc)
+                risk_score = self._calculate_and_store_risk_score(ioc, db_session)
+                print(f"[DEBUG] Fallback risk_score calculated and stored: {risk_score}")
+                return prediction
         else:
-            return self._create_fallback_prediction(ioc_id, ioc)
+            print(f"[DEBUG] ERROR: No feature selection available for {ioc_type}")
+            prediction = self._create_fallback_prediction(ioc_id, ioc)
+            risk_score = self._calculate_and_store_risk_score(ioc, db_session)
+            print(f"[DEBUG] Fallback risk_score calculated and stored: {risk_score}")
+            return prediction
 
         # Scale features
+        print(f"[DEBUG] Available scalers: {list(self.scalers.keys())}")
         if ioc_type in self.scalers:
             try:
+                print(f"[DEBUG] Scaling features for {ioc_type}")
                 features_scaled = self.scalers[ioc_type].transform(features_selected)
+                print(f"[DEBUG] Features scaled successfully, shape: {features_scaled.shape}")
             except Exception as e:
-                return self._create_fallback_prediction(ioc_id, ioc)
+                print(f"[DEBUG] ERROR in feature scaling: {e}")
+                prediction = self._create_fallback_prediction(ioc_id, ioc)
+                risk_score = self._calculate_and_store_risk_score(ioc, db_session)
+                print(f"[DEBUG] Fallback risk_score calculated and stored: {risk_score}")
+                return prediction
         else:
-            return self._create_fallback_prediction(ioc_id, ioc)
+            print(f"[DEBUG] ERROR: No scaler available for {ioc_type}")
+            prediction = self._create_fallback_prediction(ioc_id, ioc)
+            risk_score = self._calculate_and_store_risk_score(ioc, db_session)
+            print(f"[DEBUG] Fallback risk_score calculated and stored: {risk_score}")
+            return prediction
 
         # Make prediction
         try:
             model = self.models[ioc_type]
+            print(f"[DEBUG] Using model: {ioc_type}_model")
 
             # Check if model is fitted by trying to access its attributes
             try:
                 # For RandomForestClassifier, check if it has estimators (fitted)
                 if hasattr(model, 'estimators_') and len(model.estimators_) == 0:
-                    return self._create_fallback_prediction(ioc_id, ioc)
+                    print(f"[DEBUG] ERROR: Model has no estimators (not fitted)")
+                    prediction = self._create_fallback_prediction(ioc_id, ioc)
+                    risk_score = self._calculate_and_store_risk_score(ioc, db_session)
+                    print(f"[DEBUG] Fallback risk_score calculated and stored: {risk_score}")
+                    return prediction
                 # For other models, check if they have classes_ attribute
                 elif hasattr(model, 'classes_') and len(model.classes_) == 0:
-                    return self._create_fallback_prediction(ioc_id, ioc)
+                    print(f"[DEBUG] ERROR: Model has no classes (not fitted)")
+                    prediction = self._create_fallback_prediction(ioc_id, ioc)
+                    risk_score = self._calculate_and_store_risk_score(ioc, db_session)
+                    print(f"[DEBUG] Fallback risk_score calculated and stored: {risk_score}")
+                    return prediction
                 # Additional check: try to make a dummy prediction to ensure model is ready
                 elif hasattr(model, 'predict'):
                     # Create a dummy feature vector with the right shape
@@ -1017,24 +1082,58 @@ class AIClassificationService:
                     dummy_features.iloc[0] = 0  # Set all features to 0
                     try:
                         model.predict(dummy_features)
+                        print(f"[DEBUG] Model validation successful")
                     except Exception as pred_error:
-                        return self._create_fallback_prediction(ioc_id, ioc)
+                        print(f"[DEBUG] ERROR: Model prediction test failed: {pred_error}")
+                        prediction = self._create_fallback_prediction(ioc_id, ioc)
+                        risk_score = self._calculate_and_store_risk_score(ioc, db_session)
+                        print(f"[DEBUG] Fallback risk_score calculated and stored: {risk_score}")
+                        return prediction
             except Exception as attr_error:
-                return self._create_fallback_prediction(ioc_id, ioc)
+                print(f"[DEBUG] ERROR: Model attribute check failed: {attr_error}")
+                prediction = self._create_fallback_prediction(ioc_id, ioc)
+                risk_score = self._calculate_and_store_risk_score(ioc, db_session)
+                print(f"[DEBUG] Fallback risk_score calculated and stored: {risk_score}")
+                return prediction
 
             if ioc_type == 'hash':
                 # Hash model is a binary classifier, not a risk scorer
                 prediction_proba = model.predict_proba(features_scaled)[0]
                 prediction = 'malicious' if model.predict(features_scaled)[0] == 1 else 'benign'
                 confidence = max(prediction_proba)
+                print(f"[DEBUG] Hash model prediction: {prediction}, confidence: {confidence:.4f}")
             else:
                 # Binary classification
                 prediction_proba = model.predict_proba(features_scaled)[0]
                 prediction = 'malicious' if model.predict(features_scaled)[0] == 1 else 'benign'
                 confidence = max(prediction_proba)
+                print(f"[DEBUG] {ioc_type} model prediction: {prediction}, confidence: {confidence:.4f}")
 
         except Exception as e:
-            return self._create_fallback_prediction(ioc_id, ioc)
+            print(f"[DEBUG] ERROR in prediction: {e}")
+            prediction = self._create_fallback_prediction(ioc_id, ioc)
+            risk_score = self._calculate_and_store_risk_score(ioc, db_session)
+            print(f"[DEBUG] Fallback risk_score calculated and stored: {risk_score}")
+            return prediction
+
+        # Calculate and store risk score based on AI prediction
+        print(f"[DEBUG] Calculating risk score from prediction: {prediction}, confidence: {confidence:.4f}")
+        risk_score = self._calculate_risk_score_from_prediction(prediction, confidence)
+        print(f"[DEBUG] Calculated risk_score: {risk_score:.4f}")
+        
+        # Update IOC risk score
+        print(f"[DEBUG] Setting ioc.risk_score from {ioc.risk_score} to {risk_score}")
+        ioc.risk_score = float(risk_score)
+        
+        # Commit to database
+        try:
+            db_session.commit()
+            print(f"[DEBUG] Successfully committed risk_score {risk_score} to database")
+        except Exception as commit_error:
+            print(f"[DEBUG] ERROR committing to database: {commit_error}")
+            db_session.rollback()
+            
+        print(f"[DEBUG] Final ioc.risk_score in memory: {ioc.risk_score}")
 
         # Create features dict for explanation
         features_dict = features_df.iloc[0].to_dict()
@@ -1058,7 +1157,32 @@ class AIClassificationService:
             explanation=explanation
         )
 
+        print(f"[DEBUG] AI CLASSIFICATION COMPLETE ===")
+        print(f"[DEBUG] Final results - Prediction: {prediction}, Confidence: {confidence:.4f}, Risk Score: {risk_score:.4f}")
+        print(f"[DEBUG] IOC {ioc_id} now has risk_score: {ioc.risk_score}")
+
         return prediction_obj
+
+    def _calculate_risk_score_from_prediction(self, prediction: str, confidence: float) -> float:
+        """Calculate risk score based on AI prediction and confidence."""
+        print(f"[DEBUG] _calculate_risk_score_from_prediction called with: {prediction}, {confidence:.4f}")
+        
+        if prediction == 'malicious':
+            # For malicious predictions, use confidence as base risk score
+            # Scale to 0.6-1.0 range to indicate higher risk
+            score = 0.6 + (confidence * 0.4)
+            print(f"[DEBUG] Malicious prediction: {confidence:.4f} -> risk_score: {score:.4f}")
+            return score
+        elif prediction == 'benign':
+            # For benign predictions, use inverse confidence
+            # Scale to 0.0-0.4 range to indicate lower risk
+            score = 0.0 + ((1 - confidence) * 0.4)
+            print(f"[DEBUG] Benign prediction: {confidence:.4f} -> risk_score: {score:.4f}")
+            return score
+        else:
+            # For unknown/fallback predictions, use moderate risk
+            print(f"[DEBUG] Unknown prediction: using default risk_score: 0.5")
+            return 0.5
 
     def _create_fallback_prediction(self, ioc_id: int, ioc: ThreatIOC) -> AIPrediction:
         """Create a fallback prediction when model is not available."""
@@ -1129,14 +1253,66 @@ class AIClassificationService:
 
         return explanation
 
+    def _calculate_risk_score_from_prediction(self, prediction: str, confidence: float) -> float:
+        """Calculate risk score based on AI prediction and confidence."""
+        if prediction == 'malicious':
+            # For malicious predictions, use confidence as base risk score
+            # Scale to 0.6-1.0 range to indicate higher risk
+            return 0.6 + (confidence * 0.4)
+        elif prediction == 'benign':
+            # For benign predictions, use inverse confidence
+            # Scale to 0.0-0.4 range to indicate lower risk
+            return 0.0 + ((1 - confidence) * 0.4)
+        else:
+            # For unknown/fallback predictions, use moderate risk
+            return 0.5
+
+    def _calculate_and_store_risk_score(self, ioc: ThreatIOC, db_session) -> float:
+        """Calculate and store risk score for an IOC."""
+        print(f"\n[DEBUG] _calculate_and_store_risk_score called for IOC: {ioc.value}")
+        print(f"[DEBUG] Current risk_score before calculation: {ioc.risk_score}")
+        print(f"[DEBUG] IOC type: {ioc.type}, has enrichments: {len(ioc.enrichments) if ioc.enrichments else 0}")
+        
+        # First try dynamic risk calculation based on enrichments
+        risk_score = self._calculate_dynamic_risk_score(ioc)
+        print(f"[DEBUG] Dynamic risk score from enrichments: {risk_score:.4f}")
+        
+        # If no enrichments or low risk score, calculate fallback based on IOC characteristics
+        if risk_score < 0.1:
+            print(f"[DEBUG] Risk score too low ({risk_score:.4f}), calculating fallback")
+            fallback_score = self._calculate_fallback_risk_score(ioc)
+            print(f"[DEBUG] Fallback risk score: {fallback_score:.4f}")
+            risk_score = fallback_score
+        
+        # Update IOC risk score
+        print(f"[DEBUG] Setting ioc.risk_score from {ioc.risk_score} to {risk_score:.4f}")
+        ioc.risk_score = float(risk_score)
+        
+        # Only commit if we have a database session
+        if db_session is not None:
+            try:
+                db_session.commit()
+                print(f"[DEBUG] Successfully committed risk_score {risk_score:.4f} to database")
+            except Exception as commit_error:
+                print(f"[DEBUG] ERROR committing to database: {commit_error}")
+                db_session.rollback()
+        else:
+            print(f"[DEBUG] No database session provided, skipping commit")
+        
+        print(f"[DEBUG] Final risk_score for {ioc.value}: {ioc.risk_score}")
+        return risk_score
+
     def _calculate_dynamic_risk_score(self, ioc: ThreatIOC) -> float:
         """Calculate dynamic risk score (kept for compatibility)."""
+        print(f"[DEBUG] _calculate_dynamic_risk_score called for IOC: {ioc.value}")
         score = 0.0
 
         if ioc.risk_score:
             score += float(ioc.risk_score)
+            print(f"[DEBUG] Added existing risk_score: {ioc.risk_score}")
 
         if ioc.enrichments:
+            print(f"[DEBUG] Processing {len(ioc.enrichments)} enrichments")
             for enrichment in ioc.enrichments:
                 if enrichment.enrichment_type == "virustotal":
                     try:
@@ -1145,15 +1321,24 @@ class AIClassificationService:
                             malicious = vt_data.get("last_analysis_stats", {}).get("malicious", 0)
                             total = sum(vt_data.get("last_analysis_stats", {}).values())
                             if total > 0:
-                                score += (malicious / total) * 0.8
+                                enrichment_score = (malicious / total) * 0.8
+                                score += enrichment_score
+                                print(f"[DEBUG] VirusTotal malicious ratio: {malicious}/{total} = {enrichment_score:.4f}")
 
                             reputation = vt_data.get("reputation", 0)
                             if reputation < 0:
-                                score += min(abs(reputation) / 100, 0.5)
-                    except:
+                                reputation_score = min(abs(reputation) / 100, 0.5)
+                                score += reputation_score
+                                print(f"[DEBUG] VirusTotal reputation: {reputation} = {reputation_score:.4f}")
+                    except Exception as e:
+                        print(f"[DEBUG] Error processing VirusTotal enrichment: {e}")
                         pass
+        else:
+            print(f"[DEBUG] No enrichments found")
 
-        return min(score, 1.0)
+        final_score = min(score, 1.0)
+        print(f"[DEBUG] Final dynamic risk score: {final_score:.4f}")
+        return final_score
 
     def train_models(self, training_data: List[Dict[str, Any]]) -> bool:
         """Train models from dataset (placeholder - not implemented for domain-specific models)."""

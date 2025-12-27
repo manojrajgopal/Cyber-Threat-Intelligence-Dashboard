@@ -8,6 +8,7 @@ const ThreatLifecyclePage = () => {
     threats: [],
     stats: null
   });
+  const [allThreats, setAllThreats] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [selectedState, setSelectedState] = useState('new');
@@ -21,16 +22,28 @@ const ThreatLifecyclePage = () => {
   ];
 
   useEffect(() => {
-    loadLifecycleData();
-  }, [selectedState]);
+    loadAllLifecycleData();
+  }, []);
 
-  const loadLifecycleData = async () => {
+  useEffect(() => {
+    if (allThreats[selectedState]) {
+      setLifecycleData(prev => ({ ...prev, threats: allThreats[selectedState] }));
+    }
+  }, [selectedState, allThreats]);
+
+  const loadAllLifecycleData = async () => {
     try {
       setLoading(true);
 
-      // Load threats by state
-      const threatsResponse = await api.get(`/lifecycle/states/${selectedState}`);
-      setLifecycleData(prev => ({ ...prev, threats: threatsResponse.data }));
+      // Load threats for all states
+      const threatsPromises = states.map(state => api.get(`/lifecycle/states/${state}`));
+      const threatsResponses = await Promise.all(threatsPromises);
+      const threatsMap = {};
+      states.forEach((state, index) => {
+        threatsMap[state] = threatsResponses[index].data;
+      });
+      setAllThreats(threatsMap);
+      setLifecycleData(prev => ({ ...prev, threats: threatsMap[selectedState] || [] }));
 
       // Load stats
       const statsResponse = await api.get('/lifecycle/stats');
@@ -50,7 +63,7 @@ const ThreatLifecyclePage = () => {
         ioc_id: iocId,
         new_state: newState
       });
-      loadLifecycleData(); // Refresh data
+      loadAllLifecycleData(); // Refresh data
     } catch (err) {
       const errorDetail = err.response?.data?.detail;
       const errorMessage = typeof errorDetail === 'string' ? errorDetail : JSON.stringify(errorDetail) || err.message;

@@ -234,3 +234,42 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
 .glass-card:focus-within {
   box-shadow: 0 0 0 2px #ffbf00;
 }
+
+
+/* Modal styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 16px;
+  padding: 1.5rem;
+  max-width: 400px;
+  width: 90%;
+  text-align: center;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+
+.modal-content h3 {
+  margin: 0 0 1rem 0;
+  color: rgba(0, 0, 0, 0.9);
+  font-size: 1.25rem;
+}
+
+.modal-content p {
+  margin: 0 0 1.5rem 0;
+  color: rgba(0, 0, 0, 0.7);
+}

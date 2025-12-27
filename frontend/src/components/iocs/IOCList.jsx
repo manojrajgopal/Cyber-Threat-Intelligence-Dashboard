@@ -111,6 +111,7 @@ const IOCList = () => {
                   <th>Value</th>
                   <th>Risk Score</th>
                   <th>Source</th>
+                  <th>Created</th>
                   <th>Enriched</th>
                   <th>Actions</th>
                 </tr>
@@ -134,6 +135,9 @@ const IOCList = () => {
                       </span>
                     </td>
                     <td className="opacity-70">{ioc.source}</td>
+                    <td className="opacity-70 text-sm">
+                      {ioc.created_at ? new Date(ioc.created_at).toLocaleDateString() : 'N/A'}
+                    </td>
                     <td>
                       <span className={`px-2 py-1 text-xs rounded-full ${
                         ioc.enriched ? 'bg-green-500/20 text-green-300' : 'bg-gray-500/20 text-gray-300'

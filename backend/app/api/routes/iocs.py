@@ -17,11 +17,12 @@ async def get_iocs(
     db: Session = Depends(get_db),
     current_user = Depends(get_current_active_user)
 ):
-    """Get all IOCs."""
+    """Get all IOCs sorted by latest first."""
     query = db.query(ThreatIOC)
     if type_filter:
         query = query.filter(ThreatIOC.type == type_filter)
-    iocs = query.offset(skip).limit(limit).all()
+    # Sort by created_at in descending order to show latest IOCs first
+    iocs = query.order_by(ThreatIOC.created_at.desc()).offset(skip).limit(limit).all()
     return iocs
 
 @router.post("/", response_model=IOCSchema)

@@ -17,8 +17,15 @@ async def get_dashboard_metrics(
     # Total IOCs
     total_iocs = db.query(func.count(ThreatIOC.id)).scalar()
     
-    # High risk IOCs (risk_score >= 0.7)
-    high_risk_iocs = db.query(func.count(ThreatIOC.id)).filter(ThreatIOC.risk_score >= 0.7).scalar()
+    # Risk level breakdown
+    critical_risk_iocs = db.query(func.count(ThreatIOC.id)).filter(ThreatIOC.risk_score >= 0.9).scalar()
+    high_risk_iocs = db.query(func.count(ThreatIOC.id)).filter(
+        (ThreatIOC.risk_score >= 0.7) & (ThreatIOC.risk_score < 0.9)
+    ).scalar()
+    medium_risk_iocs = db.query(func.count(ThreatIOC.id)).filter(
+        (ThreatIOC.risk_score >= 0.4) & (ThreatIOC.risk_score < 0.7)
+    ).scalar()
+    low_risk_iocs = db.query(func.count(ThreatIOC.id)).filter(ThreatIOC.risk_score < 0.4).scalar()
     
     # Active alerts (not acknowledged)
     active_alerts = db.query(func.count(Alert.id)).filter(Alert.acknowledged == False).scalar()
@@ -34,5 +41,8 @@ async def get_dashboard_metrics(
         high_risk_iocs=high_risk_iocs,
         active_alerts=active_alerts,
         acknowledged_alerts=acknowledged_alerts,
-        recent_alerts=recent_alerts
+        recent_alerts=recent_alerts,
+        critical_risk_iocs=critical_risk_iocs,
+        medium_risk_iocs=medium_risk_iocs,
+        low_risk_iocs=low_risk_iocs
     )

@@ -236,6 +236,7 @@
   text-decoration: none;
   display: inline-block;
   border: none;
+  margin-left: 1rem;
 }
 
 .glass-button::before {

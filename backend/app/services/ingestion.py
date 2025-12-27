@@ -358,7 +358,8 @@ def process_single_input(threat_input_id: int, db_session):
                 'explanation': prediction.explanation,
                 'ioc_id': ioc.id,
                 'ioc_type': ioc.type,
-                'ioc_value': ioc.value
+                'ioc_value': ioc.value,
+                'risk_score': float(ioc.risk_score) if ioc.risk_score else 0.0
             }
 
         # Step 8: Commit transaction

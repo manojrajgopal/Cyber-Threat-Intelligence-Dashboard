@@ -164,6 +164,7 @@ Glass Effect Variables:
 /* Sidebar */
 .glass-sidebar {
   width: 280px;
+  height: 100%;
   background: var(--glass-bg);
   backdrop-filter: blur(var(--glass-blur));
   -webkit-backdrop-filter: blur(var(--glass-blur));
@@ -511,7 +512,7 @@ Glass Effect Variables:
 
   .glass-sidebar {
     width: 100%;
-    margin-bottom: var(--glass-spacing-xl);
+    
   }
 
   .glass-content {

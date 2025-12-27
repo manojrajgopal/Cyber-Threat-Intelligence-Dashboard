@@ -44,10 +44,16 @@ const Dashboard = () => {
               <div className="glass-metric-value">{metrics?.total_iocs || 0}</div>
               <div className="glass-metric-label">Total IOCs</div>
             </Link>
-            <Link to="/iocs" className="glass-metric-item">
-              <div className="glass-metric-value">{metrics?.high_risk_iocs || 0}</div>
-              <div className="glass-metric-label">High Risk IOCs</div>
+            
+            {/* Single Risk Button */}
+            <Link to="/risk" className="glass-metric-item border-l-4">
+              <div className="glass-metric-value text-red-400">
+                {(metrics?.critical_risk_iocs || 0) + (metrics?.high_risk_iocs || 0)}
+              </div>
+              <div className="glass-metric-label">Total Risks</div>
+              <div className="text-xs opacity-70">Critical + High Risk</div>
             </Link>
+            
             <Link to="/alerts" className="glass-metric-item">
               <div className="glass-metric-value">{metrics?.active_alerts || 0}</div>
               <div className="glass-metric-label">Active Alerts</div>
@@ -77,10 +83,10 @@ const Dashboard = () => {
                       </p>
                     </div>
                     <span className={`px-2 py-1 rounded text-xs ${
-                      alert.severity === 'critical' ? 'bg-red-500/20 text-red-300' :
-                      alert.severity === 'high' ? 'bg-orange-500/20 text-orange-300' :
-                      alert.severity === 'medium' ? 'bg-yellow-500/20 text-yellow-300' :
-                      'bg-green-500/20 text-green-300'
+                      alert.severity === 'critical' ? 'bg-red-500 text-red-500' :
+                      alert.severity === 'high' ? 'bg-orange-500 text-orange-500' :
+                      alert.severity === 'medium' ? 'bg-yellow-500 text-yellow-500' :
+                      'bg-green-500 text-green-500'
                     }`}>
                       {alert.severity}
                     </span>

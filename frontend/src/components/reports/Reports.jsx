@@ -10,6 +10,7 @@ const Reports = () => {
     date_to: ''
   });
   const [loading, setLoading] = useState(false);
+  const [showErrorModal, setShowErrorModal] = useState(false);
 
   const handleChange = (e) => {
     setReportConfig({
@@ -35,7 +36,7 @@ const Reports = () => {
       link.remove();
       window.URL.revokeObjectURL(url);
     } catch (error) {
-      alert('Error exporting report');
+      setShowErrorModal(true);
     } finally {
       setLoading(false);
     }
@@ -114,6 +115,16 @@ const Reports = () => {
           </div>
         </div>
       </div>
+
+      {showErrorModal && (
+        <div className="modal-overlay" onClick={() => setShowErrorModal(false)}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <h3>Error</h3>
+            <p>Error exporting report</p>
+            <button className="glass-button primary" onClick={() => setShowErrorModal(false)}>OK</button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

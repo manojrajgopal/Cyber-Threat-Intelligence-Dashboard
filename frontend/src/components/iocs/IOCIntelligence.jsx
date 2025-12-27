@@ -86,8 +86,13 @@ const IOCIntelligence = () => {
         setAiError('AI analysis completed but no predictions were returned. Please try again.');
         setAiPredictions([]);
       }
+      
+      // Reload IOC data to get updated risk score
+      const iocResponse = await api.get(`/iocs/${id}`);
+      setIoc(iocResponse.data);
+      
     } catch (err) {
-      setAiError('Failed to run AI analysis. Please try again.');
+            setAiError('Failed to run AI analysis. Please try again.');
       setAiPredictions([]);
     } finally {
       setAiLoading(false);
@@ -172,7 +177,15 @@ const IOCIntelligence = () => {
                 </div>
                 <div>
                   <div className="opacity-70 text-sm">Risk Score</div>
-                  <div className="font-medium">{ioc.risk_score}</div>
+                  <div className="font-medium">
+                    {ioc.risk_score !== undefined && ioc.risk_score !== null ? (
+                      <span style={{color: ioc.risk_score >= 0.7 ? '#ef4444' : ioc.risk_score >= 0.4 ? '#eab308' : '#22c55e'}}>
+                        {(ioc.risk_score * 100).toFixed(1)}%
+                      </span>
+                    ) : (
+                      <span className="opacity-50">No score</span>
+                    )}
+                  </div>
                 </div>
                 <div>
                   <div className="opacity-70 text-sm">Source</div>

@@ -109,6 +109,10 @@ class DashboardMetrics(BaseModel):
     active_alerts: int
     acknowledged_alerts: int
     recent_alerts: List[Alert]
+    # Risk level breakdown
+    critical_risk_iocs: int = 0
+    medium_risk_iocs: int = 0
+    low_risk_iocs: int = 0
 
 # Report schemas
 class ReportExport(BaseModel):
@@ -337,3 +341,16 @@ class IngestionResponse(BaseModel):
     success: bool
     message: str
     data: Optional[Dict[str, Any]] = None
+
+# Risk Management schemas
+class RiskSummary(BaseModel):
+    total: int
+    critical: int
+    high: int
+    medium: int
+    low: int
+
+class RiskFilterResponse(BaseModel):
+    summary: RiskSummary
+    risks: List[IOC]
+    filter_applied: str
