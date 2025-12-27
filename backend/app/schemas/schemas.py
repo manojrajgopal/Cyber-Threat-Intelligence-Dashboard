@@ -53,7 +53,7 @@ class User(UserBase):
 
 # IOC schemas
 class IOCBase(BaseModel):
-    type: str  # ip, domain, url, hash
+    type: str  # ip, domain, url, hash, network
     value: str
     source: Optional[str] = None
 
@@ -163,7 +163,7 @@ class Account(AccountBase):
 
 # Threat Input schemas
 class ThreatInputBase(BaseModel):
-    type: str  # ip, domain, url, hash
+    type: str  # ip, domain, url, hash, network
     value: str
     continuous_monitoring: Optional[bool] = False
 

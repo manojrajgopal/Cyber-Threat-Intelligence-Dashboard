@@ -75,6 +75,8 @@ class IOCEnrichmentService:
                         "country_code": geo_data.get("countryCode"),
                         "region": geo_data.get("regionName"),
                         "city": geo_data.get("city"),
+                        "lat": geo_data.get("lat"),
+                        "lon": geo_data.get("lon"),
                         "isp": geo_data.get("isp"),
                         "org": geo_data.get("org")
                     }

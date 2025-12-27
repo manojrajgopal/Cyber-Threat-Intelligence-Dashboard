@@ -54,7 +54,6 @@ const Login = ({ api }) => {
     setError('');
 
     try {
-      console.log('Login attempt with:', formData);
 
       if (formData.username && formData.password) {
         const response = await api.post('/auth/login', {

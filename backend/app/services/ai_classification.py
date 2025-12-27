@@ -78,9 +78,51 @@ class AIClassificationService:
 
             except Exception as e:
                 print(f"Error loading {ioc_type} models: {e}")
+                # Remove the model from the dictionary if loading failed
+                if ioc_type in self.models:
+                    del self.models[ioc_type]
                 continue
 
         print(f"Loaded models for IOC types: {list(self.models.keys())}")
+
+        # Validate loaded models
+        self._validate_loaded_models()
+
+    def _validate_loaded_models(self):
+        """Validate that loaded models are properly fitted and ready for use."""
+        print("Validating loaded models...")
+
+        for ioc_type, model in self.models.items():
+            try:
+                # Check if model has basic attributes
+                if not hasattr(model, 'predict'):
+                    print(f"WARNING: {ioc_type} model missing predict method")
+                    continue
+
+                # Try to check if model is fitted
+                if hasattr(model, 'estimators_'):
+                    if len(model.estimators_) == 0:
+                        print(f"ERROR: {ioc_type} model has no estimators (not fitted)")
+                        del self.models[ioc_type]
+                        continue
+                    else:
+                        print(f"✓ {ioc_type} model has {len(model.estimators_)} estimators")
+                elif hasattr(model, 'classes_'):
+                    if len(model.classes_) == 0:
+                        print(f"ERROR: {ioc_type} model has no classes (not fitted)")
+                        del self.models[ioc_type]
+                        continue
+                    else:
+                        print(f"✓ {ioc_type} model has {len(model.classes_)} classes")
+                else:
+                    print(f"✓ {ioc_type} model loaded (unknown type)")
+
+            except Exception as e:
+                print(f"ERROR: Failed to validate {ioc_type} model: {e}")
+                if ioc_type in self.models:
+                    del self.models[ioc_type]
+
+        print(f"Validation complete. Available models: {list(self.models.keys())}")
 
     def _extract_features_for_ioc_type(self, ioc: ThreatIOC, ioc_type: str) -> pd.DataFrame:
         """Extract features for specific IOC type matching training code."""
@@ -897,7 +939,7 @@ class AIClassificationService:
             print(f"Error extracting features for {ioc_type}: {e}")
             return self._create_fallback_prediction(ioc_id, ioc)
 
-        # Select features using trained selector
+        # Select features using trained selector or feature names
         if ioc_type in self.selectors and ioc_type in self.feature_names:
             try:
                 selected_features = self.feature_names[ioc_type]
@@ -905,8 +947,16 @@ class AIClassificationService:
             except Exception as e:
                 print(f"Error selecting features for {ioc_type}: {e}")
                 return self._create_fallback_prediction(ioc_id, ioc)
+        elif ioc_type in self.feature_names:
+            # For IOC types like hash that don't use feature selection
+            try:
+                selected_features = self.feature_names[ioc_type]
+                features_selected = features_df[selected_features]
+            except Exception as e:
+                print(f"Error using feature names for {ioc_type}: {e}")
+                return self._create_fallback_prediction(ioc_id, ioc)
         else:
-            print(f"No feature selector available for {ioc_type}")
+            print(f"No feature selector or feature names available for {ioc_type}")
             return self._create_fallback_prediction(ioc_id, ioc)
 
         # Scale features
@@ -924,11 +974,35 @@ class AIClassificationService:
         try:
             model = self.models[ioc_type]
 
+            # Check if model is fitted by trying to access its attributes
+            try:
+                # For RandomForestClassifier, check if it has estimators (fitted)
+                if hasattr(model, 'estimators_') and len(model.estimators_) == 0:
+                    print(f"Model {ioc_type} is not fitted yet - no estimators")
+                    return self._create_fallback_prediction(ioc_id, ioc)
+                # For other models, check if they have classes_ attribute
+                elif hasattr(model, 'classes_') and len(model.classes_) == 0:
+                    print(f"Model {ioc_type} is not fitted yet - no classes")
+                    return self._create_fallback_prediction(ioc_id, ioc)
+                # Additional check: try to make a dummy prediction to ensure model is ready
+                elif hasattr(model, 'predict'):
+                    # Create a dummy feature vector with the right shape
+                    dummy_features = features_selected.iloc[:1].copy()
+                    dummy_features.iloc[0] = 0  # Set all features to 0
+                    try:
+                        model.predict(dummy_features)
+                    except Exception as pred_error:
+                        print(f"Model {ioc_type} prediction test failed: {pred_error}")
+                        return self._create_fallback_prediction(ioc_id, ioc)
+            except Exception as attr_error:
+                print(f"Model {ioc_type} is not fitted yet - attribute check failed: {attr_error}")
+                return self._create_fallback_prediction(ioc_id, ioc)
+
             if ioc_type == 'hash':
-                # Hash is a risk scorer, not binary classifier
-                risk_score = model.predict_proba(features_scaled)[0][1]
-                prediction = 'malicious' if risk_score > 0.5 else 'benign'
-                confidence = risk_score
+                # Hash model is a binary classifier, not a risk scorer
+                prediction_proba = model.predict_proba(features_scaled)[0]
+                prediction = 'malicious' if model.predict(features_scaled)[0] == 1 else 'benign'
+                confidence = max(prediction_proba)
             else:
                 # Binary classification
                 prediction_proba = model.predict_proba(features_scaled)[0]
@@ -1057,8 +1131,11 @@ class AIClassificationService:
 
         return min(score, 1.0)
 
-# Global instance
-ai_service = AIClassificationService()
+    def train_models(self, training_data: List[Dict[str, Any]]) -> bool:
+        """Train models from dataset (placeholder - not implemented for domain-specific models)."""
+        print("Warning: train_models is not implemented for domain-specific AI models")
+        print("Use the training scripts in backend/train/ to train individual models")
+        return False
 
 # Global instance
 ai_service = AIClassificationService()

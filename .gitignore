@@ -2,3 +2,5 @@ node_modules/
 venv/
 .env
 *.pyc
+build/
+venv10/

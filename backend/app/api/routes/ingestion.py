@@ -21,7 +21,7 @@ async def ingest_single(
     """Ingest a single threat input and return AI prediction."""
     try:
         # Validate input type
-        if request.type not in ['ip', 'domain', 'url', 'hash']:
+        if request.type not in ['ip', 'domain', 'url', 'hash', 'network']:
             raise HTTPException(status_code=400, detail="Invalid input type")
 
         # Get default account (assuming user has account, or create default)

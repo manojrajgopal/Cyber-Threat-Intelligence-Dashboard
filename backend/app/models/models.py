@@ -36,7 +36,7 @@ class ThreatIOC(Base):
     __tablename__ = "threat_iocs"
     
     id = Column(Integer, primary_key=True, index=True)
-    type = Column(Enum('ip', 'domain', 'url', 'hash'), nullable=False)
+    type = Column(Enum('ip', 'domain', 'url', 'hash', 'network'), nullable=False)
     value = Column(String(500), nullable=False)
     source = Column(String(255))
     first_seen = Column(DateTime)
@@ -140,7 +140,7 @@ class ThreatInput(Base):
     __tablename__ = "threat_inputs"
 
     id = Column(Integer, primary_key=True, index=True)
-    type = Column(Enum('ip', 'domain', 'url', 'hash'), nullable=False)
+    type = Column(Enum('ip', 'domain', 'url', 'hash', 'network'), nullable=False)
     value = Column(String(500), nullable=False)
     user_id = Column(Integer, ForeignKey("users.id"))
     account_id = Column(Integer, ForeignKey("accounts.id"))

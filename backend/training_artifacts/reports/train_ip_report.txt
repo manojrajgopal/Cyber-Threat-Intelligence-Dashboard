@@ -1,64 +1,64 @@
 Training Report for train_ip
-Algorithm: random_forest
-Datasets: octet1, octet2, octet3, ip_int, is_class_a, is_class_b, is_class_c, is_private, is_multicast, octet_sum, octet_mean, octet_std, octet1_high_bit, octet4_low_bit, octets_equal, has_consecutive_octets, octet_entropy, is_european_range, octet1_binary_ones, is_sequential_up
-Start Time: Wed Dec 24 00:08:24 2025
-End Time: Wed Dec 24 00:22:39 2025
-Duration: 855.49s
+Algorithm: gradient_boosting
+Datasets: octet1, octet2, octet3, ip_int, is_class_b, is_class_c, is_private, is_link_local, is_multicast, octet_sum, octet_mean, octet_std, octets_equal, has_consecutive_octets, octet_entropy, is_european_range, is_american_range, octet1_binary_ones, is_sequential_up, is_sequential_down
+Start Time: Sat Dec 27 10:08:59 2025
+End Time: Sat Dec 27 10:19:42 2025
+Duration: 642.57s
 Metrics: {
-    "accuracy": 0.7410714285714286,
-    "precision": 0.7849462365591398,
-    "recall": 0.6576576576576577,
-    "f1": 0.7156862745098039,
+    "accuracy": 0.7654867256637168,
+    "precision": 0.7364341085271318,
+    "recall": 0.8333333333333334,
+    "f1": 0.7818930041152263,
     "confusion_matrix": [
         [
-            93,
-            20
+            78,
+            34
         ],
         [
-            38,
-            73
+            19,
+            95
         ]
     ],
-    "true_negatives": 93,
-    "false_positives": 20,
-    "false_negatives": 38,
-    "true_positives": 73,
-    "training_duration": 853.7428815364838,
-    "best_model": "random_forest",
-    "best_parameters": "{'bootstrap': False, 'max_depth': 5, 'max_features': 0.5, 'min_samples_leaf': 4, 'min_samples_split': 10, 'n_estimators': 150}",
+    "true_negatives": 78,
+    "false_positives": 34,
+    "false_negatives": 19,
+    "true_positives": 95,
+    "training_duration": 633.4959659576416,
+    "best_model": "gradient_boosting",
+    "best_parameters": "{'learning_rate': 0.001, 'max_depth': 5, 'max_features': 'sqrt', 'min_samples_leaf': 1, 'min_samples_split': 5, 'n_estimators': 50, 'subsample': 0.9}",
     "selected_features": [
         "octet1",
         "octet2",
         "octet3",
         "ip_int",
-        "is_class_a",
         "is_class_b",
         "is_class_c",
         "is_private",
+        "is_link_local",
         "is_multicast",
         "octet_sum",
         "octet_mean",
         "octet_std",
-        "octet1_high_bit",
-        "octet4_low_bit",
         "octets_equal",
         "has_consecutive_octets",
         "octet_entropy",
         "is_european_range",
+        "is_american_range",
         "octet1_binary_ones",
-        "is_sequential_up"
+        "is_sequential_up",
+        "is_sequential_down"
     ],
     "feature_importance": {
-        "octet2": 0.41197232740846845,
-        "octet1_binary_ones": 0.11291670781781989,
-        "is_private": 0.09887115004019219,
-        "octet3": 0.08217548146176405,
-        "octet1": 0.058008408062809685,
-        "ip_int": 0.05718643437572483,
-        "octet_std": 0.04653060483233018,
-        "octet_entropy": 0.036282867227918174,
-        "is_class_c": 0.022783809728071747,
-        "octet_mean": 0.021575192625042625
+        "octet1_binary_ones": 0.16218286111515404,
+        "octet2": 0.14722634206946209,
+        "octet3": 0.13505566230872987,
+        "ip_int": 0.11000112940922226,
+        "octet1": 0.08759789421759233,
+        "is_private": 0.06517167038721301,
+        "octet_sum": 0.060801865165994354,
+        "octet_mean": 0.05277581662106117,
+        "octet_std": 0.04657496337942928,
+        "octet_entropy": 0.04632142522210702
     }
 }
 Model Path: models/ip_model.pkl

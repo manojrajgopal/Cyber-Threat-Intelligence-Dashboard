@@ -1,55 +1,58 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+
+import 'leaflet/dist/leaflet.css';
+
+import { getMapIOCs } from '../../api/mapApi';
+
 import './GeoMap.css';
 
 const GeoMap = () => {
-  return (
-    <div className="glass-content">
-      <div className="glass-card glass-fade-in">
-        <div className="glass-card-header">
-          <h1 className="glass-card-title">Threat Geolocation Map</h1>
-        </div>
-      </div>
+    const [iocs, setIocs] = useState([]);
 
-      <div className="glass-card glass-fade-in">
-        <div className="glass-card-content">
-          <div className="h-96 glass-card flex items-center justify-center">
-            <div className="text-center">
-              <p className="opacity-70">Interactive threat map would be displayed here</p>
-              <p className="text-sm opacity-50 mt-2">
-                (Integration with mapping library like Leaflet or Google Maps required)
-              </p>
+    useEffect(() => {
+        const fetchIOCs = async () => {
+            const data = await getMapIOCs();
+            setIocs(data);
+        };
+        fetchIOCs();
+    }, []);
+
+    return (
+        <div className="glass-content">
+            <div className="glass-card glass-fade-in">
+                <div className="glass-card-header">
+                    <h1 className="glass-card-title">Threat Geolocation Map</h1>
+                </div>
             </div>
-          </div>
 
-          <div className="mt-6">
-            <h2 className="text-lg font-medium mb-4 opacity-90">Map Features</h2>
-            <ul className="space-y-2 opacity-70">
-              <li className="flex items-center">
-                <span className="mr-2">📍</span>
-                Display IOCs with geolocation data
-              </li>
-              <li className="flex items-center">
-                <span className="mr-2">🎨</span>
-                Color-coded markers based on risk score
-              </li>
-              <li className="flex items-center">
-                <span className="mr-2">💬</span>
-                Interactive tooltips with IOC details
-              </li>
-              <li className="flex items-center">
-                <span className="mr-2">📊</span>
-                Clustering for dense areas
-              </li>
-              <li className="flex items-center">
-                <span className="mr-2">🔍</span>
-                Filter by IOC type and time range
-              </li>
-            </ul>
-          </div>
+            <div className="glass-card glass-fade-in">
+                <div className="glass-card-content">
+                    <MapContainer center={[20, 0]} zoom={2} style={{ height: '500px', width: '100%' }}>
+                        <TileLayer
+                            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                        />
+                        {iocs.map(ioc => (
+                            <Marker key={ioc.id} position={[ioc.lat, ioc.lon]}>
+                                <Popup>
+                                    <strong>{ioc.type.toUpperCase()}: {ioc.value}</strong><br />
+                                    Risk Score: {ioc.risk_score}<br />
+                                    Location: {ioc.city}, {ioc.country}
+                                </Popup>
+                            </Marker>
+                        ))}
+                    </MapContainer>
+
+                    <div className="mt-6">
+                        <h2 className="text-lg font-medium mb-4 opacity-90">Map Statistics</h2>
+                        <p>Total IOCs on map: {iocs.length}</p>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-  );
+    );
 };
 
 export default GeoMap;
