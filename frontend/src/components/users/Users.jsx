@@ -195,8 +195,8 @@ const Users = () => {
       </div>
 
       {showModal && (
-        <div className="fixed inset-0 modal-overlay flex items-center justify-center z-50">
-          <div className="glass-card max-w-md w-full mx-4">
+        <div className="fixed inset-0 modal-overlay flex items-center justify-center z-50" onClick={() => setShowModal(false)}>
+          <div className="glass-card max-w-md w-full mx-4" onClick={(e) => e.stopPropagation()}>
             <div className="glass-card-header">
               <h3 className="glass-card-title">
                 {editingUser ? 'Edit User' : 'Add User'}
