@@ -27,7 +27,7 @@ const Sidebar = () => {
               <Link
                 to={item.path}
                 className={`glass-nav-item ${
-                  location.pathname === item.path ? 'active' : ''
+                  location.pathname === item.path || (item.path === '/iocs' && location.pathname.startsWith('/iocs')) ? 'active' : ''
                 }`}
               >
                 <span className="glass-nav-icon">{item.icon}</span>
