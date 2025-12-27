@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { ingestionApi } from '../../api/ingestionApi';
+import './ThreatInputForm.css';
 
 const ThreatInputForm = () => {
   const [formData, setFormData] = useState({
@@ -197,49 +198,130 @@ const ThreatInputForm = () => {
           )}
 
           {aiResult && (
-            <div className={`glass-card p-4 border-2 ${
+            <div className={`glass-card p-5 border-2 ${
               aiResult.prediction === 'malicious'
                 ? 'border-red-500/30 bg-red-500/10'
                 : aiResult.prediction === 'benign'
                 ? 'border-green-500/30 bg-green-500/10'
                 : 'border-yellow-500/30 bg-yellow-500/10'
             }`}>
-              <div className="flex items-center justify-between mb-3">
-                <h4 className="text-lg font-semibold">AI Analysis Result</h4>
-                <span className={`px-3 py-1 rounded-full text-sm font-medium ${
-                  aiResult.prediction === 'malicious'
-                    ? 'bg-red-500/20 text-red-300'
-                    : aiResult.prediction === 'benign'
-                    ? 'bg-green-500/20 text-green-300'
-                    : 'bg-yellow-500/20 text-yellow-300'
-                }`}>
-                  {aiResult.prediction.toUpperCase()}
-                </span>
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center space-x-3">
+                  <div className="w-3 h-3 rounded-full bg-gradient-to-r from-blue-400 to-purple-400 animate-pulse"></div>
+                  <h4 className="text-lg font-bold text-white">AI Analysis Result</h4>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <span className={`px-4 py-2 rounded-full text-sm font-bold shadow-lg backdrop-blur-sm ${
+                    aiResult.prediction === 'malicious'
+                      ? 'bg-red-500/20 text-red-300 border border-red-500/30'
+                      : aiResult.prediction === 'benign'
+                      ? 'bg-green-500/20 text-green-300 border border-green-500/30'
+                      : 'bg-yellow-500/20 text-yellow-300 border border-yellow-500/30'
+                  }`}>
+                    <div className="flex items-center space-x-2">
+                      <div className={`w-2 h-2 rounded-full ${
+                        aiResult.prediction === 'malicious'
+                          ? 'bg-red-400'
+                          : aiResult.prediction === 'benign'
+                          ? 'bg-green-400'
+                          : 'bg-yellow-400'
+                      }`}></div>
+                      <span>{aiResult.prediction.toUpperCase()}</span>
+                    </div>
+                  </span>
+                </div>
               </div>
 
-              <div className="space-y-2 text-sm">
-                <div className="flex justify-between">
-                  <span className="opacity-80">IOC Type:</span>
-                  <span className="font-medium">{aiResult.ioc_type.toUpperCase()}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="opacity-80">Confidence:</span>
-                  <span className="font-medium">{(aiResult.confidence * 100).toFixed(1)}%</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="opacity-80">Model:</span>
-                  <span className="font-medium">{aiResult.model_name}</span>
+              <div className="bg-black/20 rounded-lg p-4 space-y-3 border border-white/10">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                  <div className="flex flex-col space-y-1">
+                    <span className="text-xs text-white/60 uppercase tracking-wider font-semibold">IOC Type</span>
+                    <span className="text-sm font-bold text-white/90 bg-white/10 px-3 py-2 rounded-lg border border-white/20">
+                      {aiResult.ioc_type.toUpperCase()}
+                    </span>
+                  </div>
+                  <div className="flex flex-col space-y-1">
+                    <span className="text-xs text-white/60 uppercase tracking-wider font-semibold">Risk Score</span>
+                    <div className="flex items-center space-x-2">
+                      <div className="flex-1 bg-black/30 rounded-full h-2 border border-white/20">
+                        <div 
+                          className={`h-full rounded-full transition-all duration-500 ${
+                            aiResult.risk_score >= 0.7
+                              ? 'bg-gradient-to-r from-red-500 to-red-700'
+                              : aiResult.risk_score >= 0.4
+                              ? 'bg-gradient-to-r from-yellow-400 to-yellow-600'
+                              : 'bg-gradient-to-r from-green-400 to-green-600'
+                          }`}
+                          style={{ width: `${(aiResult.risk_score || 0) * 100}%` }}
+                        ></div>
+                      </div>
+                      <span className="text-sm font-bold text-white/90 min-w-[3rem]">
+                        {aiResult.risk_score ? (aiResult.risk_score * 100).toFixed(1) : 'N/A'}%
+                      </span>
+                    </div>
+                  </div>
+                  <div className="flex flex-col space-y-1">
+                    <span className="text-xs text-white/60 uppercase tracking-wider font-semibold">Confidence</span>
+                    <div className="flex items-center space-x-2">
+                      <div className="flex-1 bg-black/30 rounded-full h-2 border border-white/20">
+                        <div 
+                          className={`h-full rounded-full transition-all duration-500 ${
+                            aiResult.prediction === 'malicious'
+                              ? 'bg-gradient-to-r from-red-400 to-red-600'
+                              : aiResult.prediction === 'benign'
+                              ? 'bg-gradient-to-r from-green-400 to-green-600'
+                              : 'bg-gradient-to-r from-yellow-400 to-yellow-600'
+                          }`}
+                          style={{ width: `${aiResult.confidence * 100}%` }}
+                        ></div>
+                      </div>
+                      <span className="text-sm font-bold text-white/90 min-w-[3rem]">
+                        {(aiResult.confidence * 100).toFixed(1)}%
+                      </span>
+                    </div>
+                  </div>
+                  <div className="flex flex-col space-y-1">
+                    <span className="text-xs text-white/60 uppercase tracking-wider font-semibold">Model</span>
+                    <span className="text-sm font-bold text-white/90 bg-white/10 px-3 py-2 rounded-lg border border-white/20">
+                      {aiResult.model_name}
+                    </span>
+                  </div>
                 </div>
               </div>
 
               {aiResult.explanation && (
                 <div className="mt-4">
-                  <details className="cursor-pointer">
-                    <summary className="text-sm font-medium opacity-80 hover:opacity-100">
-                      View Detailed Analysis
+                  <details className="cursor-pointer group">
+                    <summary className="flex items-center justify-between p-3 rounded-lg border border-white/10 hover:border-white/20 transition-all duration-300 hover:bg-white/5">
+                      <div className="flex items-center space-x-2">
+                        <div className="w-2 h-2 rounded-full bg-gradient-to-r from-blue-400 to-purple-400"></div>
+                        <span className="text-sm font-semibold text-white/90">View Detailed Analysis</span>
+                      </div>
+                      <div className="transform group-open:rotate-180 transition-transform duration-300">
+                        <svg className="w-4 h-4 text-white/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                        </svg>
+                      </div>
                     </summary>
-                    <div className="mt-2 p-3 bg-black/20 rounded text-xs whitespace-pre-line max-h-60 overflow-y-auto">
-                      {aiResult.explanation}
+                    <div className="mt-3 p-4 bg-gradient-to-br from-slate-800/50 to-slate-900/50 border border-white/10 rounded-lg backdrop-blur-sm">
+                      <div className="space-y-3">
+                        <div className="flex items-center space-x-2 mb-4">
+                          <div className="w-1 h-4 bg-gradient-to-b from-blue-400 to-purple-400 rounded-full"></div>
+                          <h5 className="text-sm font-semibold text-white/90">AI Analysis Details</h5>
+                        </div>
+                        <div className="bg-black/30 rounded-lg p-4 border border-white/5">
+                          <pre className="text-xs text-white/80 whitespace-pre-wrap leading-relaxed font-mono max-h-80 overflow-y-auto scrollbar-thin scrollbar-track-slate-800 scrollbar-thumb-slate-600 hover:scrollbar-thumb-slate-500">
+                            {aiResult.explanation}
+                          </pre>
+                        </div>
+                        <div className="flex items-center justify-between pt-2 border-t border-white/10">
+                          <span className="text-xs text-white/60">Generated by AI Analysis</span>
+                          <div className="flex items-center space-x-1">
+                            <div className="w-2 h-2 rounded-full bg-green-400/60 animate-pulse"></div>
+                            <span className="text-xs text-white/60">Live Analysis</span>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </details>
                 </div>
