@@ -864,79 +864,204 @@ class AIClassificationService:
 
         # For now, create dummy features based on typical network anomaly detection
         # This is a placeholder - real implementation would need actual network packet data
+        
+        print(f"📊 Creating dummy network features based on IOC content...")
+        
+        # Analyze the network indicator text to create more realistic dummy data
+        network_text = ioc.value.lower()
+        print(f"🔍 Analyzing network text: '{network_text[:100]}...'")
+        
+        # Base dummy values
+        base_packet_count = 100
+        base_bytes_transferred = 50000
+        base_duration_seconds = 30
+        base_connection_count = 5
+        base_failed_connections = 0
+        
+        # Adjust dummy values based on content analysis
+        if 'high' in network_text or 'large' in network_text:
+            base_packet_count = 500
+            base_bytes_transferred = 250000
+            print(f"📈 High activity detected in text, increasing base values")
+            
+        if 'failed' in network_text or 'error' in network_text or 'anomaly' in network_text:
+            base_failed_connections = 3
+            base_connection_count = 8
+            print(f"⚠️  Failed connections mentioned, adjusting parameters")
+            
+        if 'port' in network_text and 'scan' in network_text:
+            base_connection_count = 50
+            base_failed_connections = 45
+            base_duration_seconds = 120
+            print(f"🔍 Port scanning pattern detected, adjusting for reconnaissance")
+            
+        if 'tunnel' in network_text or 'exfil' in network_text:
+            base_bytes_transferred = 1000000
+            base_duration_seconds = 60
+            print(f"🏃 Data exfiltration/tunneling pattern detected")
+            
+        print(f"📋 Adjusted dummy parameters:")
+        print(f"   Packet count: {base_packet_count}")
+        print(f"   Bytes transferred: {base_bytes_transferred}")
+        print(f"   Duration: {base_duration_seconds}s")
+        print(f"   Connection count: {base_connection_count}")
+        print(f"   Failed connections: {base_failed_connections}")
 
         df = pd.DataFrame([{
-            'packet_count': 100,  # Dummy values
-            'bytes_transferred': 50000,
-            'duration_seconds': 30,
-            'connection_count': 5,
-            'failed_connections': 0,
+            'packet_count': base_packet_count,
+            'bytes_transferred': base_bytes_transferred,
+            'duration_seconds': base_duration_seconds,
+            'connection_count': base_connection_count,
+            'failed_connections': base_failed_connections,
             'is_malicious': 0  # Dummy target
         }])
+        
+        print(f"✅ Base DataFrame created with shape: {df.shape}")
 
         # 1. BASIC DERIVED FEATURES
+        print(f"🧮 Computing basic derived features...")
         df['packets_per_second'] = df['packet_count'] / (df['duration_seconds'] + 0.001)
         df['bytes_per_second'] = df['bytes_transferred'] / (df['duration_seconds'] + 0.001)
         df['avg_packet_size'] = df['bytes_transferred'] / (df['packet_count'] + 0.001)
+        print(f"   ✓ Basic features: pps, bps, avg_size")
 
         # 2. CONNECTION INTENSITY FEATURES
+        print(f"🔗 Computing connection intensity features...")
         df['connections_per_second'] = df['connection_count'] / (df['duration_seconds'] + 0.001)
+        print(f"   ✓ Connection rate computed")
 
         # 3. FAILURE RATE
+        print(f"❌ Computing failure rate...")
         df['failure_rate'] = df['failed_connections'] / (df['connection_count'] + 0.001)
+        print(f"   ✓ Failure rate: {df['failure_rate'].iloc[0]:.4f}")
 
         # 4. TRAFFIC DENSITY
+        print(f"📦 Computing traffic density...")
         df['packets_per_connection'] = df['packet_count'] / (df['connection_count'] + 0.001)
+        print(f"   ✓ Packets per connection: {df['packets_per_connection'].iloc[0]:.2f}")
 
         # 5. BYTE EFFICIENCY
+        print(f"💾 Computing byte efficiency...")
         df['bytes_per_packet'] = df['bytes_transferred'] / (df['packet_count'] + 0.001)
+        print(f"   ✓ Bytes per packet: {df['bytes_per_packet'].iloc[0]:.2f}")
 
         # 6. TRAFFIC BURSTINESS
+        print(f"🌊 Computing traffic burstiness...")
         df['traffic_burstiness'] = df['packets_per_second'] * df['bytes_per_second'] / 1000
+        print(f"   ✓ Traffic burstiness: {df['traffic_burstiness'].iloc[0]:.4f}")
 
         # 7. SESSION DURATION CATEGORY
+        print(f"⏱️  Computing session duration metrics...")
         df['session_duration_norm'] = np.log1p(df['duration_seconds'])
+        print(f"   ✓ Normalized duration: {df['session_duration_norm'].iloc[0]:.4f}")
 
         # 8. PACKET SIZE VARIABILITY
+        print(f"📏 Computing packet size variability...")
         df['packet_size_variability'] = df['avg_packet_size'] / (df['bytes_per_packet'] + 0.001)
+        print(f"   ✓ Size variability: {df['packet_size_variability'].iloc[0]:.4f}")
 
         # 9. CONNECTION SUCCESS RATE
+        print(f"✅ Computing success rate...")
         df['success_rate'] = 1 - df['failure_rate']
+        print(f"   ✓ Success rate: {df['success_rate'].iloc[0]:.4f}")
 
         # 10. TRAFFIC INTENSITY SCORE
+        print(f"🎯 Computing traffic intensity score...")
         df['traffic_intensity_score'] = (
             df['packets_per_second'] * df['bytes_per_second'] * df['connections_per_second']
         ) / 1000000
+        print(f"   ✓ Intensity score: {df['traffic_intensity_score'].iloc[0]:.6f}")
 
         # Drop temporary columns
+        print(f"🧹 Cleaning up temporary columns...")
         df = df.drop(['is_malicious'], axis=1, errors='ignore')
 
         # Fill NaN values
+        print(f"🔧 Filling NaN values...")
         df = df.fillna(0)
+        
+        print(f"✅ NETWORK FEATURE EXTRACTION COMPLETED")
+        print(f"📊 Final DataFrame shape: {df.shape}")
+        print(f"📋 Feature columns: {list(df.columns)}")
+        print(f"📈 Sample values:")
+        for col in df.columns:
+            print(f"   {col}: {df[col].iloc[0]:.6f}")
+        print(f"🌐 NETWORK FEATURE EXTRACTION ENDED\n")
 
         return df
 
     def classify_threat(self, ioc_id: int, db_session) -> AIPrediction:
         """Classify a threat IOC using trained domain-specific models."""
+        print(f"\n🤖 CLASSIFY_THREAT STARTED")
+        print(f"📋 IOC ID to classify: {ioc_id}")
+        
         ioc = db_session.query(ThreatIOC).filter(ThreatIOC.id == ioc_id).first()
         if not ioc:
+            print(f"❌ IOC with ID {ioc_id} not found in database")
             return None
 
+        print(f"✅ Found IOC in database:")
+        print(f"   ID: {ioc.id}")
+        print(f"   Type: {ioc.type}")
+        print(f"   Value: {ioc.value}")
+        print(f"   Source: {ioc.source}")
+        print(f"   First seen: {ioc.first_seen}")
+        print(f"   Last seen: {ioc.last_seen}")
+        
+        # Special logging for network IOCs
+        if ioc.type == 'network':
+            print(f"🌐 NETWORK IOC CLASSIFICATION!")
+            print(f"   Network value: '{ioc.value}'")
+            print(f"   Network value length: {len(ioc.value)} characters")
+            print(f"   Network content preview: {ioc.value[:100]}{'...' if len(ioc.value) > 100 else ''}")
+
         ioc_type = ioc.type
+        print(f"🎯 IOC type for classification: {ioc_type}")
+        print(f"🧠 Available models: {list(self.models.keys())}")
 
         # Check if we have a trained model for this IOC type
         if ioc_type not in self.models:
-            print(f"No trained model available for IOC type: {ioc_type}")
+            print(f"❌ No trained model available for IOC type: {ioc_type}")
+            print(f"⚠️  Falling back to fallback prediction")
             return self._create_fallback_prediction(ioc_id, ioc)
+            
+        print(f"✅ Found trained model for IOC type: {ioc_type}")
+        print(f"📊 Model details:")
+        print(f"   Model: {self.models[ioc_type]}")
+        if ioc_type in self.scalers:
+            print(f"   Scaler: {self.scalers[ioc_type]}")
+        if ioc_type in self.feature_names:
+            print(f"   Feature names: {len(self.feature_names[ioc_type])} features")
+        if ioc_type in self.selectors:
+            print(f"   Feature selector: {self.selectors[ioc_type]}")
 
         # Extract features
+        print(f"\n🔍 Step: Feature extraction for {ioc_type}...")
         try:
+            print(f"   Calling _extract_features_for_ioc_type...")
             features_df = self._extract_features_for_ioc_type(ioc, ioc_type)
+            print(f"✅ Feature extraction completed")
+            print(f"   Features DataFrame shape: {features_df.shape}")
+            print(f"   Features columns: {list(features_df.columns)}")
+            
             if features_df.empty:
-                print(f"Feature extraction failed for IOC type: {ioc_type}")
+                print(f"❌ Feature extraction failed - empty DataFrame for IOC type: {ioc_type}")
+                print(f"⚠️  Falling back to fallback prediction")
                 return self._create_fallback_prediction(ioc_id, ioc)
+                
+            print(f"   Sample feature values:")
+            for col in features_df.columns[:5]:  # Show first 5 features
+                value = features_df[col].iloc[0]
+                print(f"     {col}: {value:.6f}")
+                
         except Exception as e:
-            print(f"Error extracting features for {ioc_type}: {e}")
+            print(f"❌ Error extracting features for {ioc_type}:")
+            print(f"   Error type: {type(e).__name__}")
+            print(f"   Error message: {str(e)}")
+            print(f"   Error details: {e}")
+            import traceback
+            traceback.print_exc()
+            print(f"⚠️  Falling back to fallback prediction due to feature extraction error")
             return self._create_fallback_prediction(ioc_id, ioc)
 
         # Select features using trained selector or feature names
@@ -1014,6 +1139,7 @@ class AIClassificationService:
             return self._create_fallback_prediction(ioc_id, ioc)
 
         # Create features dict for explanation
+        print(f"\n📊 Step: Creating features dictionary...")
         features_dict = features_df.iloc[0].to_dict()
         features_dict.update({
             'ioc_type': ioc.type,
@@ -1021,10 +1147,17 @@ class AIClassificationService:
             'model_used': f'{ioc_type}_model',
             'confidence': float(confidence)
         })
+        print(f"✅ Features dictionary created with {len(features_dict)} entries")
 
         # Generate explanation
+        print(f"\n📝 Step: Generating detailed explanation...")
         explanation = self._generate_detailed_explanation(ioc, prediction, confidence, features_dict, ioc_type)
+        print(f"✅ Explanation generated")
+        print(f"   Explanation length: {len(explanation)} characters")
+        print(f"   Explanation preview: {explanation[:200]}...")
 
+        # Create prediction object
+        print(f"\n🎯 Step: Creating AIPrediction object...")
         prediction_obj = AIPrediction(
             ioc_id=ioc_id,
             model_name=f'{ioc_type}_model',
@@ -1033,6 +1166,17 @@ class AIClassificationService:
             features_used=features_dict,
             explanation=explanation
         )
+        
+        print(f"✅ AIPrediction object created:")
+        print(f"   ID: {prediction_obj.ioc_id}")
+        print(f"   Model: {prediction_obj.model_name}")
+        print(f"   Prediction: {prediction_obj.prediction}")
+        print(f"   Confidence: {prediction_obj.confidence:.6f}")
+        print(f"   Features count: {len(prediction_obj.features_used)}")
+        print(f"   Explanation length: {len(prediction_obj.explanation)}")
+
+        print(f"🎉 CLASSIFY_THREAT COMPLETED SUCCESSFULLY")
+        print(f"🤖 CLASSIFY_THREAT ENDED\n")
 
         return prediction_obj
 

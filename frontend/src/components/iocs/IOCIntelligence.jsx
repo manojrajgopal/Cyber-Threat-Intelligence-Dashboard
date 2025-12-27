@@ -24,7 +24,7 @@ const IOCIntelligence = () => {
       const userResponse = await api.get('/users/me');
       setCurrentUser(userResponse.data);
     } catch (err) {
-      console.log('Failed to load user info');
+      // Failed to load user info
     }
   };
   
@@ -48,7 +48,6 @@ const IOCIntelligence = () => {
         const aiResponse = await api.get(`/ai/predictions/${id}`);
         setAiPredictions(aiResponse.data || []);
       } catch (aiErr) {
-        console.log('AI predictions not available');
         setAiPredictions([]);
       }
 
@@ -57,7 +56,6 @@ const IOCIntelligence = () => {
         const relResponse = await api.get(`/correlation/relationships/${id}`);
         setRelationships(relResponse.data || []);
       } catch (relErr) {
-        console.log('Relationships not available');
         setRelationships([]);
       }
 

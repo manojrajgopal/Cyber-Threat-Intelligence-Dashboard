@@ -159,37 +159,59 @@ ingestion_service = ThreatIngestionService()
 
 def normalize_input(value: str, input_type: str = None) -> Dict[str, Any]:
     """Normalize and validate input value."""
+    original_value = value
     value = value.strip()
 
     # Auto-detect type if not provided
     if not input_type:
         input_type = detect_indicator_type(value)
+    else:
+        pass  # Using provided type
 
     # Validate and normalize based on type
     if input_type == 'ip':
         if not is_valid_ip(value):
-            raise ValueError("Invalid IP address")
+            raise ValueError(f"Invalid IP address: {value}")
         normalized = normalize_ip(value)
+        
     elif input_type == 'domain':
         if not is_valid_domain(value):
-            raise ValueError("Invalid domain")
+            raise ValueError(f"Invalid domain: {value}")
         normalized = value.lower()
+        
     elif input_type == 'url':
         if not is_valid_url(value):
-            raise ValueError("Invalid URL")
+            raise ValueError(f"Invalid URL: {value}")
         normalized = normalize_url(value)
+        
     elif input_type == 'hash':
         if not is_valid_hash(value):
-            raise ValueError("Invalid hash")
+            raise ValueError(f"Invalid hash: {value}")
         normalized = value.lower()
+        
+    elif input_type == 'network':
+        # Network inputs are descriptive text, no specific validation needed
+        
+        # Network inputs are descriptive text, no specific validation needed
+        # Basic validation: must not be empty
+        if not value.strip():
+            raise ValueError("Network indicator cannot be empty")
+            
+        if len(value) < 3:
+            raise ValueError(f"Network indicator too short: minimum 3 characters required")
+            
+        normalized = value.strip()
+        
     else:
-        raise ValueError("Unsupported indicator type")
+        raise ValueError(f"Unsupported indicator type: {input_type}")
 
-    return {
+    result = {
         "type": input_type,
         "value": normalized,
-        "original": value
+        "original": original_value
     }
+    
+    return result
 
 def detect_indicator_type(value: str) -> str:
     """Auto-detect indicator type."""
@@ -275,18 +297,19 @@ def process_single_input(threat_input_id: int, db_session):
     prediction_result = None
 
     try:
+        # Step 1: Retrieve threat input from database
         threat_input = db_session.query(ThreatInput).filter(ThreatInput.id == threat_input_id).first()
         if not threat_input:
             return None
 
-        # Normalize
+        # Step 2: Normalize input
         normalized = normalize_input(threat_input.value, threat_input.type)
 
-        # Update threat_input
+        # Step 3: Update threat input
         threat_input.value = normalized['value']
         threat_input.status = 'processed'
 
-        # Create or update IOC
+        # Step 4: Create or update IOC
         ioc = db_session.query(ThreatIOC).filter(
             ThreatIOC.type == normalized['type'],
             ThreatIOC.value == normalized['value']
@@ -302,8 +325,10 @@ def process_single_input(threat_input_id: int, db_session):
             )
             db_session.add(ioc)
             db_session.flush()  # Get ID
+        else:
+            ioc.last_seen = datetime.utcnow()
 
-        # Account mapping
+        # Step 5: Account mapping
         if threat_input.account_id:
             mapping = AccountThreatMapping(
                 account_id=threat_input.account_id,
@@ -311,7 +336,7 @@ def process_single_input(threat_input_id: int, db_session):
             )
             db_session.add(mapping)
 
-        # Lifecycle
+        # Step 6: Lifecycle tracking
         lifecycle = ThreatLifecycle(
             threat_input_id=threat_input.id,
             ioc_id=ioc.id,
@@ -319,11 +344,12 @@ def process_single_input(threat_input_id: int, db_session):
         )
         db_session.add(lifecycle)
 
-        # AI Classification
+        # Step 7: AI Classification
         prediction = ai_service.classify_threat(ioc.id, db_session)
         if prediction:
             db_session.add(prediction)
             db_session.flush()  # Get prediction ID
+            
             prediction_result = {
                 'prediction_id': prediction.id,
                 'prediction': prediction.prediction,
@@ -335,12 +361,13 @@ def process_single_input(threat_input_id: int, db_session):
                 'ioc_value': ioc.value
             }
 
+        # Step 8: Commit transaction
         db_session.commit()
+        
         return prediction_result
 
     except Exception as e:
         db_session.rollback()
-        print(f"Error processing single input {threat_input_id}: {e}")
         return None
 
 def process_bulk_file(job_id: int, db_session):
@@ -393,7 +420,6 @@ def process_bulk_file(job_id: int, db_session):
                 db_session.commit()
 
             except Exception as e:
-                print(f"Error processing item: {e}")
                 continue
 
         job.status = 'completed' if processed == total else 'completed'  # or partial
@@ -405,4 +431,3 @@ def process_bulk_file(job_id: int, db_session):
         job.status = 'failed'
         job.error_message = str(e)
         db_session.commit()
-        print(f"Error processing bulk job {job_id}: {e}")
