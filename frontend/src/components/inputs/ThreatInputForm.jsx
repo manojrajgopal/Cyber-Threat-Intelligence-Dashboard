@@ -48,17 +48,21 @@ const ThreatInputForm = () => {
         }
         break;
       case 'domain':
+        // Support both regular domains and obfuscated domains with [.] notation
+        const normalizedDomain = formData.value.replace(/\[\.\]/g, '.');
         const domainRegex = /^(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}$/;
-        if (!domainRegex.test(formData.value)) {
-          setError('❌ Please enter a valid domain name (e.g., example.com)');
+        if (!domainRegex.test(normalizedDomain)) {
+          setError('❌ Please enter a valid domain name (e.g., example.com or example[.])com)');
           return false;
         }
         break;
       case 'url':
         try {
-          new URL(formData.value);
+          // Support URLs with [.] notation by normalizing them temporarily for validation
+          const normalizedUrl = formData.value.replace(/\[\.\]/g, '.');
+          new URL(normalizedUrl);
         } catch {
-          setError('❌ Please enter a valid URL (e.g., https://example.com)');
+          setError('❌ Please enter a valid URL (e.g., https://example.com or https://example[.]com)');
           return false;
         }
         break;
