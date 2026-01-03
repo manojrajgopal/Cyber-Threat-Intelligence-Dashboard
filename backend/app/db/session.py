@@ -11,23 +11,10 @@ DATABASE_URL = (
     f"{settings.mysql_database}"
 )
 
-# Engine (2.x compatible)
-if settings.backend_env == "production":
-    connect_args = {
-        "ssl": {
-            "ca": settings.MYSQL_SSL_CA,
-            "check_hostname": False,
-            "verify_mode": ssl.CERT_NONE
-        }
-    }
-else:
-    connect_args = {}
-
 engine = create_engine(
     DATABASE_URL,
     pool_pre_ping=True,
-    future=True,
-    connect_args=connect_args
+    future=True
 )
 
 SessionLocal = sessionmaker(
